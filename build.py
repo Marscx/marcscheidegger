@@ -5,7 +5,7 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 4  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 5  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
@@ -181,6 +181,44 @@ CLIPS = {
     ],
 }
 
+# Hörproben (offizielle Tracks auf YouTube Music): (video-id, titel, album, jahr)
+# Nur Alben, auf denen Marc spielt (eigene Liste der CD-Produktionen bzw. Credits).
+TRACKS = {
+    "julian-von-fluee": [
+        ("pgAw4WsFi_0", "Wie Zyt verstricht", "Alpine Folk", "2024"),
+        ("NNLJ-EM_WI4", "E glungne Abig", "Alpine Folk", "2024"),
+        ("BHHYikTRc4E", "Dur d’Altstadt", "Dur d’Altstadt", "2023"),
+    ],
+    "moe": [
+        ("S0OphG_POJc", "Zundersobsi", "Inners", "2012"),
+    ],
+    "stimmreise": [
+        ("OqI-yCfw5oE", "Oldbox", "stimmreise.ch, Vol. 2", "2010"),
+        ("ZROLFbtCzGM", "Riiwäiwel", "stimmreise.ch, Vol. 2", "2010"),
+    ],
+    "patrick-jonsson": [
+        ("AIC3HCFGOUk", "This Is the Sky", "This Is the Sky", "2010"),
+    ],
+    "yvonne-moore": [
+        ("EwKDtihOAt4", "Come On Yvonne", "Nomad", "2002"),
+    ],
+}
+
+def tracks(slug):
+    if slug not in TRACKS:
+        return ""
+    items = "\n".join(
+        f"""                            <li><a class="track" href="https://music.youtube.com/watch?v={tid}" data-yt="{tid}" data-title="{E(t)}">"""
+        f"""<b>{E(t)}</b> <span>{E(alb)} · {y}</span></a></li>"""
+        for tid, t, alb, y in TRACKS[slug])
+    return f"""
+                        <div class="tracks">
+                            <p class="tracks-head">Hörproben <span>YouTube Music</span></p>
+                            <ul>
+{items}
+                            </ul>
+                        </div>"""
+
 def clip(kind, cid, title, year):
     if kind == "yt":
         embed = f"https://www.youtube-nocookie.com/embed/{cid}?autoplay=1&rel=0"
@@ -223,7 +261,7 @@ def project_row(p):
                         <p class="lineup">{E(lineup)}</p>
                         <ul class="facts">
 {facts(fs)}
-                        </ul>{btn}
+                        </ul>{tracks(slug)}{btn}
                     </div>{clips(slug)}
                 </article>"""
 
@@ -237,7 +275,7 @@ def compact_card(p):
                         <p class="lineup">{E(lineup)}</p>
                         <ul class="facts">
 {facts(fs)}
-                        </ul>{clips(slug)}
+                        </ul>{tracks(slug)}{clips(slug)}
                     </div>
                 </article>"""
 
@@ -618,7 +656,7 @@ datenschutz = """        <section class="section">
                 <h2>Kontaktformular und E-Mail</h2>
                 <p>Wenn du mir über das Kontaktformular oder per E-Mail schreibst, verwende ich deine Angaben (Name, E-Mail-Adresse, Nachricht) nur, um deine Anfrage zu beantworten. Die Daten werden nicht weitergegeben.</p>
                 <h2>Videos</h2>
-                <p>Videos von YouTube und SRF sind so eingebunden, dass beim Besuch der Seite keine Daten an diese Anbieter gehen. Erst wenn du auf ein Video klickst, wird es von YouTube (im erweiterten Datenschutzmodus, youtube-nocookie.com) bzw. von SRF geladen. Dabei erhält der Anbieter deine IP-Adresse und es gelten seine Datenschutzbestimmungen.</p>
+                <p>Videos und Hörproben von YouTube und SRF sind so eingebunden, dass beim Besuch der Seite keine Daten an diese Anbieter gehen. Erst wenn du auf ein Video oder eine Hörprobe klickst, wird es von YouTube (im erweiterten Datenschutzmodus, youtube-nocookie.com) bzw. von SRF geladen. Dabei erhält der Anbieter deine IP-Adresse und es gelten seine Datenschutzbestimmungen.</p>
                 <h2>Externe Links</h2>
                 <p>Links zu anderen Websites (z.&nbsp;B. Instagram, YouTube, Moodle, Noteflight) führen zu Angeboten mit eigenen Datenschutzbestimmungen. Beim Anklicken verlässt du diese Website.</p>
                 <h2>Deine Rechte</h2>

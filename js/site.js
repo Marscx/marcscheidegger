@@ -30,13 +30,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Clips: Vorschaubild durch den Player ersetzen – erst dann wird YouTube/SRF geladen.
-    // Es läuft immer nur ein Clip: der vorherige wird wieder zum Vorschaubild.
+    // Clips und Hörproben: YouTube/SRF wird erst nach Klick geladen.
+    // Es läuft immer nur etwas: ein Clip oder eine Hörprobe im Mini-Player.
     let aktiv = null;
+    let mini = null;
+    const clipStoppen = () => {
+        if (aktiv) aktiv.player.replaceWith(aktiv.vorschau);
+        aktiv = null;
+    };
+    const miniSchliessen = () => {
+        if (mini) mini.remove();
+        mini = null;
+        document.querySelectorAll('.track.spielt').forEach(t => t.classList.remove('spielt'));
+    };
+
+    document.querySelectorAll('.track[data-yt]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            clipStoppen();
+            miniSchliessen();
+            mini = document.createElement('div');
+            mini.className = 'mini-player';
+            mini.innerHTML = '<div class="mp-head"><span></span><button type="button" aria-label="Hörprobe schliessen">×</button></div>';
+            mini.querySelector('span').textContent = '♪ ' + a.dataset.title;
+            mini.querySelector('button').addEventListener('click', miniSchliessen);
+            const f = document.createElement('iframe');
+            f.src = 'https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?autoplay=1&rel=0';
+            f.title = 'Hörprobe: ' + a.dataset.title;
+            f.allow = 'autoplay; encrypted-media';
+            mini.append(f);
+            document.body.append(mini);
+            a.classList.add('spielt');
+        });
+    });
+
     document.querySelectorAll('.clip-play[data-embed]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
-            if (aktiv) aktiv.player.replaceWith(aktiv.vorschau);
+            clipStoppen();
+            miniSchliessen();
             const f = document.createElement('iframe');
             aktiv = { player: f, vorschau: a };
             f.src = a.dataset.embed;

@@ -189,6 +189,42 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .clip-note { font-size: .82rem; color: var(--muted); margin: 10px 0 0; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+/* ---------- Hörproben ---------- */
+.tracks { margin: 4px 0 8px; }
+.tracks-head { font-size: .8rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+.tracks-head span { letter-spacing: .04em; text-transform: none; color: var(--muted); font-weight: 400; margin-left: 6px; }
+.tracks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.track {
+    display: flex; align-items: center; gap: 12px; padding: 9px 14px 9px 10px;
+    border-radius: 10px; background: var(--bg); border: 1px solid var(--line);
+    color: var(--ink); text-decoration: none;
+}
+.track::before {
+    content: ""; flex: none; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 2l5 3-5 3z' fill='%231a1305'/%3E%3C/svg%3E") center / 14px no-repeat;
+}
+.track b { font-weight: 600; }
+.track span { color: var(--muted); font-size: .9rem; margin-left: auto; text-align: right; }
+.track:hover { border-color: var(--blue); color: var(--ink); }
+.track.spielt { border-color: var(--accent); background: rgba(242, 181, 68, .1); }
+.track.spielt::before { animation: puls 1.2s ease-in-out infinite; }
+@keyframes puls { 50% { transform: scale(.85); } }
+@media (max-width: 560px) { .track { flex-wrap: wrap; } .track span { margin-left: 42px; text-align: left; width: 100%; } }
+
+.mini-player {
+    position: fixed; right: 16px; bottom: 16px; z-index: 60; width: min(340px, calc(100% - 32px));
+    background: var(--panel); border: 1px solid var(--accent); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
+}
+.mp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 8px 8px 14px; font-weight: 600; font-size: .92rem; }
+.mp-head span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mp-head button {
+    flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); font-size: 1.2rem; line-height: 1; cursor: pointer;
+}
+.mp-head button:hover { border-color: var(--accent); }
+.mini-player iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+
 /* ---------- Konzerte ---------- */
 .gigs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .gigs li {
