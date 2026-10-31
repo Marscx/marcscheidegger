@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.track.spielt').forEach(t => t.classList.remove('spielt'));
     };
 
-    document.querySelectorAll('.track[data-yt]').forEach(a => {
+    document.querySelectorAll('.track[data-embed]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
             clipStoppen();
@@ -55,9 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
             mini.querySelector('span').textContent = '♪ ' + a.dataset.title;
             mini.querySelector('button').addEventListener('click', miniSchliessen);
             const f = document.createElement('iframe');
-            f.src = 'https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?autoplay=1&rel=0';
+            f.src = a.dataset.embed;
             f.title = 'Hörprobe: ' + a.dataset.title;
             f.allow = 'autoplay; encrypted-media';
+            // Apple Music braucht eine feste Höhe statt 16:9
+            if (a.dataset.h) {
+                f.style.aspectRatio = 'auto';
+                f.style.height = a.dataset.h + 'px';
+            }
             mini.append(f);
             document.body.append(mini);
             a.classList.add('spielt');
