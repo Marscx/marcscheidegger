@@ -58,11 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             f.src = a.dataset.embed;
             f.title = 'Hörprobe: ' + a.dataset.title;
             f.allow = 'autoplay; encrypted-media';
-            // Apple Music braucht eine feste Höhe statt 16:9
-            if (a.dataset.h) {
-                f.style.aspectRatio = 'auto';
-                f.style.height = a.dataset.h + 'px';
-            }
             mini.append(f);
             document.body.append(mini);
             a.classList.add('spielt');

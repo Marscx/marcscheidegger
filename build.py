@@ -5,7 +5,7 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 6  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 7  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
@@ -181,64 +181,54 @@ CLIPS = {
     ],
 }
 
-# Hörproben: (quelle, id, titel, album, jahr) – quelle: yt = YouTube Music,
-# am = Apple Music ("album-id?i=track-id"), sc = SoundCloud (Pfad nach soundcloud.com/).
+# Hörproben von Apple Music: (album-id?i=track-id, titel, album, jahr)
 # Nur Aufnahmen, auf denen Marc spielt (eigene Liste der CD-Produktionen bzw. Credits).
 TRACKS = {
     "julian-von-fluee": [
-        ("yt", "pgAw4WsFi_0", "Wie Zyt verstricht", "Alpine Folk", "2024"),
-        ("yt", "NNLJ-EM_WI4", "E glungne Abig", "Alpine Folk", "2024"),
-        ("yt", "BHHYikTRc4E", "Dur d’Altstadt", "Dur d’Altstadt", "2023"),
-        ("am", "1690406111?i=1690406557", "Uf um Stoos ob Schwyz", "Drive", "2019"),
-        ("am", "1690406111?i=1690406337", "Nachtspaziergang", "Drive", "2019"),
+        ("1779697391?i=1779698068", "Wie Zyt verstricht", "Alpine Folk", "2024"),
+        ("1779697391?i=1779697648", "E glungne Abig", "Alpine Folk", "2024"),
+        ("1690417968?i=1690418716", "Dur d’Altstadt", "Dur d’Altstadt", "2023"),
+        ("1690406111?i=1690406557", "Uf um Stoos ob Schwyz", "Drive", "2019"),
+        ("1690406111?i=1690406337", "Nachtspaziergang", "Drive", "2019"),
     ],
     "kubus": [
-        ("am", "1435500427?i=1435500429", "Hürfel", "Kubus", "2002"),
-        ("am", "1435500427?i=1435500703", "Pilzkultur", "Kubus", "2002"),
+        ("1435500427?i=1435500429", "Hürfel", "Kubus", "2002"),
+        ("1435500427?i=1435500703", "Pilzkultur", "Kubus", "2002"),
     ],
     "moe": [
-        ("yt", "S0OphG_POJc", "Zundersobsi", "Inners", "2012"),
+        ("582259786?i=582259877", "Zundersobsi", "Inners", "2012"),
     ],
     "stimmreise": [
-        ("yt", "OqI-yCfw5oE", "Oldbox", "stimmreise.ch, Vol. 2", "2010"),
-        ("yt", "ZROLFbtCzGM", "Riiwäiwel", "stimmreise.ch, Vol. 2", "2010"),
+        ("1635556489?i=1635557122", "Oldbox", "stimmreise.ch, Vol. 2", "2010"),
+        ("1635556489?i=1635556510", "Riiwäiwel", "stimmreise.ch, Vol. 2", "2010"),
     ],
     "patrick-jonsson": [
-        ("yt", "AIC3HCFGOUk", "This Is the Sky", "This Is the Sky", "2010"),
-        ("am", "1292581091?i=1292581099", "People Are Strange", "People Are Strange", "2013"),
+        ("375345689?i=375345741", "This Is the Sky", "This Is the Sky", "2009"),
+        ("1292581091?i=1292581099", "People Are Strange", "People Are Strange", "2013"),
     ],
     "emel": [
-        ("am", "1305231429?i=1305231649", "Dragon", "Single", "2017"),
+        ("1305231429?i=1305231649", "Dragon", "Single", "2017"),
     ],
     "yvonne-moore": [
-        ("yt", "EwKDtihOAt4", "Come On Yvonne", "Nomad", "2002"),
+        ("163232224?i=163232902", "Come On Yvonne", "Nomad", "2002"),
     ],
     "guy-vincent": [
-        ("yt", "ynTa3oMEvEo", "Expectations", "Expectations", "2013"),
-        ("yt", "5pFaJ6h6rHY", "We Live", "Expectations", "2013"),
+        ("693996856?i=693996860", "Expectations", "Expectations", "2013"),
+        ("693996856?i=693996891", "We Live", "Expectations", "2013"),
     ],
 }
-QUELLE = {"yt": "YouTube Music", "am": "Apple Music", "sc": "SoundCloud"}
 
-def track(src, tid, t, alb, y):
-    if src == "yt":
-        url, embed, h = f"https://music.youtube.com/watch?v={tid}", f"https://www.youtube-nocookie.com/embed/{tid}?autoplay=1&rel=0", ""
-    elif src == "am":
-        url, embed, h = f"https://music.apple.com/ch/album/{tid}", f"https://embed.music.apple.com/ch/album/{tid}", "175"
-    else:
-        url = f"https://soundcloud.com/{tid}"
-        embed, h = f"https://w.soundcloud.com/player/?url={url}&auto_play=true&visual=false&color=%23f2b544", "300"
-    info = " · ".join(x for x in (alb, y, QUELLE[src]) if x)
-    hattr = f' data-h="{h}"' if h else ""
-    return (f"""                            <li><a class="track" href="{url}" data-embed="{E(embed)}"{hattr} data-title="{E(t)}">"""
-            f"""<b>{E(t)}</b> <span>{E(info)}</span></a></li>""")
+def track(tid, t, alb, y):
+    return (f"""                            <li><a class="track" href="https://music.apple.com/ch/album/{tid}" """
+            f"""data-embed="https://embed.music.apple.com/ch/album/{tid}" data-title="{E(t)}">"""
+            f"""<b>{E(t)}</b> <span>{E(alb)} · {y}</span></a></li>""")
 
 def tracks(slug):
     if slug not in TRACKS:
         return ""
     return f"""
                         <div class="tracks">
-                            <p class="tracks-head">Hörproben</p>
+                            <p class="tracks-head">Hörproben <span>Apple Music</span></p>
                             <ul>
 {chr(10).join(track(*t) for t in TRACKS[slug])}
                             </ul>
