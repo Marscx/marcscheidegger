@@ -15,6 +15,21 @@ document.addEventListener('DOMContentLoaded', () => {
         el.textContent = new Date().getFullYear();
     });
 
+    // Konzertlisten: vergangene Daten ausblenden, auf der Startseite nur die nächsten N zeigen
+    const heute = new Date().toISOString().slice(0, 10);
+    document.querySelectorAll('.gigs').forEach(list => {
+        const limit = Number(list.dataset.limit) || Infinity;
+        let shown = 0;
+        list.querySelectorAll('li[data-date]').forEach(li => {
+            li.hidden = li.dataset.date < heute || shown++ >= limit;
+        });
+        if (!shown) {
+            list.hidden = true;
+            const empty = list.nextElementSibling;
+            if (empty && empty.classList.contains('gigs-empty')) empty.hidden = false;
+        }
+    });
+
     // kontakt.php leitet mit ?gesendet=1 oder ?fehler=1 zurück
     const params = new URLSearchParams(location.search);
     const show = id => { const el = document.getElementById(id); if (el) el.hidden = false; };

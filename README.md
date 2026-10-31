@@ -17,9 +17,20 @@ Ersetzt die bisherige WordPress-Seite.
 | `.htaccess` | HTTPS, 301-Weiterleitungen der alten WordPress-Adressen, Caching |
 | `img/` | Fotos (JPG, max. 2000 px) und Übe-Tool-Grafiken (`tool-grafiken-quelle.html` ist die Vorlage) |
 
-Kopf- und Fusszeile stehen in jeder Seite. Bei Änderungen an der Navigation alle Seiten anpassen.
+## Inhalte ändern
 
-Bei Änderungen an `site.css` / `site.js` die Versionsnummer `?v=N` in allen Seiten erhöhen.
+Alle HTML-Seiten werden von `build.py` erzeugt (Kopf- und Fusszeile, Projekte, Konzerte,
+Chronologie). Inhalte dort ändern und danach neu erzeugen:
+
+```bash
+python3 build.py
+```
+
+- **Konzerte:** Liste `KONZERTE` – vergangene Daten blendet `site.js` automatisch aus,
+  die Startseite zeigt die nächsten fünf.
+- **Projekte:** Liste `P` – Gruppe `aktuell`, `frueher` oder `begleit`. Die Chronologie
+  entsteht automatisch aus den Fakten der Projekte.
+- Bei Änderungen an `site.css` / `site.js` die Zahl `V` in `build.py` erhöhen.
 
 ## Lokal ansehen
 
