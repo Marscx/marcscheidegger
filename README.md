@@ -1,0 +1,36 @@
+# marcscheidegger.ch
+
+Website von Marc Scheidegger – reines HTML/CSS/JS, ohne CMS und ohne Abhängigkeiten.
+Ersetzt die bisherige WordPress-Seite.
+
+## Aufbau
+
+| Datei | Inhalt |
+|---|---|
+| `index.html` | Startseite |
+| `projekte.html` | Aktuelle Bands, frühere Bands, Begleitmusiker & Studio |
+| `chronologie.html` | Alle Stationen nach Jahren |
+| `lernen.html` | Übe-Tools, Online-Kurse, Links |
+| `kontakt.html` + `kontakt.php` | Kontaktformular (PHP `mail()`) |
+| `impressum.html`, `datenschutz.html`, `404.html` | Rechtliches, Fehlerseite |
+| `css/site.css`, `js/site.js` | Gemeinsames Design, Mobil-Menü |
+| `.htaccess` | HTTPS, 301-Weiterleitungen der alten WordPress-Adressen, Caching |
+| `img/` | Fotos (JPG, max. 2000 px) und Übe-Tool-Grafiken (`tool-grafiken-quelle.html` ist die Vorlage) |
+
+Kopf- und Fusszeile stehen in jeder Seite. Bei Änderungen an der Navigation alle Seiten anpassen.
+
+Bei Änderungen an `site.css` / `site.js` die Versionsnummer `?v=N` in allen Seiten erhöhen.
+
+## Lokal ansehen
+
+```bash
+php -S localhost:8090
+```
+
+Dann http://localhost:8090 öffnen (das Kontaktformular verschickt lokal keine Mails).
+
+## Noch offen vor dem Livegang
+
+- Impressum: Postadresse ergänzen
+- Datenschutz: Hoster ergänzen
+- Testen auf einer Subdomain (z.B. neu.marcscheidegger.ch), erst danach auf marcscheidegger.ch umstellen

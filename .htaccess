@@ -1,0 +1,131 @@
+# marcscheidegger.ch – Apache (Plesk)
+
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+AddDefaultCharset utf-8
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# HTTPS erzwingen
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Alte WordPress-Adressen (?p=, ?page_id=, ?cat=) auf die neuen Seiten umleiten
+RewriteCond %{QUERY_STRING} (^|&)p=33(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#open-mic-band [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=39(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#emel [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=41(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#andrew-bond [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=43(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#yvonne-moore [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=45(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#cyrill-camenzind [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=49(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#martina-linn [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=51(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#stimmreise [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=53(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#guy-vincent [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=55(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#patrick-jonsson [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=57(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#moe [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=59(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#kubus [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=61(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#mat-and-yvonne [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=63(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#boogiefox [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=65(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#julian-von-fluee [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)p=67(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#mala-oreen [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)page_id=77(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html#frueher [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)page_id=16(&|$)
+RewriteRule ^(index\.php)?$ /projekte.html [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)page_id=10(&|$)
+RewriteRule ^(index\.php)?$ /lernen.html [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)page_id=6(&|$)
+RewriteRule ^(index\.php)?$ /datenschutz.html [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=10(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-1999 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=25(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2001 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=22(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2002 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=23(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2003 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=8(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2004 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=7(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2005 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=9(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2006 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=11(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2007 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=24(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2008 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=21(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2009 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=19(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2010 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=20(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2011 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=18(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2012 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=16(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2013 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=17(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2014 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=15(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2015 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=13(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2016 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=12(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2017 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=14(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2018 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=28(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2019 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=29(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2020 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=26(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2021 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=27(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2022 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=30(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2023 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=31(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2024 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=44(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2025 [R=301,NE,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)cat=45(&|$)
+RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2026 [R=301,NE,QSD,L]
+
+# Übrige WordPress-Pfade
+RewriteRule ^(vergangene-projekte|social-media)/?$ /projekte.html [R=301,L]
+RewriteRule ^datenschutzerklaerung/?$ /datenschutz.html [R=301,L]
+RewriteRule ^(feed|wp-admin|wp-login\.php|wp-content|wp-json)(/.*)?$ / [R=301,QSD,L]
+RewriteCond %{QUERY_STRING} (^|&)(rest_route|feed)=
+RewriteRule ^(index\.php)?$ / [R=301,QSD,L]
+RewriteRule ^index\.php$ / [R=301,L]
+</IfModule>
+
+# Caching: Bilder lange, CSS/JS über ?v=N versioniert
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 year"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 year"
+ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set X-Content-Type-Options "nosniff"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
