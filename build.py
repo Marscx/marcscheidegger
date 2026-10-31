@@ -5,7 +5,7 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 2  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 3  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
@@ -82,8 +82,10 @@ P = [
       ("2022", "CD-Produktion «Dur D’Altstadt» abgeschlossen"),
       ("2022", "Auftritt in der SRF-Sendung Potzmusig"),
       ("2023", "CD-Taufe am 11. März, Chollerhalle Zug"),
+      ("2023", "Zwei Auftritte auf der Hauptbühne des Premio Internazionale della Fisarmonica, Castelfidardo (Italien)"),
       ("2024", "CD «Alpine Folk» mit 13 neuen Kompositionen, Plattentaufe am 23. November in der Galvanik Zug"),
       ("2025", "Tournee «Alpine Folk», u. a. Stanser Musiktage und Pregny Alp Festival; Interview bei SRF Musikwelle"),
+      ("2025", "SRF «Typisch Volksmusik Sessions»"),
       ("2026", "Auftritt in der SRF-Sendung Potzmusig (21. Februar)"),
       ("2026", "Landäbärg Unplugged in Sarnen und Küstenklänge auf der MS Switzerland")],
      [("https://julianvonfluee.ch/", "Band-Website"), ("https://julianvonfluee.ch/live/", "Alle Konzerte")], "aktuell"),
@@ -152,6 +154,58 @@ INTRO = {
     "mala-oreen": "«Songs for and from the heart» – Americana und Folk mit mehrstimmigem Gesang. Das Album «AWAKE» nannte Americana Highways «one of the year’s best».",
 }
 
+# ---------------------------------------------------------------- Clips
+# (quelle, id, titel, jahr) – nur Clips, in denen Marc nachweislich mitspielt.
+# Vorschaubilder liegen lokal in img/clips/; das Video lädt erst nach Klick (Datenschutz).
+CLIPS = {
+    "julian-von-fluee": [
+        ("srf", "017d68a1-7ecb-4124-a484-b73eafa8a137", "SRF Typisch Volksmusik Sessions", "2025"),
+        ("yt", "jCNFVanFAxY", "Neue CD «Alpine Folk»", "2024"),
+        ("yt", "AC6F9rHJwL4", "On the way to Castelfidardo", "2023"),
+        ("srf", "c9a96bc2-3897-4d29-911a-1cc2ea4119a6", "SRF Potzmusig aus Kaiserstuhl", "2022"),
+        ("yt", "HnTExtVyzM0", "Tango Nuevo", "2022"),
+        ("yt", "No2nQ4fnL_8", "Caviano", "2021"),
+    ],
+    "mala-oreen": [
+        ("yt", "jhvhz8U2mec", "Live in der Liebhaberei Rain", "2020"),
+    ],
+    "boogiefox": [
+        ("yt", "Pf2XysrZIS4", "Über d’Liebi", "2016"),
+    ],
+    "moe": [
+        ("yt", "NPvAOLSUiUI", "Sehnsucht (Album «inners»)", "2012"),
+    ],
+    "patrick-jonsson": [
+        ("yt", "4kAg4MDMOpU", "A Better Morning (Videoclip)", "2013"),
+    ],
+}
+
+def clip(kind, cid, title, year):
+    if kind == "yt":
+        embed = f"https://www.youtube-nocookie.com/embed/{cid}?autoplay=1&rel=0"
+        url, thumb, src = f"https://www.youtube.com/watch?v={cid}", f"yt-{cid}.jpg", "YouTube"
+    else:
+        embed = f"https://www.srf.ch/play/embed?urn=urn:srf:video:{cid}&subdivisions=false"
+        url, thumb, src = f"https://www.srf.ch/play/tv/redirect/detail/{cid}", f"srf-{cid[:8]}.jpg", "SRF"
+    return f"""                            <figure class="clip">
+                                <a class="clip-play" href="{url}" data-embed="{embed}" data-title="{E(title)}">
+                                    <img src="img/clips/{thumb}" alt="" loading="lazy" width="960" height="540">
+                                    <span class="clip-src">{src}</span>
+                                    <span class="clip-icon" aria-hidden="true"></span>
+                                    <span class="sr">Video abspielen: </span>
+                                </a>
+                                <figcaption>{E(title)} <span>{year}</span></figcaption>
+                            </figure>"""
+
+def clips(slug):
+    if slug not in CLIPS:
+        return ""
+    return f"""
+                        <div class="clips">
+{chr(10).join(clip(*c) for c in CLIPS[slug])}
+                        </div>
+                        <p class="clip-note">Videos werden erst beim Abspielen von YouTube bzw. SRF geladen.</p>"""
+
 def facts(fs):
     return "\n".join(f"                            <li><b>{E(y)}</b><span>{E(t)}</span></li>" for y, t in fs)
 
@@ -169,7 +223,7 @@ def project_row(p):
                         <ul class="facts">
 {facts(fs)}
                         </ul>{btn}
-                    </div>
+                    </div>{clips(slug)}
                 </article>"""
 
 def compact_card(p):
@@ -182,7 +236,7 @@ def compact_card(p):
                         <p class="lineup">{E(lineup)}</p>
                         <ul class="facts">
 {facts(fs)}
-                        </ul>
+                        </ul>{clips(slug)}
                     </div>
                 </article>"""
 
@@ -562,6 +616,8 @@ datenschutz = """        <section class="section">
                 <p>Beim Aufruf der Website speichert der Webserver technisch notwendige Daten (IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser). Diese Daten dienen dem sicheren Betrieb und werden nach kurzer Zeit gelöscht. <!-- TODO: Hoster und Speicherdauer ergänzen -->[Hoster bitte ergänzen]</p>
                 <h2>Kontaktformular und E-Mail</h2>
                 <p>Wenn du mir über das Kontaktformular oder per E-Mail schreibst, verwende ich deine Angaben (Name, E-Mail-Adresse, Nachricht) nur, um deine Anfrage zu beantworten. Die Daten werden nicht weitergegeben.</p>
+                <h2>Videos</h2>
+                <p>Videos von YouTube und SRF sind so eingebunden, dass beim Besuch der Seite keine Daten an diese Anbieter gehen. Erst wenn du auf ein Video klickst, wird es von YouTube (im erweiterten Datenschutzmodus, youtube-nocookie.com) bzw. von SRF geladen. Dabei erhält der Anbieter deine IP-Adresse und es gelten seine Datenschutzbestimmungen.</p>
                 <h2>Externe Links</h2>
                 <p>Links zu anderen Websites (z.&nbsp;B. Instagram, YouTube, Moodle, Noteflight) führen zu Angeboten mit eigenen Datenschutzbestimmungen. Beim Anklicken verlässt du diese Website.</p>
                 <h2>Deine Rechte</h2>

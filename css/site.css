@@ -158,6 +158,37 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .compact h3 { margin-bottom: .25em; }
 .compact .lineup { font-size: .95rem; color: var(--muted); margin-bottom: .8em; }
 
+/* ---------- Clips (Video erst nach Klick laden) ---------- */
+.project > .clips, .project > .clip-note { grid-column: 1 / -1; }
+.project > .clips { margin-top: 4px; }
+.clips { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.card .clips { grid-template-columns: 1fr; margin-top: 8px; }
+.clip { margin: 0; }
+.clip-play, .clip iframe {
+    position: relative; display: block; width: 100%; aspect-ratio: 16 / 9;
+    border-radius: 12px; overflow: hidden; border: 0; background: #000;
+}
+.clip-play img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: opacity .2s, transform .3s; }
+.clip-play:hover img { opacity: 1; transform: scale(1.03); }
+.clip-icon {
+    position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px;
+    border-radius: 50%; background: rgba(11, 18, 32, .78); box-shadow: 0 0 0 2px var(--accent);
+    transition: transform .2s, background .2s;
+}
+.clip-icon::after {
+    content: ""; position: absolute; left: 26px; top: 20px;
+    border-style: solid; border-width: 12px 0 12px 19px; border-color: transparent transparent transparent var(--accent);
+}
+.clip-play:hover .clip-icon { transform: scale(1.08); background: rgba(11, 18, 32, .92); }
+.clip-src {
+    position: absolute; left: 10px; top: 10px; padding: 2px 9px; border-radius: 999px;
+    background: rgba(11, 18, 32, .8); color: var(--ink); font-size: .75rem; font-weight: 600; letter-spacing: .04em;
+}
+.clip figcaption { margin-top: 8px; font-weight: 600; font-size: .95rem; }
+.clip figcaption span { color: var(--muted); font-weight: 400; }
+.clip-note { font-size: .82rem; color: var(--muted); margin: 10px 0 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 /* ---------- Konzerte ---------- */
 .gigs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .gigs li {

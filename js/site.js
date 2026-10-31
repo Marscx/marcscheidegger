@@ -30,6 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Clips: Vorschaubild durch den Player ersetzen – erst dann wird YouTube/SRF geladen
+    document.querySelectorAll('.clip-play[data-embed]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const f = document.createElement('iframe');
+            f.src = a.dataset.embed;
+            f.title = a.dataset.title;
+            f.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+            f.allowFullscreen = true;
+            a.replaceWith(f);
+        });
+    });
+
     // kontakt.php leitet mit ?gesendet=1 oder ?fehler=1 zurück
     const params = new URLSearchParams(location.search);
     const show = id => { const el = document.getElementById(id); if (el) el.hidden = false; };
