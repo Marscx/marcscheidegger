@@ -210,6 +210,7 @@ TRACKS = {
         ("1305231429?i=1305231649", "Dragon", "Single", "2017"),
     ],
     "yvonne-moore": [
+        ("163232224?i=163232718", "Closer to You", "Nomad", "2002"),
         ("163232224?i=163232902", "Come On Yvonne", "Nomad", "2002"),
     ],
     "guy-vincent": [
