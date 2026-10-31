@@ -105,7 +105,7 @@ P = [
      [("2021", "Konzert im Café Mokka Thun"), ("2022", "Videodreh")], [], "frueher"),
     ("moe", "Moë", "moe.jpg", "2002 – 2011",
      "Anet Zemp – Gesang · Ephrem Lüchinger – Keyboards · Manuel Rindlisbacher – Bass · Dominik Burkhalter – Schlagzeug · Marc Scheidegger – Gitarre",
-     [("2002", "Luzerner Werkbeiträge"), ("2002", "Popkredit Zürich"), ("2003", "Clubtour"),
+     [("2002", "Luzerner Werkbeiträge"), ("2002", "Popkredit Zürich"), ("2003", "Album «Reflections» und Clubtour"),
       ("2008", "CD-Produktion und Clubtour"), ("2011", "CD-Produktion und Clubtour")], [], "frueher"),
     ("kubus", "Kubus", "kubus.jpg", "1999 – 2006",
      "Rafael Woll – Schlagzeug · Marcel Stalder – Bass · Adrian Pflugshaupt – Saxofon · Peter Estermann – Piano · Fabian Stübi – Elektronik · Marc Scheidegger – Gitarre, Elektronik",
@@ -196,7 +196,7 @@ TRACKS = {
         ("1435500427?i=1435500703", "Pilzkultur", "Kubus", "2002"),
     ],
     "moe": [
-        ("582259786?i=582259877", "Zundersobsi", "Inners", "2012"),
+        ("487607869?i=487608450", "The Same Old Story", "Reflections", "2003"),
     ],
     "stimmreise": [
         ("1635556489?i=1635557122", "Oldbox", "stimmreise.ch, Vol. 2", "2010"),
