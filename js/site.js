@@ -30,11 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Clips: Vorschaubild durch den Player ersetzen – erst dann wird YouTube/SRF geladen
+    // Clips: Vorschaubild durch den Player ersetzen – erst dann wird YouTube/SRF geladen.
+    // Es läuft immer nur ein Clip: der vorherige wird wieder zum Vorschaubild.
+    let aktiv = null;
     document.querySelectorAll('.clip-play[data-embed]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
+            if (aktiv) aktiv.player.replaceWith(aktiv.vorschau);
             const f = document.createElement('iframe');
+            aktiv = { player: f, vorschau: a };
             f.src = a.dataset.embed;
             f.title = a.dataset.title;
             f.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';

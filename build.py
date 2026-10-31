@@ -5,7 +5,7 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 3  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 4  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
@@ -74,11 +74,12 @@ def page(fname, title, desc, body, current=None):
 # (slug, name, bild, zeitraum, besetzung, fakten[(jahr, text)], links[(url, text)], gruppe)
 P = [
     ("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio.jpg", "seit 2014",
-     "Julian von Flüe – Akkordeon · Marc Scheidegger – Gitarre · Matthias Abächerli – Bass",
+     "Julian von Flüe – Akkordeon · Marc Scheidegger – Gitarre · Matthias Abächerli – Bass (seit 2021)",
      [("2014 – heute", "zahlreiche Konzerte"),
       ("2018", "CD-Produktion «Drive»"),
       ("2019", "CD-Taufe"),
       ("2019", "TV Oberwallis"),
+      ("2021", "Matthias Abächerli kommt am Bass dazu – das Trio in der heutigen Besetzung"),
       ("2022", "CD-Produktion «Dur D’Altstadt» abgeschlossen"),
       ("2022", "Auftritt in der SRF-Sendung Potzmusig"),
       ("2023", "CD-Taufe am 11. März, Chollerhalle Zug"),
