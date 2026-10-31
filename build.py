@@ -191,7 +191,7 @@ grp = lambda g: [p for p in P if p[7] == g]
 # ---------------------------------------------------------------- Konzerte
 # (datum JJJJ-MM-TT, zeit, band-slug, ort, link) – vergangene blendet site.js automatisch aus
 KONZERTE = [
-    ("2026-11-21", "20:00", "julian-von-fluee", "ARTick – Schlösser Mattstetten", "https://eventfrog.ch/de/p/konzerte/folk/julian-von-fluee-trio-alpine-folk-7462512049513359337.html"),
+    ("2026-11-21", "20:00", "julian-von-fluee", "ARTick – Schlössli Mattstetten", "https://eventfrog.ch/de/p/konzerte/folk/julian-von-fluee-trio-alpine-folk-7462512049513359337.html"),
     ("2026-12-05", "18:00", "julian-von-fluee", "Alpine Folk im Roten Doppelpfeil «Churchill», Zürich", "https://www.sbb.ch/de/freizeit-ferien/ideen/angebot.html/zuege/folkmusik-churchill"),
     ("2027-01-22", "", "julian-von-fluee", "Kulturverein Ermitage, Beckenried", ""),
     ("2027-01-23", "", "julian-von-fluee", "Jazzclub Thalwil, feat. Roland von Flüe", ""),
