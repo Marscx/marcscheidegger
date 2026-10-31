@@ -109,7 +109,7 @@ P = [
       ("2008", "CD-Produktion und Clubtour"), ("2011", "CD-Produktion und Clubtour")], [], "frueher"),
     ("kubus", "Kubus", "kubus.jpg", "1999 – 2006",
      "Rafael Woll – Schlagzeug · Marcel Stalder – Bass · Adrian Pflugshaupt – Saxofon · Peter Estermann – Piano · Fabian Stübi – Elektronik · Marc Scheidegger – Gitarre, Elektronik",
-     [("1999", "Luzerner Werkbeiträge"), ("2001", "Jazzfestival Kaunas, Litauen"),
+     [("1999", "Luzerner Werkbeiträge"), ("2001", "Jazzfestival Kaunas, Litauen"), ("2002", "Album «Kubus» (SeeHear Recordings)"),
       ("2003", "Jazzfestival Willisau, Hauptbühne"), ("2006", "Anerkennungspreis der Stadt Luzern")], [], "frueher"),
     ("stimmreise", "stimmreise.ch", None, "2010 – 2014",
      "Nadja Räss – Gesang · Dani Häusler – Klarinette, Gesang · Richard Hugener – Bass, Gesang · Marc Scheidegger – Gitarre, Gesang",
@@ -191,6 +191,10 @@ TRACKS = {
         ("yt", "BHHYikTRc4E", "Dur d’Altstadt", "Dur d’Altstadt", "2023"),
         ("am", "1690406111?i=1690406557", "Uf um Stoos ob Schwyz", "Drive", "2019"),
         ("am", "1690406111?i=1690406337", "Nachtspaziergang", "Drive", "2019"),
+    ],
+    "kubus": [
+        ("am", "1435500427?i=1435500429", "Hürfel", "Kubus", "2002"),
+        ("am", "1435500427?i=1435500703", "Pilzkultur", "Kubus", "2002"),
     ],
     "moe": [
         ("yt", "S0OphG_POJc", "Zundersobsi", "Inners", "2012"),
