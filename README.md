@@ -40,8 +40,23 @@ php -S localhost:8090
 
 Dann http://localhost:8090 öffnen.
 
-## Noch offen vor dem Livegang
+## Veröffentlichen (Plesk)
+
+1. **Test:** Subdomain `neu.marcscheidegger.ch` → Git → Repository
+   `https://github.com/Marscx/marcscheidegger.git`, Branch `main`, automatische Bereitstellung
+   bei Push, Bereitstellungspfad = Dokumentenstamm der Subdomain.
+   SSL/TLS (Let's Encrypt) für die Subdomain aktivieren – `.htaccess` leitet auf HTTPS um.
+   Auf `neu.` sendet der Server `noindex`, damit Google die Testseite nicht aufnimmt.
+2. **Livegang:** bei `marcscheidegger.ch` unter Hosting-Einstellungen den Dokumentenstamm auf den
+   Ordner von `neu.marcscheidegger.ch` stellen. Die WordPress-Dateien in `httpdocs` bleiben
+   unverändert; zurück geht es, indem man den Dokumentenstamm wieder auf `httpdocs` stellt.
+
+Noch offen vor dem Livegang:
 
 - Impressum: Postadresse ergänzen
 - Datenschutz: Hoster ergänzen
-- Testen auf einer Subdomain (z.B. neu.marcscheidegger.ch), erst danach auf marcscheidegger.ch umstellen
+
+## Urheberrecht
+
+Texte, Fotos und Grafiken: © Marc Scheidegger bzw. die jeweiligen Bands und Fotografinnen und
+Fotografen. Alle Rechte vorbehalten – keine Weiterverwendung ohne Einwilligung.
