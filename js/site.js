@@ -1,4 +1,4 @@
-// marcscheidegger.ch – Navigation (Mobil), Jahr in der Fusszeile, Rückmeldung Kontaktformular
+// marcscheidegger.ch – Navigation (Mobil), Jahr in der Fusszeile, Konzerte, Clips und Hörproben
 document.documentElement.classList.add('js');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -78,10 +78,4 @@ document.addEventListener('DOMContentLoaded', () => {
             a.replaceWith(f);
         });
     });
-
-    // kontakt.php leitet mit ?gesendet=1 oder ?fehler=1 zurück
-    const params = new URLSearchParams(location.search);
-    const show = id => { const el = document.getElementById(id); if (el) el.hidden = false; };
-    if (params.has('gesendet')) show('msg-ok');
-    if (params.has('fehler')) show('msg-err');
 });

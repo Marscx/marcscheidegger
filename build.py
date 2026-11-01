@@ -5,13 +5,16 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 7  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 8  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
 
 E = html.escape
 CUR = ' aria-current="page"'
+MAIL_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
+             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>')
 
 def page(fname, title, desc, body, current=None):
     navlis = "\n".join(
@@ -59,6 +62,7 @@ def page(fname, title, desc, body, current=None):
                 <li><a href="https://www.instagram.com/marscx/">Instagram</a></li>
                 <li><a href="https://www.youtube.com/watch?v=AC6F9rHJwL4">YouTube</a></li>
                 <li><a href="https://www.linkedin.com/in/marc-scheidegger-470537ab/">LinkedIn</a></li>
+                <li><a href="mailto:marcscheidegger@mac.com">E-Mail</a></li>
                 <li><a href="impressum.html">Impressum</a></li>
                 <li><a href="datenschutz.html">Datenschutz</a></li>
             </ul>
@@ -541,7 +545,7 @@ home = f"""        <section class="hero">
                 <span class="kicker">Kontakt</span>
                 <h2>Konzert, Studio oder Anfrage?</h2>
                 <p>Schreib mir – ich melde mich gerne.</p>
-                <div class="btns"><a class="btn" href="kontakt.html">Nachricht schreiben</a></div>
+                <div class="btns"><a class="btn" href="mailto:marcscheidegger@mac.com">{MAIL_ICON} E-Mail schreiben</a></div>
             </div>
         </section>
 """
@@ -598,7 +602,7 @@ lernen = f"""        <section class="hero small plain">
 page("lernen.html", "Lernen", "Übe-Tools von Marc Scheidegger: Würfel, Übe-Timer und Instrumentengrafiken, dazu Online-Kurse und Werkzeuge zum Musik machen.", lernen)
 
 # ---------------------------------------------------------------- Kontakt
-kontakt = """        <section class="hero small plain">
+kontakt = f"""        <section class="hero small plain">
             <div class="wrap">
                 <span class="kicker">Kontakt</span>
                 <h1>Lass uns<br>Musik machen</h1>
@@ -608,23 +612,13 @@ kontakt = """        <section class="hero small plain">
 
         <section class="section">
             <div class="wrap grid two">
-                <div class="card"><div class="body">
-                    <h2 style="font-size:1.7rem">Nachricht schreiben</h2>
-                    <p id="msg-ok" class="notice ok" hidden>Danke! Deine Nachricht ist angekommen.</p>
-                    <p id="msg-err" class="notice err" hidden>Das hat leider nicht geklappt. Bitte prüfe die Angaben oder schreib direkt per E-Mail.</p>
-                    <form class="form" action="kontakt.php" method="post">
-                        <label>Name<input name="name" autocomplete="name" required maxlength="120"></label>
-                        <label>E-Mail<input name="email" type="email" autocomplete="email" required maxlength="200"></label>
-                        <label>Nachricht<textarea name="nachricht" required maxlength="5000"></textarea></label>
-                        <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-                        <button class="btn" type="submit">Senden</button>
-                    </form>
-                </div></div>
+                <a class="card mail-card" href="mailto:marcscheidegger@mac.com">
+                    <span class="mail-icon">{MAIL_ICON}</span>
+                    <span class="kicker">E-Mail</span>
+                    <strong>marcscheidegger@mac.com</strong>
+                    <span class="more">Nachricht schreiben</span>
+                </a>
                 <div style="display:grid;gap:24px;align-content:start">
-                    <div class="card"><div class="body">
-                        <h2 style="font-size:1.4rem">Direkt per E-Mail</h2>
-                        <p><a href="mailto:marcscheidegger@mac.com">marcscheidegger@mac.com</a></p>
-                    </div></div>
                     <div class="card"><div class="body">
                         <h2 style="font-size:1.4rem">Social Media</h2>
                         <ul class="links">
@@ -669,8 +663,8 @@ datenschutz = """        <section class="section">
                 <p>Marc Scheidegger, <a href="mailto:marcscheidegger@mac.com">marcscheidegger@mac.com</a> (Adresse siehe <a href="impressum.html">Impressum</a>).</p>
                 <h2>Server-Logdateien</h2>
                 <p>Beim Aufruf der Website speichert der Webserver technisch notwendige Daten (IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser). Diese Daten dienen dem sicheren Betrieb und werden nach kurzer Zeit gelöscht. <!-- TODO: Hoster und Speicherdauer ergänzen -->[Hoster bitte ergänzen]</p>
-                <h2>Kontaktformular und E-Mail</h2>
-                <p>Wenn du mir über das Kontaktformular oder per E-Mail schreibst, verwende ich deine Angaben (Name, E-Mail-Adresse, Nachricht) nur, um deine Anfrage zu beantworten. Die Daten werden nicht weitergegeben.</p>
+                <h2>E-Mail</h2>
+                <p>Wenn du mir per E-Mail schreibst, verwende ich deine Angaben nur, um deine Anfrage zu beantworten. Die Daten werden nicht weitergegeben.</p>
                 <h2>Videos</h2>
                 <p>Videos und Hörproben von YouTube, SRF und Apple Music sind so eingebunden, dass beim Besuch der Seite keine Daten an diese Anbieter gehen. Erst wenn du auf ein Video oder eine Hörprobe klickst, wird der Player des Anbieters geladen (YouTube im erweiterten Datenschutzmodus, youtube-nocookie.com). Dabei erhält der Anbieter deine IP-Adresse und es gelten seine Datenschutzbestimmungen.</p>
                 <h2>Externe Links</h2>

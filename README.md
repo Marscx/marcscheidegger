@@ -11,7 +11,7 @@ Ersetzt die bisherige WordPress-Seite.
 | `projekte.html` | Aktuelle Bands, frühere Bands, Begleitmusiker & Studio |
 | `chronologie.html` | Alle Stationen nach Jahren |
 | `lernen.html` | Übe-Tools, Online-Kurse, Links |
-| `kontakt.html` + `kontakt.php` | Kontaktformular (PHP `mail()`) |
+| `kontakt.html` | E-Mail und Social Media |
 | `impressum.html`, `datenschutz.html`, `404.html` | Rechtliches, Fehlerseite |
 | `css/site.css`, `js/site.js` | Gemeinsames Design, Mobil-Menü |
 | `.htaccess` | HTTPS, 301-Weiterleitungen der alten WordPress-Adressen, Caching |
@@ -38,7 +38,7 @@ python3 build.py
 php -S localhost:8090
 ```
 
-Dann http://localhost:8090 öffnen (das Kontaktformular verschickt lokal keine Mails).
+Dann http://localhost:8090 öffnen.
 
 ## Noch offen vor dem Livegang
 
