@@ -1,6 +1,7 @@
 # marcscheidegger.ch – Apache (Plesk)
 
-DirectoryIndex index.html
+# Unterordner (moodle, MarcBuch, ghoerweg …) haben teils index.htm oder index.php als Startseite
+DirectoryIndex index.html home.html index.htm index.php
 ErrorDocument 404 /404.html
 AddDefaultCharset utf-8
 
@@ -108,7 +109,11 @@ RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2026 [R=301,NE,QSD,L]
 # Übrige WordPress-Pfade
 RewriteRule ^(vergangene-projekte|social-media)/?$ /projekte.html [R=301,L]
 RewriteRule ^datenschutzerklaerung/?$ /datenschutz.html [R=301,L]
-RewriteRule ^(feed|wp-admin|wp-login\.php|wp-content|wp-json)(/.*)?$ / [R=301,QSD,L]
+RewriteRule ^(feed|wp-admin|wp-login\.php|wp-json)(/.*)?$ / [R=301,QSD,L]
+
+# Liegengelassenes WordPress stilllegen: PHP-Dateien sperren, Uploads (Bilder, PDFs) bleiben erreichbar
+RewriteRule ^(wp-[a-z-]+\.php|xmlrpc\.php|readme\.html|liesmich\.html|license\.txt)$ - [F,L]
+RewriteRule ^wp-(includes|content)/.*\.php$ - [F,L]
 RewriteCond %{QUERY_STRING} (^|&)(rest_route|feed)=
 RewriteRule ^(index\.php)?$ / [R=301,QSD,L]
 RewriteRule ^index\.php$ / [R=301,L]
