@@ -1,22 +1,73 @@
 """Erzeugt alle HTML-Seiten von marcscheidegger.ch.
 
-Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
+SO FUNKTIONIERT DIE WEBSITE
+---------------------------
+Die Website besteht aus fertigen HTML-Dateien (index.html, projekte.html …), die der
+Webserver einfach ausliefert – ohne Datenbank, ohne WordPress. Damit Kopf- und
+Fusszeile auf allen Seiten gleich sind und Inhalte nur an einer Stelle stehen,
+werden die HTML-Dateien von diesem Skript erzeugt.
+
+    build.py  ──erzeugt──▶  index.html, projekte.html, chronologie.html, lernen.html,
+                            kontakt.html, impressum.html, datenschutz.html, 404.html
+
+Die HTML-Dateien deshalb NIE direkt bearbeiten – Änderungen gehen beim nächsten
+Durchlauf verloren. Immer hier ändern und dann im Terminal ausführen:
+
+    python3 build.py
+
+Weitere Dateien:
+    css/site.css   Aussehen (Farben, Abstände, Layout)
+    js/site.js     Kleine Funktionen im Browser (Handy-Menü, Konzerte, Videos, Hörproben)
+    .htaccess      Regeln für den Webserver (Weiterleitungen, HTTPS, Sperren)
+    img/           Bilder
+
+AUFBAU DIESER DATEI
+-------------------
+1. Grundeinstellungen und Bausteine (Navigation, Icons, Seitenrahmen)
+2. Inhalte als Listen: Projekte, Clips, Hörproben, Konzerte
+3. Funktionen, die aus den Listen HTML machen
+4. Die einzelnen Seiten (Projekte, Chronologie, Home, Lernen, Kontakt, Rechtliches, 404)
+
+Was du am häufigsten änderst:
+    neues Konzert          → Liste KONZERTE
+    neue Station / Band    → Liste P (Projekte)
+    neues Video            → Liste CLIPS
+    neue Hörprobe          → Liste TRACKS
+    Texte einer Seite      → Abschnitt der jeweiligen Seite weiter unten
 """
 import html, os, re
 
-OUT = os.path.dirname(os.path.abspath(__file__))
-V = 9  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+# =============================================================================
+# 1. GRUNDEINSTELLUNGEN UND BAUSTEINE
+# =============================================================================
 
+# Ordner, in den die HTML-Dateien geschrieben werden (= Ordner dieser Datei)
+OUT = os.path.dirname(os.path.abspath(__file__))
+
+# Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
+# den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
+# → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
+V = 9
+
+# Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
 
+# E() macht Text HTML-sicher: aus "&" wird "&amp;", aus "<" wird "&lt;" usw.
 E = html.escape
+# Markiert im Menü die Seite, auf der man gerade ist (wird per CSS hervorgehoben)
 CUR = ' aria-current="page"'
+
+# --- Icons -------------------------------------------------------------------
+# Alle Icons sind kleine SVG-Grafiken direkt im Code (keine externen Icon-Dienste,
+# damit beim Seitenaufruf keine Daten an Dritte gehen). "currentColor" bedeutet:
+# das Icon nimmt die Textfarbe an, die im CSS festgelegt ist.
 MAIL_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
              '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>')
 
 def icon(inner):
+    """Verpackt die Zeichnung eines Icons in einen einheitlichen SVG-Rahmen (24×24, Strichstärke 1.8)."""
     return ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
             f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{inner}</svg>')
 
@@ -28,6 +79,11 @@ ICONS = {
     "x": icon('<path d="M4 4h4.5L20 20h-4.5z"/><path d="M19.5 4l-6.6 7.5M11.1 12.5 4.5 20"/>'),
     "mail": MAIL_ICON,
 }
+
+# --- Social Media ------------------------------------------------------------
+# (Icon-Name, Beschriftung, Link). Erscheint als Icon-Reihe in der Fusszeile jeder
+# Seite und als Liste auf der Kontaktseite (dort ohne E-Mail, die hat eine eigene Karte).
+# Neuen Kanal hinzufügen: Zeile ergänzen und oben in ICONS ein passendes Icon anlegen.
 SOCIAL = [
     ("instagram", "Instagram", "https://www.instagram.com/marscx/"),
     ("youtube", "YouTube", "https://www.youtube.com/watch?v=AC6F9rHJwL4"),
@@ -37,19 +93,33 @@ SOCIAL = [
 ]
 
 def social_icons(indent):
+    """Runde Icons ohne Text für die Fusszeile (Beschriftung nur als Tooltip / für Screenreader)."""
     return "\n".join(f'{indent}<li><a href="{u}" aria-label="{t}" title="{t}">{ICONS[k]}</a></li>' for k, t, u in SOCIAL)
 
 def social_links(indent):
+    """Liste mit Icon + Name für die Kontaktseite (E-Mail ausgelassen)."""
     return "\n".join(f'{indent}<li><a href="{u}"><span class="ico">{ICONS[k]}</span>{t}</a></li>' for k, t, u in SOCIAL if k != "mail")
 
+# --- Seitenrahmen ------------------------------------------------------------
 def page(fname, title, desc, body, current=None):
+    """Schreibt eine komplette HTML-Seite: gemeinsamer Rahmen + der Inhalt "body".
+
+    fname    Dateiname, z. B. "projekte.html"
+    title    Seitentitel im Browser-Tab ("Projekte – Marc Scheidegger")
+    desc     Kurzbeschreibung für Google und für Vorschauen beim Teilen (WhatsApp usw.)
+    body     der eigentliche Seiteninhalt (HTML-Abschnitte, siehe weiter unten)
+    current  welcher Menüpunkt hervorgehoben wird; "-" = keiner (Impressum usw.)
+    """
     navlis = "\n".join(
         f'                <li><a href="{h}"{CUR if h == (current or fname) else ""}>{t}</a></li>'
         for h, t in NAV)
     full_title = "Marc Scheidegger – Gitarre & Gesang" if fname == "index.html" else f"{title} – Marc Scheidegger"
     doc = f"""<!doctype html>
+<!-- Diese Datei wird von build.py erzeugt – Änderungen bitte dort machen. -->
 <html lang="de-CH">
 <head>
+    <!-- Unsichtbarer Kopf: Zeichensatz, Handy-Darstellung, Titel, Beschreibung
+         für Google (description) und für Link-Vorschauen (og:…), Icon, CSS und JS -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{E(full_title)}</title>
@@ -64,7 +134,11 @@ def page(fname, title, desc, body, current=None):
     <script src="js/site.js?v={V}"></script>
 </head>
 <body>
+    <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
     <a class="skip" href="#inhalt">Zum Inhalt</a>
+
+    <!-- ===== KOPFZEILE: Name links, Navigation rechts (bleibt beim Scrollen oben).
+         Auf dem Handy wird die Navigation hinter dem Knopf "Menü" versteckt. ===== -->
     <header class="site-header">
         <div class="wrap">
             <a class="brand" href="index.html">Marc <span>Scheidegger</span></a>
@@ -77,10 +151,13 @@ def page(fname, title, desc, body, current=None):
         </div>
     </header>
 
+    <!-- ===== HAUPTINHALT der Seite ===== -->
     <main id="inhalt">
 {body.rstrip()}
     </main>
 
+    <!-- ===== FUSSZEILE: Copyright, Social-Media-Icons, Impressum/Datenschutz.
+         Die Jahreszahl wird von site.js automatisch aktualisiert. ===== -->
     <footer class="site-footer">
         <div class="wrap">
             <p>© <span data-year>2026</span> Marc Scheidegger</p>
@@ -99,8 +176,30 @@ def page(fname, title, desc, body, current=None):
     with open(os.path.join(OUT, fname), "w") as f:
         f.write(doc)
 
+# =============================================================================
+# 2. INHALTE
+# =============================================================================
+
 # ---------------------------------------------------------------- Projekte
-# (slug, name, bild, zeitraum, besetzung, fakten[(jahr, text)], links[(url, text)], gruppe)
+# Alle Bands und Projekte. Daraus entstehen die Seite "Projekte" UND die
+# "Chronologie" (die Jahreszahlen der Fakten werden dort automatisch sortiert).
+#
+# Jeder Eintrag hat 8 Felder in dieser Reihenfolge:
+#   1 slug       kurzer Kennname ohne Leerzeichen/Umlaute; wird zur Sprungmarke
+#                projekte.html#slug und verbindet CLIPS, TRACKS und KONZERTE
+#   2 name       Name der Band, wie er auf der Seite steht
+#   3 bild       Dateiname in img/ – oder None für "kein Bild"
+#   4 zeitraum   Text oben in Gelb, z. B. "seit 2014" oder "2002 – 2011"
+#   5 besetzung  Musiker mit Instrumenten, durch " · " getrennt
+#   6 fakten     Liste von ("Jahr", "Text"). Jahr darf ein Zeitraum sein
+#                ("2010 – 2014"); in der Chronologie erscheint der Eintrag beim Startjahr.
+#   7 links      Buttons zu externen Seiten: [("https://…", "Beschriftung")] oder []
+#   8 gruppe     "aktuell" = grosse Darstellung oben, "frueher" = Frühere Bands,
+#                "begleit" = Begleitmusiker & Studio
+#
+# Beispiel für eine neue Station bei einer bestehenden Band: in deren Fakten-Liste
+#   ("2027", "Auftritt am Festival XY"),
+# ergänzen. Band wechselt zu "früher": Feld 8 von "aktuell" auf "frueher" ändern.
 P = [
     ("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio-treppe.jpg", "seit 2014",
      "Julian von Flüe – Akkordeon · Marc Scheidegger – Gitarre · Matthias Abächerli – Bass (seit 2021)",
@@ -179,14 +278,23 @@ P = [
      [("2013", "Studioaufnahmen für die Vorentscheidung des Eurovision Song Contest")], [], "begleit"),
 ]
 
+# Optionaler Einleitungstext unter dem Bandnamen (nur für die grossen "aktuell"-Einträge)
 INTRO = {
     "julian-von-fluee": "Alpine Folk: Julian von Flües eigene Kompositionen, verwurzelt in der Musik des Alpenraums und inspiriert von amerikanischer Country- und Folkmusik. Aktuelles Album: «Alpine Folk» (2024).",
     "mala-oreen": "«Songs for and from the heart» – Americana und Folk mit mehrstimmigem Gesang. Das Album «AWAKE» nannte Americana Highways «one of the year’s best».",
 }
 
-# ---------------------------------------------------------------- Clips
-# (quelle, id, titel, jahr) – nur Clips, in denen Marc nachweislich mitspielt.
-# Vorschaubilder liegen lokal in img/clips/; das Video lädt erst nach Klick (Datenschutz).
+# ---------------------------------------------------------------- Clips (Videos)
+# Videos pro Band, geordnet nach slug (siehe Projekte). Ein Eintrag:
+#   (quelle, id, titel, jahr)
+#   quelle  "yt" = YouTube, "srf" = SRF Play
+#   id      YouTube: die 11 Zeichen nach "watch?v=" in der Adresse
+#           SRF:     die lange ID aus der SRF-Play-Adresse (urn:srf:video:…)
+# Nur Clips, in denen Marc nachweislich mitspielt.
+#
+# Das Vorschaubild muss lokal in img/clips/ liegen: "yt-<id>.jpg" bzw.
+# "srf-<erste 8 Zeichen der id>.jpg". Das Video selbst lädt erst nach einem Klick –
+# vorher gehen keine Daten an YouTube/SRF (Datenschutz).
 CLIPS = {
     "julian-von-fluee": [
         ("srf", "017d68a1-7ecb-4124-a484-b73eafa8a137", "SRF Typisch Volksmusik Sessions", "2025"),
@@ -210,7 +318,13 @@ CLIPS = {
     ],
 }
 
-# Hörproben von Apple Music: (album-id?i=track-id, titel, album, jahr)
+# ---------------------------------------------------------------- Hörproben
+# Hörproben von Apple Music pro Band (slug). Ein Eintrag:
+#   (album-id?i=track-id, titel, album, jahr)
+# Die IDs findest du in der Adresse eines Songs bei music.apple.com, z. B.
+#   https://music.apple.com/ch/album/alpine-folk/1779697391?i=1779698068
+#                                                └ album-id ┘   └ track-id ┘
+# Beim Klick öffnet sich der Apple-Player unten rechts (ohne Abo: 30 Sekunden).
 # Nur Aufnahmen, auf denen Marc spielt (eigene Liste der CD-Produktionen bzw. Credits).
 TRACKS = {
     "julian-von-fluee": [
@@ -248,12 +362,21 @@ TRACKS = {
     ],
 }
 
+# =============================================================================
+# 3. FUNKTIONEN: aus den Listen oben wird HTML
+# =============================================================================
+# Diese Funktionen musst du normalerweise nicht ändern. Sie bauen die immer
+# gleichen Bausteine (Hörprobe, Video, Fakten-Liste, Band-Karte) zusammen.
+
 def track(tid, t, alb, y):
+    """Eine Zeile in der Hörproben-Liste. Der Link führt zu Apple Music; site.js
+    fängt den Klick ab und öffnet stattdessen den Mini-Player (data-embed)."""
     return (f"""                            <li><a class="track" href="https://music.apple.com/ch/album/{tid}" """
             f"""data-embed="https://embed.music.apple.com/ch/album/{tid}" data-title="{E(t)}">"""
             f"""<b>{E(t)}</b> <span>{E(alb)} · {y}</span></a></li>""")
 
 def tracks(slug):
+    """Block "Hörproben" einer Band – leer, wenn die Band keine Hörproben hat."""
     if slug not in TRACKS:
         return ""
     return f"""
@@ -265,6 +388,8 @@ def tracks(slug):
                         </div>"""
 
 def clip(kind, cid, title, year):
+    """Ein Video als Vorschaubild mit Abspielknopf. Erst der Klick ersetzt das Bild
+    durch den echten Player (siehe site.js). Ohne JavaScript führt der Link zum Video."""
     if kind == "yt":
         embed = f"https://www.youtube-nocookie.com/embed/{cid}?autoplay=1&rel=0"
         url, thumb, src = f"https://www.youtube.com/watch?v={cid}", f"yt-{cid}.jpg", "YouTube"
@@ -282,6 +407,7 @@ def clip(kind, cid, title, year):
                             </figure>"""
 
 def clips(slug):
+    """Alle Videos einer Band als Raster – leer, wenn die Band keine Videos hat."""
     if slug not in CLIPS:
         return ""
     return f"""
@@ -291,9 +417,11 @@ def clips(slug):
                         <p class="clip-note">Videos werden erst beim Abspielen von YouTube bzw. SRF geladen.</p>"""
 
 def facts(fs):
+    """Die Liste "Jahr – Text" einer Band."""
     return "\n".join(f"                            <li><b>{E(y)}</b><span>{E(t)}</span></li>" for y, t in fs)
 
 def project_row(p):
+    """Grosse Darstellung für aktuelle Bands: Bild links, Text rechts, Videos darunter."""
     slug, name, img, years, lineup, fs, links, _ = p
     btn = ("\n                        <div class=\"btns\">" + "".join(
         f'<a class="btn ghost" href="{u}">{E(t)} ↗</a>' for u, t in links) + "</div>") if links else ""
@@ -311,6 +439,7 @@ def project_row(p):
                 </article>"""
 
 def compact_card(p):
+    """Kompakte Karte für frühere Bands und Begleitmusiker (Bild oben, falls vorhanden)."""
     slug, name, img, years, lineup, fs, links, _ = p
     im = f'\n                    <img src="img/{img}" alt="{E(name)}" loading="lazy" width="1200" height="800">' if img else ""
     return f"""                <article class="card" id="{slug}">{im}
@@ -324,10 +453,19 @@ def compact_card(p):
                     </div>
                 </article>"""
 
+# Alle Projekte einer Gruppe ("aktuell", "frueher" oder "begleit")
 grp = lambda g: [p for p in P if p[7] == g]
 
 # ---------------------------------------------------------------- Konzerte
-# (datum JJJJ-MM-TT, zeit, band-slug, ort, link) – vergangene blendet site.js automatisch aus
+# Kommende Konzerte, nach Datum sortiert eintragen. Ein Eintrag:
+#   (datum, zeit, band-slug, ort, link)
+#   datum      immer im Format JJJJ-MM-TT, z. B. "2027-03-18"
+#   zeit       "20:15" oder "" wenn unbekannt
+#   band-slug  slug aus der Projektliste, z. B. "julian-von-fluee"
+#   ort        Veranstalter und Ort
+#   link       Ticket-/Info-Link oder ""
+# Vergangene Konzerte musst du nicht löschen: site.js blendet sie im Browser
+# automatisch aus. Die Startseite zeigt die nächsten 5, die Projekte-Seite alle.
 KONZERTE = [
     ("2026-11-21", "20:00", "julian-von-fluee", "ARTick – Schlössli Mattstetten", "https://eventfrog.ch/de/p/konzerte/folk/julian-von-fluee-trio-alpine-folk-7462512049513359337.html"),
     ("2026-12-05", "18:00", "julian-von-fluee", "Alpine Folk im Roten Doppelpfeil «Churchill», Zürich", "https://www.sbb.ch/de/freizeit-ferien/ideen/angebot.html/zuege/folkmusik-churchill"),
@@ -346,9 +484,10 @@ KONZERTE = [
     ("2027-10-31", "17:00", "julian-von-fluee", "Kulturraum Marabu, Gelterkinden", ""),
 ]
 MONATE = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
-BAND = {p[0]: p[1] for p in P}
+BAND = {p[0]: p[1] for p in P}   # slug → Bandname, z. B. "mala-oreen" → "Mala Oreen"
 
 def konzerte(limit=None):
+    """Konzertliste. limit = wie viele höchstens sichtbar sind (Startseite: 5)."""
     items = []
     for d, t, b, ort, url in KONZERTE:
         y, m, day = d.split("-")
@@ -364,7 +503,22 @@ def konzerte(limit=None):
                 </ul>
                 <p class="gigs-empty" hidden>Zurzeit sind keine Konzerte eingetragen.</p>"""
 
-projekte = f"""        <section class="hero small">
+# =============================================================================
+# 4. DIE SEITEN
+# =============================================================================
+# Jede Seite ist ein Text mit HTML-Abschnitten (<section>). Die {…} in geschweiften
+# Klammern werden beim Erzeugen durch die Bausteine von oben ersetzt.
+# Häufige CSS-Klassen (Aussehen in site.css):
+#   hero          grosser Seitenkopf (mit Bild; "small" = niedriger, "plain" = ohne Bild)
+#   section       normaler Abschnitt; "alt" = leicht anderer Hintergrund zur Abwechslung
+#   wrap          begrenzt die Breite und zentriert den Inhalt
+#   kicker        kleine Überschrift in Grossbuchstaben über dem Titel
+#   btn / ghost   gelber Button / umrandeter Button
+#   grid / two    Raster für Karten (automatisch so viele Spalten wie Platz hat / max. 2)
+
+# ---------------------------------------------------------------- Seite: Projekte
+projekte = f"""        <!-- ===== SEITENKOPF mit Bandfoto und Sprung-Buttons zu den Abschnitten ===== -->
+        <section class="hero small">
             <img src="img/mat-and-yvonne.jpg" alt="" width="2000" height="1330">
             <div class="wrap">
                 <span class="kicker">Bands &amp; Projekte</span>
@@ -379,6 +533,7 @@ projekte = f"""        <section class="hero small">
             </div>
         </section>
 
+        <!-- ===== AKTUELLE BANDS: grosse Darstellung (Liste P, gruppe "aktuell") ===== -->
         <section class="section" id="aktuell">
             <div class="wrap">
                 <div class="section-head">
@@ -389,6 +544,7 @@ projekte = f"""        <section class="hero small">
             </div>
         </section>
 
+        <!-- ===== KONZERTE: alle kommenden Termine (Liste KONZERTE) ===== -->
         <section class="section alt" id="konzerte">
             <div class="wrap">
                 <div class="section-head">
@@ -399,6 +555,7 @@ projekte = f"""        <section class="hero small">
             </div>
         </section>
 
+        <!-- ===== FRÜHERE BANDS: kompakte Karten (gruppe "frueher") ===== -->
         <section class="section" id="frueher">
             <div class="wrap">
                 <div class="section-head">
@@ -411,6 +568,7 @@ projekte = f"""        <section class="hero small">
             </div>
         </section>
 
+        <!-- ===== BEGLEITMUSIKER & STUDIO: kompakte Karten (gruppe "begleit") ===== -->
         <section class="section alt" id="begleit">
             <div class="wrap">
                 <div class="section-head">
@@ -427,7 +585,9 @@ projekte = f"""        <section class="hero small">
 """
 page("projekte.html", "Projekte", "Bands und Projekte von Marc Scheidegger: Julian von Flüe Trio, Mala Oreen, Boogiefox sowie frühere Bands und Produktionen als Begleitmusiker.", projekte)
 
-# ---------------------------------------------------------------- Chronologie
+# ---------------------------------------------------------------- Seite: Chronologie
+# Die Chronologie wird automatisch aus den Fakten aller Projekte gebaut:
+# jeder Fakt landet beim Startjahr; bei Zeiträumen wird "(bis …)" angehängt.
 by_year = {}
 for p in P:
     for y, t in p[5]:
@@ -438,6 +598,7 @@ for p in P:
 years = sorted(by_year, reverse=True)
 
 def year_block(y):
+    """Ein Jahr auf der Zeitleiste mit allen Einträgen aus diesem Jahr."""
     items = "\n".join(
         f'                        <li><a href="projekte.html#{s}">{E(n)}</a> <span>– {E(t)}</span></li>'
         for s, n, t in by_year[y])
@@ -448,7 +609,8 @@ def year_block(y):
                     </ul>
                 </li>"""
 
-chrono = f"""        <section class="hero small plain">
+chrono = f"""        <!-- ===== SEITENKOPF ===== -->
+        <section class="hero small plain">
             <div class="wrap">
                 <span class="kicker">Chronologie</span>
                 <h1>Seit 1999<br>unterwegs</h1>
@@ -456,6 +618,7 @@ chrono = f"""        <section class="hero small plain">
             </div>
         </section>
 
+        <!-- ===== ZEITLEISTE: oben Sprungmarken zu den Jahren, darunter alle Jahre ===== -->
         <section class="section">
             <div class="wrap">
                 <nav class="years-nav" aria-label="Jahre">
@@ -469,8 +632,9 @@ chrono = f"""        <section class="hero small plain">
 """
 page("chronologie.html", "Chronologie", "Chronologie von Marc Scheidegger: Konzerte, CD-Produktionen, Festivals und TV-Auftritte seit 1999.", chrono)
 
-# ---------------------------------------------------------------- Home
+# ---------------------------------------------------------------- Seite: Home (Startseite)
 def band_card(slug, name, img, text):
+    """Karte einer aktuellen Band auf der Startseite; führt zur Band auf der Projekte-Seite."""
     return f"""                    <a class="card" href="projekte.html#{slug}">
                         <img src="img/{img}" alt="{E(name)}" loading="lazy" width="1200" height="800">
                         <div class="body">
@@ -480,6 +644,8 @@ def band_card(slug, name, img, text):
                         </div>
                     </a>"""
 
+# Die Übe-Tools (eigene Subdomains). (Bild-Kürzel, Name, Link, Text);
+# das Bild heisst img/tool-<Kürzel>.jpg. Wird auf Home und Lernen verwendet.
 TOOLS = [
     ("wuerfel", "Würfel", "https://zufall.marcscheidegger.ch/",
      "Zufallsgenerator für die Übezeit: Stammton, Chromatik, Akkorde, CAGED-Formen und mehr – würfeln statt immer das Gleiche üben."),
@@ -490,6 +656,7 @@ TOOLS = [
 ]
 
 def tool_card(k, name, url, text, h="h3"):
+    """Karte für ein Übe-Tool mit quadratischer Grafik."""
     return f"""                    <a class="card" href="{url}">
                         <img class="square" src="img/tool-{k}.jpg" alt="Grafik: {E(name)}" loading="lazy" width="800" height="800">
                         <div class="body">
@@ -499,7 +666,8 @@ def tool_card(k, name, url, text, h="h3"):
                         </div>
                     </a>"""
 
-home = f"""        <section class="hero">
+home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschreibung ===== -->
+        <section class="hero">
             <img src="img/hero-jvf-earlclub.jpg" alt="Marc Scheidegger mit dem Julian von Flüe Trio auf der Bühne" width="2000" height="1500" fetchpriority="high">
             <div class="wrap">
                 <span class="kicker">Gitarre · Gesang · Mandoline</span>
@@ -512,6 +680,7 @@ home = f"""        <section class="hero">
             </div>
         </section>
 
+        <!-- ===== AKTUELLE BANDS: zwei Karten (Text hier direkt im band_card-Aufruf) ===== -->
         <section class="section">
             <div class="wrap">
                 <div class="section-head">
@@ -525,6 +694,7 @@ home = f"""        <section class="hero">
             </div>
         </section>
 
+        <!-- ===== NÄCHSTE KONZERTE: die nächsten 5 aus der Liste KONZERTE ===== -->
         <section class="section alt">
             <div class="wrap">
                 <div class="section-head">
@@ -536,6 +706,7 @@ home = f"""        <section class="hero">
             </div>
         </section>
 
+        <!-- ===== ÜBER MICH: Porträt links, Text rechts ("split" = zwei Spalten) ===== -->
         <section class="section">
             <div class="wrap split">
                 <img src="img/marc-scheidegger.jpg" alt="Porträt Marc Scheidegger" loading="lazy" width="1200" height="1200">
@@ -551,6 +722,7 @@ home = f"""        <section class="hero">
             </div>
         </section>
 
+        <!-- ===== ÜBE-TOOLS: drei Karten (Liste TOOLS) ===== -->
         <section class="section alt">
             <div class="wrap">
                 <div class="section-head">
@@ -565,6 +737,7 @@ home = f"""        <section class="hero">
             </div>
         </section>
 
+        <!-- ===== KONTAKT-AUFRUF mit E-Mail-Button ===== -->
         <section class="section">
             <div class="wrap section-head" style="margin-bottom:0">
                 <span class="kicker">Kontakt</span>
@@ -576,8 +749,9 @@ home = f"""        <section class="hero">
 """
 page("index.html", "Home", "Marc Scheidegger – Gitarrist und Sänger mit dem Julian von Flüe Trio, Mala Oreen und Boogiefox. Projekte, Chronologie und Übe-Tools.", home)
 
-# ---------------------------------------------------------------- Lernen
-lernen = f"""        <section class="hero small plain">
+# ---------------------------------------------------------------- Seite: Lernen
+lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== -->
+        <section class="hero small plain">
             <div class="wrap split">
                 <div>
                     <span class="kicker">Lernen &amp; Üben</span>
@@ -592,6 +766,7 @@ lernen = f"""        <section class="hero small plain">
             </div>
         </section>
 
+        <!-- ===== ÜBE-TOOLS: dieselben Karten wie auf der Startseite (Liste TOOLS) ===== -->
         <section class="section" id="tools">
             <div class="wrap">
                 <div class="section-head">
@@ -605,6 +780,7 @@ lernen = f"""        <section class="hero small plain">
             </div>
         </section>
 
+        <!-- ===== ONLINE-KURSE (Moodle) und weitere Werkzeuge ===== -->
         <section class="section alt">
             <div class="wrap grid two">
                 <div class="card"><div class="body">
@@ -626,8 +802,9 @@ lernen = f"""        <section class="hero small plain">
 """
 page("lernen.html", "Lernen", "Übe-Tools von Marc Scheidegger: Würfel, Übe-Timer und Instrumentengrafiken, dazu Online-Kurse und Werkzeuge zum Musik machen.", lernen)
 
-# ---------------------------------------------------------------- Kontakt
-kontakt = f"""        <section class="hero small plain">
+# ---------------------------------------------------------------- Seite: Kontakt
+kontakt = f"""        <!-- ===== SEITENKOPF ===== -->
+        <section class="hero small plain">
             <div class="wrap">
                 <span class="kicker">Kontakt</span>
                 <h1>Lass uns<br>Musik machen</h1>
@@ -635,6 +812,7 @@ kontakt = f"""        <section class="hero small plain">
             </div>
         </section>
 
+        <!-- ===== E-MAIL-KARTE (links) und SOCIAL MEDIA (rechts, Liste SOCIAL) ===== -->
         <section class="section">
             <div class="wrap grid two">
                 <a class="card mail-card" href="mailto:marcscheidegger@mac.com">
@@ -656,8 +834,10 @@ kontakt = f"""        <section class="hero small plain">
 """
 page("kontakt.html", "Kontakt", "Kontakt zu Marc Scheidegger für Konzertanfragen, Studioaufnahmen und Online-Kurse.", kontakt)
 
-# ---------------------------------------------------------------- Rechtstexte
-impressum = """        <section class="section">
+# ---------------------------------------------------------------- Seiten: Impressum und Datenschutz
+# Reiner Text ("prose" = gut lesbare Textbreite). current="-" → kein Menüpunkt hervorgehoben.
+impressum = """        <!-- ===== IMPRESSUM ===== -->
+        <section class="section">
             <div class="wrap prose">
                 <span class="kicker">Rechtliches</span>
                 <h1>Impressum</h1>
@@ -676,7 +856,8 @@ impressum = """        <section class="section">
 """
 page("impressum.html", "Impressum", "Impressum von marcscheidegger.ch", impressum, current="-")
 
-datenschutz = """        <section class="section">
+datenschutz = """        <!-- ===== DATENSCHUTZERKLÄRUNG ===== -->
+        <section class="section">
             <div class="wrap prose">
                 <span class="kicker">Rechtliches</span>
                 <h1>Datenschutz</h1>
@@ -698,6 +879,8 @@ datenschutz = """        <section class="section">
 """
 page("datenschutz.html", "Datenschutz", "Datenschutzerklärung von marcscheidegger.ch", datenschutz, current="-")
 
+# ---------------------------------------------------------------- Seite: 404 (Fehlerseite)
+# Erscheint bei jeder Adresse, die es nicht gibt (eingestellt in .htaccess).
 page("404.html", "Seite nicht gefunden", "Diese Seite gibt es nicht.", """        <section class="hero small plain">
             <div class="wrap">
                 <span class="kicker">Fehler 404</span>
@@ -712,11 +895,13 @@ page("404.html", "Seite nicht gefunden", "Diese Seite gibt es nicht.", """      
         </section>
 """, current="-")
 
-# 404 wird unter beliebigen Pfaden ausgeliefert: Links absolut machen
+# Die 404-Seite kann unter jeder Adresse erscheinen (z. B. /alt/seite). Damit CSS und
+# Bilder trotzdem gefunden werden, bekommen ihre Links ein "/" davor (= ab Hauptordner). ausgeliefert: Links absolut machen
 p404 = os.path.join(OUT, "404.html")
 with open(p404) as f:
     t = re.sub(r'(href|src)="(css|js|favicon|index|img)', r'\1="/\2', f.read())
 with open(p404, "w") as f:
     f.write(t)
 
+# Kurze Bestätigung im Terminal mit allen Jahren der Chronologie
 print("ok", years)

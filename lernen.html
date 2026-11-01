@@ -1,6 +1,9 @@
 <!doctype html>
+<!-- Diese Datei wird von build.py erzeugt – Änderungen bitte dort machen. -->
 <html lang="de-CH">
 <head>
+    <!-- Unsichtbarer Kopf: Zeichensatz, Handy-Darstellung, Titel, Beschreibung
+         für Google (description) und für Link-Vorschauen (og:…), Icon, CSS und JS -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lernen – Marc Scheidegger</title>
@@ -15,7 +18,11 @@
     <script src="js/site.js?v=9"></script>
 </head>
 <body>
+    <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
     <a class="skip" href="#inhalt">Zum Inhalt</a>
+
+    <!-- ===== KOPFZEILE: Name links, Navigation rechts (bleibt beim Scrollen oben).
+         Auf dem Handy wird die Navigation hinter dem Knopf "Menü" versteckt. ===== -->
     <header class="site-header">
         <div class="wrap">
             <a class="brand" href="index.html">Marc <span>Scheidegger</span></a>
@@ -32,7 +39,9 @@
         </div>
     </header>
 
+    <!-- ===== HAUPTINHALT der Seite ===== -->
     <main id="inhalt">
+        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== -->
         <section class="hero small plain">
             <div class="wrap split">
                 <div>
@@ -48,6 +57,7 @@
             </div>
         </section>
 
+        <!-- ===== ÜBE-TOOLS: dieselben Karten wie auf der Startseite (Liste TOOLS) ===== -->
         <section class="section" id="tools">
             <div class="wrap">
                 <div class="section-head">
@@ -84,6 +94,7 @@
             </div>
         </section>
 
+        <!-- ===== ONLINE-KURSE (Moodle) und weitere Werkzeuge ===== -->
         <section class="section alt">
             <div class="wrap grid two">
                 <div class="card"><div class="body">
@@ -104,6 +115,8 @@
         </section>
     </main>
 
+    <!-- ===== FUSSZEILE: Copyright, Social-Media-Icons, Impressum/Datenschutz.
+         Die Jahreszahl wird von site.js automatisch aktualisiert. ===== -->
     <footer class="site-footer">
         <div class="wrap">
             <p>© <span data-year>2026</span> Marc Scheidegger</p>

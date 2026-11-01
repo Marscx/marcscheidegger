@@ -1,23 +1,49 @@
-/* marcscheidegger.ch – gemeinsames Design
-   Farben passen zu den Übe-Tool-Grafiken (img/tool-*.jpg). */
+/* =============================================================================
+   marcscheidegger.ch – gemeinsames Design für alle Seiten
+   =============================================================================
+   Aufbau dieser Datei (von allgemein nach speziell):
+     1. Farben und Grundwerte (Variablen)
+     2. Grundregeln für Text, Links, Bilder
+     3. Kopfzeile und Navigation (inkl. Handy-Menü)
+     4. Hero = grosser Seitenkopf
+     5. Buttons
+     6. Abschnitte, Raster und Karten
+     7. Projekte (Band-Darstellung, Fakten-Listen)
+     8. Clips (Videos)
+     9. Hörproben und Mini-Player
+    10. Konzerte
+    11. Chronologie (Zeitleiste)
+    12. E-Mail-Karte, Link-Listen, Rechtstexte
+    13. Fusszeile
 
+   Lesehilfe:
+     .name       = Klasse, im HTML class="name"
+     a:hover     = Zustand, wenn die Maus darüber ist
+     @media (max-width: 760px) { … }  = gilt nur auf schmalen Bildschirmen (Handy)
+     var(--accent) = Wert aus den Variablen unten
+   Nach Änderungen in dieser Datei in build.py die Zahl V erhöhen. */
+
+/* ---------- 1. Farben und Grundwerte ----------
+   Hier zentral ändern, dann ändert es sich überall auf der Website.
+   Die Farben passen zu den Übe-Tool-Grafiken (img/tool-*.jpg). */
 :root {
-    --bg: #0b1220;
-    --bg-2: #111a2e;
-    --panel: #16213a;
-    --line: #2a3a5e;
-    --ink: #f5f7fb;
-    --muted: #a9b8d6;
-    --blue: #8fa8dc;
-    --accent: #f2b544;
-    --accent-ink: #1a1305;
-    --radius: 18px;
-    --wrap: 1120px;
-    --font: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    color-scheme: dark;
+    --bg: #0b1220;          /* Seitenhintergrund (dunkles Nachtblau) */
+    --bg-2: #111a2e;        /* Hintergrund der "alt"-Abschnitte (etwas heller) */
+    --panel: #16213a;       /* Karten und Kästen */
+    --line: #2a3a5e;        /* Rahmen und Trennlinien */
+    --ink: #f5f7fb;         /* Haupttextfarbe (fast weiss) */
+    --muted: #a9b8d6;       /* gedämpfter Text (Besetzungen, Nebeninfos) */
+    --blue: #8fa8dc;        /* Hellblau für kleine Überschriften (kicker) */
+    --accent: #f2b544;      /* Akzentfarbe Gelb: Buttons, Links, Jahreszahlen */
+    --accent-ink: #1a1305;  /* Textfarbe auf gelbem Hintergrund */
+    --radius: 18px;         /* Rundung der Ecken von Karten und Bildern */
+    --wrap: 1120px;         /* maximale Inhaltsbreite */
+    --font: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;  /* Systemschriften, nichts wird geladen */
+    color-scheme: dark;     /* sagt dem Browser: dunkles Design (Scrollbalken usw.) */
 }
 
-* { box-sizing: border-box; }
+/* ---------- 2. Grundregeln ---------- */
+* { box-sizing: border-box; }   /* Breitenangaben schliessen Rahmen und Innenabstand mit ein */
 html { -webkit-text-size-adjust: 100%; }
 body {
     margin: 0;
@@ -29,18 +55,23 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: var(--accent); text-underline-offset: .2em; }
 a:hover { color: #ffd27a; }
 h1, h2, h3 { line-height: 1.12; margin: 0 0 .5em; letter-spacing: -.01em; }
+/* clamp(min, bevorzugt, max): Schrift wächst mit der Fensterbreite, bleibt aber in Grenzen */
 h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); font-weight: 700; }
 h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 700; }
 h3 { font-size: 1.3rem; font-weight: 600; }
 p { margin: 0 0 1em; }
 [id] { scroll-margin-top: 84px; }   /* Sprungziele nicht unter der fixen Kopfzeile */
+/* Sichtbarer gelber Rahmen, wenn man mit der Tastatur (Tab) durch die Seite geht */
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
+/* .wrap: Inhalt höchstens 1120px breit, zentriert, auf dem Handy 16px Rand links/rechts */
 .wrap { width: min(var(--wrap), 100% - 32px); margin-inline: auto; }
+/* Link "Zum Inhalt": unsichtbar, erscheint nur bei Tastaturbedienung */
 .skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--accent-ink); padding: 8px 14px; border-radius: 8px; z-index: 100; }
 .skip:focus { left: 8px; }
 
-/* ---------- Kopfzeile ---------- */
+/* ---------- 3. Kopfzeile und Navigation ----------
+   Bleibt beim Scrollen oben kleben (sticky), leicht durchsichtig mit Unschärfe. */
 .site-header {
     position: sticky; top: 0; z-index: 50;
     background: rgba(11, 18, 32, .86);
@@ -57,12 +88,16 @@ p { margin: 0 0 1em; }
     color: var(--muted); text-decoration: none; font-weight: 500;
 }
 .nav a:hover { color: var(--ink); background: var(--panel); }
+/* Menüpunkt der aktuellen Seite hervorheben */
 .nav a[aria-current="page"] { color: var(--ink); background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); }
+/* Knopf "Menü" – auf grossen Bildschirmen versteckt */
 .nav-toggle {
     display: none; background: none; border: 1px solid var(--line); color: var(--ink);
     border-radius: 10px; padding: 8px 12px; font: inherit; cursor: pointer;
 }
 
+/* Handy (bis 760px breit): Menü-Knopf zeigen, Navigation erst nach Klick aufklappen.
+   ".js" setzt site.js; ohne JavaScript bleibt die Navigation einfach sichtbar. */
 @media (max-width: 760px) {
     .nav-toggle { display: block; }
     .js .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--line); }
@@ -73,7 +108,10 @@ p { margin: 0 0 1em; }
     html:not(.js) .nav ul { flex-direction: row; flex-wrap: wrap; padding: 0; }
 }
 
-/* ---------- Hero ---------- */
+/* ---------- 4. Hero = grosser Seitenkopf ----------
+   .hero        mit Hintergrundbild, fast bildschirmhoch (Startseite)
+   .hero.small  niedriger (Unterseiten)
+   .hero.plain  ohne Bild, nur mit Farbverlauf */
 .hero {
     position: relative; isolation: isolate;
     min-height: min(82vh, 760px);
@@ -81,10 +119,12 @@ p { margin: 0 0 1em; }
     padding: 120px 0 72px;
 }
 .hero.small { min-height: 0; padding: 120px 0 56px; }
+/* Das Bild füllt den ganzen Kopf und liegt hinter dem Text */
 .hero > img {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; z-index: -2;
 }
+/* Dunkler Verlauf über dem Bild, damit der weisse Text gut lesbar ist */
 .hero::after {
     content: ""; position: absolute; inset: 0; z-index: -1;
     background:
@@ -93,12 +133,16 @@ p { margin: 0 0 1em; }
 }
 .hero.plain::after { background: radial-gradient(circle at 15% 10%, rgba(143,168,220,.22), transparent 55%), radial-gradient(circle at 90% 100%, rgba(242,181,68,.12), transparent 50%); }
 .hero .lead { font-size: clamp(1.1rem, 2vw, 1.35rem); color: #dfe6f4; max-width: 38em; }
+/* Kleine Überschrift in Grossbuchstaben über Titeln ("BANDS & PROJEKTE") */
 .kicker {
     display: inline-block; font-size: .8rem; font-weight: 600;
     letter-spacing: .28em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- 5. Buttons ----------
+   .btn        gelber Button (Hauptaktion)
+   .btn.ghost  umrandeter Button (Nebenaktion)
+   .btns       Reihe von Buttons mit Abstand */
 .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 .btn {
     display: inline-flex; align-items: center; gap: 8px;
@@ -110,15 +154,17 @@ p { margin: 0 0 1em; }
 .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn.ghost:hover { background: var(--panel); color: var(--ink); }
 
-/* ---------- Abschnitte ---------- */
+/* ---------- 6. Abschnitte, Raster und Karten ---------- */
 .section { padding: 72px 0; }
 .section.alt { background: var(--bg-2); border-block: 1px solid rgba(42,58,94,.5); }
 .section-head { max-width: 44em; margin-bottom: 36px; }
 .section-head p { color: var(--muted); }
 
+/* Raster: so viele Spalten (mind. 300px breit) wie Platz haben; .two = mind. 440px, also max. 2 */
 .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
 .grid.two { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); }
 
+/* Karte: Kasten mit Rahmen, Bild oben, Text unten (.body) */
 .card {
     background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
     overflow: hidden; display: flex; flex-direction: column;
@@ -129,15 +175,20 @@ p { margin: 0 0 1em; }
 .card .body p { color: var(--muted); }
 .card .more { margin-top: auto; font-weight: 600; text-decoration: none; }
 .card .more::after { content: " →"; }
+/* Ganze Karte ist ein Link (z. B. Bands auf der Startseite): hebt sich beim Darüberfahren */
 a.card { color: inherit; text-decoration: none; transition: transform .2s, border-color .2s; }
 a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: inherit; }
 
+/* Zwei Spalten nebeneinander (Bild + Text), auf schmalen Bildschirmen untereinander */
 .split { display: grid; gap: 48px; align-items: center; grid-template-columns: 1fr 1fr; }
 .split > * { min-width: 0; }
 .split img { border-radius: var(--radius); width: 100%; }
 @media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 28px; } }
 
-/* ---------- Projekte ---------- */
+/* ---------- 7. Projekte ----------
+   .project  grosse Darstellung der aktuellen Bands: Bild links (5 Teile), Text rechts (7 Teile)
+   .facts    Liste "Jahr – Text"
+   .compact  Raster mit kleinen Karten für frühere Bands und Begleitmusiker */
 .project {
     display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px;
     padding: 40px 0; border-top: 1px solid var(--line); align-items: start;
@@ -158,7 +209,9 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .compact h3 { margin-bottom: .25em; }
 .compact .lineup { font-size: .95rem; color: var(--muted); margin-bottom: .8em; }
 
-/* ---------- Clips (Video erst nach Klick laden) ---------- */
+/* ---------- 8. Clips (Videos) ----------
+   Zuerst nur ein Vorschaubild mit Abspielknopf (.clip-play). Beim Klick ersetzt site.js
+   das Bild durch den Player (iframe) – erst dann wird YouTube/SRF geladen. */
 .project > .clips, .project > .clip-note { grid-column: 1 / -1; }
 .project > .clips { margin-top: 4px; }
 .clips { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
@@ -170,6 +223,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 }
 .clip-play img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: opacity .2s, transform .3s; }
 .clip-play:hover img { opacity: 1; transform: scale(1.03); }
+/* Runder Abspielknopf in der Bildmitte; das Dreieck entsteht mit ::after aus Rahmenlinien */
 .clip-icon {
     position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px;
     border-radius: 50%; background: rgba(11, 18, 32, .78); box-shadow: 0 0 0 2px var(--accent);
@@ -180,6 +234,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
     border-style: solid; border-width: 12px 0 12px 19px; border-color: transparent transparent transparent var(--accent);
 }
 .clip-play:hover .clip-icon { transform: scale(1.08); background: rgba(11, 18, 32, .92); }
+/* Kleines Etikett oben links: "YouTube" oder "SRF" */
 .clip-src {
     position: absolute; left: 10px; top: 10px; padding: 2px 9px; border-radius: 999px;
     background: rgba(11, 18, 32, .8); color: var(--ink); font-size: .75rem; font-weight: 600; letter-spacing: .04em;
@@ -187,9 +242,13 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .clip figcaption { margin-top: 8px; font-weight: 600; font-size: .95rem; }
 .clip figcaption span { color: var(--muted); font-weight: 400; }
 .clip-note { font-size: .82rem; color: var(--muted); margin: 10px 0 0; }
+/* .sr = nur für Screenreader lesbar, unsichtbar auf dem Bildschirm */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ---------- Hörproben ---------- */
+/* ---------- 9. Hörproben und Mini-Player ----------
+   .track        eine Zeile mit gelbem Play-Kreis (::before), Titel und Album
+   .track.spielt die gerade laufende Hörprobe (pulsierender Kreis)
+   .mini-player  das kleine Fenster unten rechts mit dem Apple-Music-Player */
 .tracks { margin: 4px 0 8px; }
 .tracks-head { font-size: .8rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
 .tracks-head span { letter-spacing: .04em; text-transform: none; color: var(--muted); font-weight: 400; margin-left: 6px; }
@@ -225,7 +284,9 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .mp-head button:hover { border-color: var(--accent); }
 .mini-player iframe { display: block; width: 100%; height: 175px; border: 0; }   /* Höhe des Apple-Music-Players */
 
-/* ---------- Konzerte ---------- */
+/* ---------- 10. Konzerte ----------
+   Jede Zeile: Datum links, Band und Ort rechts. li[hidden] = von site.js ausgeblendete
+   vergangene Termine. Auf dem Handy steht alles untereinander. */
 .gigs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .gigs li {
     display: grid; grid-template-columns: 7.5em 1fr; gap: 20px; align-items: center;
@@ -244,7 +305,9 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
     .gigs span { display: block; }
 }
 
-/* ---------- Chronologie ---------- */
+/* ---------- 11. Chronologie ----------
+   .years-nav  die Jahres-Knöpfe oben
+   .timeline   senkrechte Linie (::before), daran pro Jahr ein Kreis (h2::after) */
 .years-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 40px; }
 .years-nav a {
     padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line);
@@ -274,7 +337,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
     .year > h2::after { right: -16px; }
 }
 
-/* ---------- E-Mail ---------- */
+/* ---------- 12. E-Mail-Karte, Link-Listen, Rechtstexte ---------- */
 .btn svg { width: 1.2em; height: 1.2em; }
 .mail-card {
     align-items: center; justify-content: center; text-align: center; gap: 6px;
@@ -292,6 +355,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .mail-card .more::after { content: " →"; }
 .mail-card:hover .mail-icon { transform: scale(1.06); }
 
+/* .links: Liste von Kästen mit Pfeil ↗ (Social Media, externe Werkzeuge) */
 .links { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .links a {
     display: flex; justify-content: space-between; align-items: center; gap: 12px;
@@ -304,11 +368,13 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .links .ico svg { width: 20px; height: 20px; }
 .links a:hover { border-color: var(--blue); }
 
+/* .prose: gut lesbare Textbreite für Impressum und Datenschutz */
 .prose { max-width: 46em; }
 .prose h2 { font-size: 1.5rem; margin-top: 1.6em; }
 .prose p, .prose li { color: #dbe3f2; }
 
-/* ---------- Fusszeile ---------- */
+/* ---------- 13. Fusszeile ----------
+   .social = runde Social-Media-Icons */
 .site-footer { border-top: 1px solid var(--line); padding: 40px 0; color: var(--muted); font-size: .95rem; }
 .site-footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; }
 .site-footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; }
@@ -322,6 +388,7 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .site-footer .social a:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
 .site-footer .social svg { width: 20px; height: 20px; }
 
+/* Wer in den Systemeinstellungen "Bewegung reduzieren" gewählt hat, bekommt keine Animationen */
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
 }

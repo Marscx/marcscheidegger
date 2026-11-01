@@ -1,18 +1,49 @@
-# marcscheidegger.ch – Apache (Plesk)
+# =============================================================================
+# marcscheidegger.ch – Regeln für den Webserver (Apache auf Plesk/Metanet)
+# =============================================================================
+# Diese Datei liest der Server bei jedem Aufruf. Sie gilt für diesen Ordner und
+# alle Unterordner. Zeilen mit # sind Kommentare.
+# Aufbau:
+#   1. Grundeinstellungen (Startseite, Fehlerseite, Zeichensatz)
+#   2. HTTPS erzwingen
+#   3. Alte WordPress-Adressen auf die neuen Seiten umleiten
+#   4. Liegengelassenes WordPress stilllegen
+#   5. Caching (wie lange Browser Dateien zwischenspeichern)
+#   6. Test-Subdomain vor Google verstecken, Sicherheits-Header
+#
+# Lesehilfe für die Umleitungen:
+#   RewriteCond  = Bedingung ("wenn …")
+#   RewriteRule  = Regel: Muster der Adresse → Ziel [Optionen]
+#   R=301  dauerhafte Umleitung (Google übernimmt die neue Adresse)
+#   L      letzte Regel, danach aufhören       F    verboten (Fehler 403)
+#   QSD    Anhang "?p=…" weglassen             NE   "#" im Ziel nicht verändern
+#   ^ … $  Anfang … Ende der Adresse
 
+# ---------- 1. Grundeinstellungen ----------
+# Welche Datei als Startseite eines Ordners gilt, in dieser Reihenfolge.
 # Unterordner (moodle, MarcBuch, ghoerweg …) haben teils index.htm oder index.php als Startseite
 DirectoryIndex index.html home.html index.htm index.php
+# Eigene Fehlerseite "Falscher Ton." für unbekannte Adressen
 ErrorDocument 404 /404.html
+# Umlaute korrekt anzeigen
 AddDefaultCharset utf-8
 
+# <IfModule …> = nur ausführen, wenn der Server diese Funktion hat (verhindert Fehler)
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# HTTPS erzwingen
+# ---------- 2. HTTPS erzwingen ----------
+# Wer http://… aufruft, wird auf die verschlüsselte Adresse https://… umgeleitet.
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# Alte WordPress-Adressen (?p=, ?page_id=, ?cat=) auf die neuen Seiten umleiten
+# ---------- 3. Alte WordPress-Adressen umleiten ----------
+# WordPress hatte Adressen wie marcscheidegger.ch/?p=65 (Beitrag), ?page_id=77 (Seite)
+# und ?cat=17 (Kategorie = Jahr). Damit alte Links und Google-Treffer weiter
+# funktionieren, führt jede alte Nummer zur passenden Stelle der neuen Website.
+#   ?p=…        Beitrag einer Band   → projekte.html#band
+#   ?page_id=…  WordPress-Seite      → passende neue Seite
+#   ?cat=…      Jahres-Kategorie     → chronologie.html#jahr-JJJJ
 RewriteCond %{QUERY_STRING} (^|&)p=33(&|$)
 RewriteRule ^(index\.php)?$ /projekte.html#open-mic-band [R=301,NE,QSD,L]
 RewriteCond %{QUERY_STRING} (^|&)p=39(&|$)
@@ -106,20 +137,29 @@ RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2025 [R=301,NE,QSD,L]
 RewriteCond %{QUERY_STRING} (^|&)cat=45(&|$)
 RewriteRule ^(index\.php)?$ /chronologie.html#jahr-2026 [R=301,NE,QSD,L]
 
-# Übrige WordPress-Pfade
+# Übrige WordPress-Adressen: alte Seiten, RSS-Feed und Anmeldung → Startseite
 RewriteRule ^(vergangene-projekte|social-media)/?$ /projekte.html [R=301,L]
 RewriteRule ^datenschutzerklaerung/?$ /datenschutz.html [R=301,L]
 RewriteRule ^(feed|wp-admin|wp-login\.php|wp-json)(/.*)?$ / [R=301,QSD,L]
 
-# Liegengelassenes WordPress stilllegen: PHP-Dateien sperren, Uploads (Bilder, PDFs) bleiben erreichbar
+# ---------- 4. Liegengelassenes WordPress stilllegen ----------
+# Die WordPress-Dateien bleiben auf dem Server liegen, sollen aber nicht mehr
+# ausführbar sein (veraltetes WordPress ist ein Einfallstor für Angreifer).
+# Gesperrt (Fehler 403): wp-….php, xmlrpc.php, Versions-Infos (readme, license)
+# und alle PHP-Dateien in wp-includes und wp-content.
+# Hochgeladene Bilder und PDFs in wp-content/uploads bleiben erreichbar.
 RewriteRule ^(wp-[a-z-]+\.php|xmlrpc\.php|readme\.html|liesmich\.html|license\.txt)$ - [F,L]
 RewriteRule ^wp-(includes|content)/.*\.php$ - [F,L]
+# WordPress-Schnittstellen (?rest_route=, ?feed=) und index.php → Startseite
 RewriteCond %{QUERY_STRING} (^|&)(rest_route|feed)=
 RewriteRule ^(index\.php)?$ / [R=301,QSD,L]
 RewriteRule ^index\.php$ / [R=301,L]
 </IfModule>
 
-# Caching: Bilder lange, CSS/JS über ?v=N versioniert
+# ---------- 5. Caching ----------
+# Browser dürfen Bilder, CSS und JS ein Jahr lang zwischenspeichern (schnellere Seite).
+# Damit Änderungen an CSS/JS trotzdem ankommen, hängt build.py "?v=…" an (Zahl V).
+# HTML-Seiten werden immer frisch geladen.
 <IfModule mod_expires.c>
 ExpiresActive On
 ExpiresByType image/jpeg "access plus 1 year"
@@ -129,13 +169,17 @@ ExpiresByType application/javascript "access plus 1 year"
 ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
-# Test-Subdomain (neu.marcscheidegger.ch) nicht bei Google aufnehmen
+# ---------- 6. Test-Subdomain und Sicherheits-Header ----------
+# Auf neu.marcscheidegger.ch sendet der Server "noindex": Google nimmt die Testseite
+# nicht auf. Auf marcscheidegger.ch selbst greift die Regel nicht.
 <IfModule mod_setenvif.c>
 SetEnvIfNoCase Host ^neu\. TESTSEITE
 </IfModule>
 
 <IfModule mod_headers.c>
 Header set X-Robots-Tag "noindex, nofollow" env=TESTSEITE
+# Sicherheits-Header: Dateitypen nicht erraten, beim Verlinken nur die Domain verraten,
+# Website nicht in fremde Seiten einbetten lassen
 Header set X-Content-Type-Options "nosniff"
 Header set Referrer-Policy "strict-origin-when-cross-origin"
 Header set X-Frame-Options "SAMEORIGIN"
