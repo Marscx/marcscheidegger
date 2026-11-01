@@ -51,11 +51,6 @@ Dann http://localhost:8090 öffnen.
    Ordner von `neu.marcscheidegger.ch` stellen. Die WordPress-Dateien in `httpdocs` bleiben
    unverändert; zurück geht es, indem man den Dokumentenstamm wieder auf `httpdocs` stellt.
 
-Noch offen vor dem Livegang:
-
-- Impressum: Postadresse ergänzen
-- Datenschutz: Hoster ergänzen
-
 ## Urheberrecht
 
 Texte, Fotos und Grafiken: © Marc Scheidegger bzw. die jeweiligen Bands und Fotografinnen und
