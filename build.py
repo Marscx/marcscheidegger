@@ -77,7 +77,7 @@ def page(fname, title, desc, body, current=None):
 # ---------------------------------------------------------------- Projekte
 # (slug, name, bild, zeitraum, besetzung, fakten[(jahr, text)], links[(url, text)], gruppe)
 P = [
-    ("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio.jpg", "seit 2014",
+    ("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio-treppe.jpg", "seit 2014",
      "Julian von Flüe – Akkordeon · Marc Scheidegger – Gitarre · Matthias Abächerli – Bass (seit 2021)",
      [("2014 – heute", "zahlreiche Konzerte"),
       ("2018", "CD-Produktion «Drive»"),
@@ -494,7 +494,7 @@ home = f"""        <section class="hero">
                     <h2>Live auf der Bühne</h2>
                 </div>
                 <div class="grid two">
-{band_card("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio.jpg", "Alpine Folk mit Akkordeon, Gitarre und Bass. Aktuelles Album «Alpine Folk» (2024), Konzerte bis 2027 und Auftritte in der SRF-Sendung Potzmusig.")}
+{band_card("julian-von-fluee", "Julian von Flüe Trio", "julian-von-fluee-trio-treppe.jpg", "Alpine Folk mit Akkordeon, Gitarre und Bass. Aktuelles Album «Alpine Folk» (2024), Konzerte bis 2027 und Auftritte in der SRF-Sendung Potzmusig.")}
 {band_card("mala-oreen", "Mala Oreen", "mala-oreen.jpg", "Americana und Folk mit Fiddle, Mandoline und mehrstimmigem Gesang. Album «AWAKE» (2021), seit 2019 zahlreiche Konzerte.")}
                 </div>
             </div>
