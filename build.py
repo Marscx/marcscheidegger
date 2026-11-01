@@ -33,7 +33,7 @@ SOCIAL = [
     ("youtube", "YouTube", "https://www.youtube.com/watch?v=AC6F9rHJwL4"),
     ("linkedin", "LinkedIn", "https://www.linkedin.com/in/marc-scheidegger-470537ab/"),
     ("x", "X", "https://twitter.com/marscx"),
-    ("mail", "E-Mail", "mailto:marcscheidegger@mac.com"),
+    ("mail", "E-Mail", "mailto:admin@marcscheidegger.ch"),
 ]
 
 def social_icons(indent):
@@ -570,7 +570,7 @@ home = f"""        <section class="hero">
                 <span class="kicker">Kontakt</span>
                 <h2>Konzert, Studio oder Anfrage?</h2>
                 <p>Schreib mir – ich melde mich gerne.</p>
-                <div class="btns"><a class="btn" href="mailto:marcscheidegger@mac.com">{MAIL_ICON} E-Mail schreiben</a></div>
+                <div class="btns"><a class="btn" href="mailto:admin@marcscheidegger.ch">{MAIL_ICON} E-Mail schreiben</a></div>
             </div>
         </section>
 """
@@ -637,10 +637,10 @@ kontakt = f"""        <section class="hero small plain">
 
         <section class="section">
             <div class="wrap grid two">
-                <a class="card mail-card" href="mailto:marcscheidegger@mac.com">
+                <a class="card mail-card" href="mailto:admin@marcscheidegger.ch">
                     <span class="mail-icon">{MAIL_ICON}</span>
                     <span class="kicker">E-Mail</span>
-                    <strong>marcscheidegger@mac.com</strong>
+                    <strong>admin@marcscheidegger.ch</strong>
                     <span class="more">Nachricht schreiben</span>
                 </a>
                 <div style="display:grid;gap:24px;align-content:start">
@@ -666,7 +666,7 @@ impressum = """        <section class="section">
                 Rüsseckstrasse 5<br>
                 4800 Zofingen<br>
                 Schweiz</p>
-                <p>E-Mail: <a href="mailto:marcscheidegger@mac.com">marcscheidegger@mac.com</a></p>
+                <p>E-Mail: <a href="mailto:admin@marcscheidegger.ch">admin@marcscheidegger.ch</a></p>
                 <h2>Haftung für Links</h2>
                 <p>Diese Website enthält Links zu externen Websites. Für deren Inhalte sind ausschliesslich die jeweiligen Betreiber verantwortlich.</p>
                 <h2>Urheberrechte</h2>
@@ -682,7 +682,7 @@ datenschutz = """        <section class="section">
                 <h1>Datenschutz</h1>
                 <p>Diese Website verzichtet bewusst auf Cookies, Tracking, Werbung und eingebettete Inhalte von Drittanbietern. Schriften und Skripte werden direkt von diesem Server geladen.</p>
                 <h2>Verantwortlich</h2>
-                <p>Marc Scheidegger, <a href="mailto:marcscheidegger@mac.com">marcscheidegger@mac.com</a> (Adresse siehe <a href="impressum.html">Impressum</a>).</p>
+                <p>Marc Scheidegger, <a href="mailto:admin@marcscheidegger.ch">admin@marcscheidegger.ch</a> (Adresse siehe <a href="impressum.html">Impressum</a>).</p>
                 <h2>Server-Logdateien</h2>
                 <p>Beim Aufruf der Website speichert der Webserver technisch notwendige Daten (IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser). Diese Daten dienen dem sicheren Betrieb und werden nach kurzer Zeit gelöscht. Die Website wird bei der Metanet AG in Zürich (Schweiz) gehostet; die Daten bleiben auf deren Servern in der Schweiz.</p>
                 <h2>E-Mail</h2>
