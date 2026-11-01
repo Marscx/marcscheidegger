@@ -298,7 +298,10 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
     padding: 14px 18px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line);
     color: var(--ink); text-decoration: none; font-weight: 500;
 }
-.links a::after { content: "↗"; color: var(--blue); }
+.links a::after { content: "↗"; color: var(--blue); margin-left: auto; }
+.links a { justify-content: flex-start; }
+.links .ico { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--panel); color: var(--accent); }
+.links .ico svg { width: 20px; height: 20px; }
 .links a:hover { border-color: var(--blue); }
 
 .prose { max-width: 46em; }
@@ -311,6 +314,13 @@ a.card:hover { transform: translateY(-3px); border-color: var(--blue); color: in
 .site-footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; }
 .site-footer a { color: var(--muted); text-decoration: none; }
 .site-footer a:hover { color: var(--ink); }
+.site-footer .social { gap: 10px; }
+.site-footer .social a {
+    display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--line); color: var(--muted); transition: color .15s, border-color .15s, transform .15s;
+}
+.site-footer .social a:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+.site-footer .social svg { width: 20px; height: 20px; }
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }

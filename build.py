@@ -5,7 +5,7 @@ Inhalte (Projekte, Konzerte, Texte) hier ändern, dann:  python3 build.py
 import html, os, re
 
 OUT = os.path.dirname(os.path.abspath(__file__))
-V = 8  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
+V = 9  # Cache-Version für CSS/JS – bei Änderungen an site.css / site.js erhöhen
 
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
        ("lernen.html", "Lernen"), ("kontakt.html", "Kontakt")]
@@ -15,6 +15,32 @@ CUR = ' aria-current="page"'
 MAIL_ICON = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
              '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>')
+
+def icon(inner):
+    return ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{inner}</svg>')
+
+ICONS = {
+    "instagram": icon('<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>'
+                      '<circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>'),
+    "youtube": icon('<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/>'),
+    "linkedin": icon('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v6M8 7.5v.01M12 17v-6M12 13.5a2.5 2.5 0 0 1 5 0V17"/>'),
+    "x": icon('<path d="M4 4h4.5L20 20h-4.5z"/><path d="M19.5 4l-6.6 7.5M11.1 12.5 4.5 20"/>'),
+    "mail": MAIL_ICON,
+}
+SOCIAL = [
+    ("instagram", "Instagram", "https://www.instagram.com/marscx/"),
+    ("youtube", "YouTube", "https://www.youtube.com/watch?v=AC6F9rHJwL4"),
+    ("linkedin", "LinkedIn", "https://www.linkedin.com/in/marc-scheidegger-470537ab/"),
+    ("x", "X", "https://twitter.com/marscx"),
+    ("mail", "E-Mail", "mailto:marcscheidegger@mac.com"),
+]
+
+def social_icons(indent):
+    return "\n".join(f'{indent}<li><a href="{u}" aria-label="{t}" title="{t}">{ICONS[k]}</a></li>' for k, t, u in SOCIAL)
+
+def social_links(indent):
+    return "\n".join(f'{indent}<li><a href="{u}"><span class="ico">{ICONS[k]}</span>{t}</a></li>' for k, t, u in SOCIAL if k != "mail")
 
 def page(fname, title, desc, body, current=None):
     navlis = "\n".join(
@@ -58,11 +84,10 @@ def page(fname, title, desc, body, current=None):
     <footer class="site-footer">
         <div class="wrap">
             <p>© <span data-year>2026</span> Marc Scheidegger</p>
+            <ul class="social" aria-label="Social Media">
+{social_icons("                ")}
+            </ul>
             <ul>
-                <li><a href="https://www.instagram.com/marscx/">Instagram</a></li>
-                <li><a href="https://www.youtube.com/watch?v=AC6F9rHJwL4">YouTube</a></li>
-                <li><a href="https://www.linkedin.com/in/marc-scheidegger-470537ab/">LinkedIn</a></li>
-                <li><a href="mailto:marcscheidegger@mac.com">E-Mail</a></li>
                 <li><a href="impressum.html">Impressum</a></li>
                 <li><a href="datenschutz.html">Datenschutz</a></li>
             </ul>
@@ -622,10 +647,7 @@ kontakt = f"""        <section class="hero small plain">
                     <div class="card"><div class="body">
                         <h2 style="font-size:1.4rem">Social Media</h2>
                         <ul class="links">
-                            <li><a href="https://www.instagram.com/marscx/">Instagram</a></li>
-                            <li><a href="https://www.youtube.com/watch?v=AC6F9rHJwL4">YouTube</a></li>
-                            <li><a href="https://www.linkedin.com/in/marc-scheidegger-470537ab/">LinkedIn</a></li>
-                            <li><a href="https://twitter.com/marscx">X</a></li>
+{social_links("                            ")}
                         </ul>
                     </div></div>
                 </div>
