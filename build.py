@@ -861,13 +861,16 @@ datenschutz = """        <!-- ===== DATENSCHUTZERKLÄRUNG ===== -->
             <div class="wrap prose">
                 <span class="kicker">Rechtliches</span>
                 <h1>Datenschutz</h1>
-                <p>Diese Website verzichtet bewusst auf Cookies, Tracking, Werbung und eingebettete Inhalte von Drittanbietern. Schriften und Skripte werden direkt von diesem Server geladen.</p>
+                <p>Diese Website verzichtet bewusst auf Cookies, Tracking und Werbung. Schriften und Skripte werden direkt von diesem Server geladen. Inhalte von Drittanbietern (Videos, Hörproben) werden erst nach einem Klick geladen, siehe unten.</p>
                 <h2>Verantwortlich</h2>
                 <p>Marc Scheidegger, <a href="mailto:marcscheidegger@mac.com">marcscheidegger@mac.com</a> (Adresse siehe <a href="impressum.html">Impressum</a>).</p>
                 <h2>Server-Logdateien</h2>
                 <p>Beim Aufruf der Website speichert der Webserver technisch notwendige Daten (IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser). Diese Daten dienen dem sicheren Betrieb und werden nach kurzer Zeit gelöscht. Die Website wird bei der Metanet AG in Zürich (Schweiz) gehostet; die Daten bleiben auf deren Servern in der Schweiz.</p>
                 <h2>E-Mail</h2>
                 <p>Wenn du mir per E-Mail schreibst, verwende ich deine Angaben nur, um deine Anfrage zu beantworten. Die Daten werden nicht weitergegeben.</p>
+                <h2>Übe-Tools</h2>
+                <p>Die Übe-Tools auf zufall.marcscheidegger.ch (Würfel), uebetimer.marcscheidegger.ch (Übe-Timer) und caged.marcscheidegger.ch (Instrumentengrafiken) laufen vollständig in deinem Browser. Der Übe-Timer speichert dein Übeprogramm und deine Einstellungen, der Würfel deinen Lernstand bei den Akkorden (gewusst / nicht gewusst). Diese Daten liegen nur im Speicher deines Browsers auf deinem Gerät (localStorage) und werden weder an mich noch an Dritte übertragen. Es werden dafür keine Cookies verwendet.</p>
+                <p>Löschen kannst du diese Daten jederzeit in den Tools selbst (z.&nbsp;B. „Lernstand löschen“) oder in den Einstellungen deines Browsers (Websitedaten löschen). Griffbilder, PNG- und PDF-Dateien werden ebenfalls direkt in deinem Browser erstellt.</p>
                 <h2>Videos</h2>
                 <p>Videos und Hörproben von YouTube, SRF und Apple Music sind so eingebunden, dass beim Besuch der Seite keine Daten an diese Anbieter gehen. Erst wenn du auf ein Video oder eine Hörprobe klickst, wird der Player des Anbieters geladen (YouTube im erweiterten Datenschutzmodus, youtube-nocookie.com). Dabei erhält der Anbieter deine IP-Adresse und es gelten seine Datenschutzbestimmungen.</p>
                 <h2>Externe Links</h2>
