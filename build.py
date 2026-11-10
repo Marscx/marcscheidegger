@@ -786,8 +786,11 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
                 <div class="card"><div class="body">
                     <span class="kicker">Online-Kurse</span>
                     <h2 style="font-size:1.7rem">Lernen im eigenen Tempo</h2>
-                    <p>Meine Kurse auf der Lernplattform Moodle – Anmeldung über den Link.</p>
-                    <div class="btns"><a class="btn" href="https://marcscheidegger.moodlecloud.com/login/index.php">Zu den Online-Kursen ↗</a></div>
+                    <p>Meine Kurse auf der Lernplattform Moodle – Anmeldung über den Link. Dazu Anleitungen zu digitalen Werkzeugen wie Noteflight, Moises oder DaVinci Resolve.</p>
+                    <div class="btns">
+                        <a class="btn" href="https://marcscheidegger.moodlecloud.com/login/index.php">Zu den Online-Kursen ↗</a>
+                        <a class="btn ghost" href="https://digi.marcscheidegger.ch/">Anleitungen zu Werkzeugen ↗</a>
+                    </div>
                 </div></div>
                 <div class="card"><div class="body">
                     <span class="kicker">Werkzeuge</span>
