@@ -77,21 +77,31 @@
     .logo { @apply font-schreib text-[1.25rem] font-normal tracking-normal text-white no-underline; }
     .logo:hover { @apply text-white; }
     .logo > span { @apply text-akzent-500; }
-    /* Logo-Zeichen: ein kleines Akkord-Diagramm, nur mit CSS gezeichnet.
-       Sattel oben (dicke Linie), 6 Saiten senkrecht, 3 Bünde waagrecht, ein Griffpunkt in Koralle. */
+    /* Logo-Zeichen: ein Verstärker-Knopf (Poti), nur mit CSS gezeichnet.
+       ::before = Skala: 11 Striche im Bogen (unten offen, wie auf dem Amp)
+       ::after  = Knopf mit Rand und Zeiger in der Akzentfarbe, fast auf Anschlag gedreht */
     .logo { @apply inline-flex items-center; }
-    .logo-zeichen {
-        @apply relative mr-2.5 inline-block h-[26px] w-[21px] flex-none;
-        --l: rgb(255 255 255 / .85);
-        background:
-            linear-gradient(var(--l), var(--l)) top / 100% 3px no-repeat,                                   /* Sattel */
-            repeating-linear-gradient(to right, var(--l) 0 1px, transparent 1px 4px),                        /* Saiten */
-            repeating-linear-gradient(to bottom, transparent 0 9px, rgb(255 255 255 / .6) 9px 10px);       /* Bünde */
+    .logo-zeichen { @apply relative mr-2.5 inline-block size-[32px] flex-none; }
+    .logo-zeichen::before {
+        content: ""; @apply absolute inset-0 rounded-full;
+        background: repeating-conic-gradient(from -152deg, rgb(255 255 255 / .8) 0 4deg, transparent 4deg 30deg);
+        /* sichtbar bleibt nur ein schmaler Ring aussen (kurze Striche) und nur der Bogen
+           von -150° bis +150° – unten ist die Skala offen wie auf dem Amp */
+        -webkit-mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
+        -webkit-mask-composite: source-in;
+                mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
+                mask-composite: intersect;
     }
     .logo-zeichen::after {
-        content: ""; @apply absolute size-[7px] bg-akzent-500;
-        left: 5px; top: 12px;                                                                  /* 3. Saite, 2. Bund */
+        content: ""; @apply absolute inset-[7px] rounded-full border-2 border-white/90;
+        background:
+            linear-gradient(var(--color-akzent-500), var(--color-akzent-500)) 50% 1px / 2.5px 6px no-repeat,   /* Zeiger */
+            radial-gradient(circle at 35% 30%, var(--color-night-600), var(--color-night-900));               /* Knopf */
+        transform: rotate(120deg);                                                                            /* auf "10" */
+        transition: transform .4s cubic-bezier(.3, 1.6, .5, 1);
     }
+    /* Kleiner Gag beim Darüberfahren: der Knopf dreht auf Anschlag */
+    .logo:hover .logo-zeichen::after { transform: rotate(150deg); }
     .logo > i { @apply ml-0.5 inline-block h-[1.05em] w-[.5em] translate-y-[.18em] bg-akzent-500; animation: cursor 1.1s steps(1) infinite; }
     .skip { @apply absolute -left-[999px] top-2 z-[100] bg-akzent-500 px-3.5 py-2 text-akzent-950; }
     .skip:focus { @apply left-2; }
