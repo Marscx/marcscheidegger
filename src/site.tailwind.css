@@ -58,10 +58,10 @@
             radial-gradient(50rem 30rem at 100% 0%, rgb(255 107 91 / .07), transparent 60%);
         background-repeat: no-repeat;
     }
-    h1, h2, h3 { @apply text-white font-bold tracking-tight text-balance; line-height: 1.08; margin: 0 0 .5em; }
-    h1 { font-size: clamp(2.6rem, 7vw, 5.2rem); @apply font-extrabold; letter-spacing: -.035em; }
-    h2 { font-size: clamp(1.9rem, 3.8vw, 2.9rem); letter-spacing: -.025em; }
-    h3 { @apply text-xl font-semibold; }
+    h1, h2, h3 { @apply text-white font-medium tracking-tight text-balance; line-height: 1.08; margin: 0 0 .5em; }
+    h1 { font-size: clamp(2.6rem, 7vw, 5.2rem); @apply font-light; letter-spacing: -.03em; }
+    h2 { font-size: clamp(1.9rem, 3.8vw, 2.9rem); @apply font-normal; letter-spacing: -.02em; }
+    h3 { @apply text-xl font-medium; }
     p { margin: 0 0 1em; }
     a { @apply text-akzent-500 underline-offset-4 transition-colors; }
     a:hover { @apply text-akzent-300; }
@@ -162,7 +162,7 @@
     .project { @apply grid items-start gap-10 border-t border-white/10 py-12 md:grid-cols-[5fr_7fr]; }
     .project:first-of-type { @apply border-t-0 pt-0; }
     .project img { @apply aspect-[4/3] w-full object-cover ring-1 ring-white/10 md:sticky md:top-24; }
-    .project h3 { @apply text-3xl font-bold; }
+    .project h3 { @apply text-3xl font-normal; }
     .project .lineup, .compact .lineup { @apply text-night-300; }
     .years { @apply font-schreib mb-2 text-sm font-normal tracking-wide text-akzent-500; }
     .facts { @apply m-0 mb-4 list-none p-0; }
@@ -223,7 +223,7 @@
     .gigs li:hover { @apply bg-white/[.06] ring-white/20; }
     .gigs li[hidden] { @apply hidden; }
     .gigs time { @apply font-schreib whitespace-nowrap text-night-300 tabular-nums; }
-    .gigs time b { @apply text-2xl font-extrabold text-akzent-500; }
+    .gigs time b { @apply text-2xl font-normal text-akzent-500; }
     .gigs strong { @apply block font-semibold text-white; }
     .gigs span { @apply text-night-300; }
     .gigs a { @apply ml-2.5 whitespace-nowrap font-semibold no-underline; }

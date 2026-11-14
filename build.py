@@ -680,9 +680,9 @@ home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschre
                         <a class="btn ghost" href="kontakt.html">Kontakt &amp; Booking</a>
                     </div>
                     <dl class="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
-                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Seit</dt><dd class="m-0 text-2xl font-extrabold text-white">1999</dd></div>
-                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Projekte</dt><dd class="m-0 text-2xl font-extrabold text-white">{len(P)}</dd></div>
-                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Übe-Tools</dt><dd class="m-0 text-2xl font-extrabold text-white">3</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Seit</dt><dd class="m-0 text-2xl font-light text-white">1999</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Projekte</dt><dd class="m-0 text-2xl font-light text-white">{len(P)}</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Übe-Tools</dt><dd class="m-0 text-2xl font-light text-white">3</dd></div>
                     </dl>
                 </div>
                 <div class="relative">
