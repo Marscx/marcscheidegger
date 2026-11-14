@@ -55,3 +55,19 @@ Dann http://localhost:8090 öffnen.
 
 Texte, Fotos und Grafiken: © Marc Scheidegger bzw. die jeweiligen Bands und Fotografinnen und
 Fotografen. Alle Rechte vorbehalten – keine Weiterverwendung ohne Einwilligung.
+
+## Design-Variante mit Tailwind CSS (Branch `design-tailwind`)
+
+Auf diesem Branch wird das Aussehen mit [Tailwind CSS](https://tailwindcss.com) v4 erzeugt.
+
+- **Quelle:** `src/site.tailwind.css` – Farben (Nachtblau `night-*`, Gold `gold-*`) und alle Bausteine.
+- **Ergebnis:** `css/site.css` – wird erzeugt, nie direkt bearbeiten. Es enthält nur die Klassen,
+  die in `build.py` und `js/site.js` vorkommen, und kommt mit Git auf den Server (Plesk baut nichts).
+- **Programm:** `tools/tailwindcss-macos-arm64` (Tailwind v4.3.3, offizieller Download von GitHub,
+  Prüfsumme kontrolliert). Liegt nicht in Git. Neu holen:
+  `gh release download v4.3.3 -R tailwindlabs/tailwindcss -p tailwindcss-macos-arm64 -D tools && chmod +x tools/tailwindcss-macos-arm64`
+- `python3 build.py` erzeugt die HTML-Seiten und danach automatisch `css/site.css`.
+- Kopf- und Fusszeile sowie der Seitenkopf der Startseite sind direkt in `build.py` mit
+  Tailwind-Klassen gestaltet; alle übrigen Bausteine (Karten, Konzerte, Hörproben, Zeitleiste …)
+  behalten ihre Namen und sind in der Quelle aus Tailwind-Werkzeugen zusammengesetzt.
+- Es werden keine Schriften oder Dateien von fremden Servern geladen.

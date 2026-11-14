@@ -35,7 +35,7 @@ Was du am häufigsten änderst:
     neue Hörprobe          → Liste TRACKS
     Texte einer Seite      → Abschnitt der jeweiligen Seite weiter unten
 """
-import html, os, re
+import html, os, re, subprocess
 
 # =============================================================================
 # 1. GRUNDEINSTELLUNGEN UND BAUSTEINE
@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 9
+V = 10
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -139,9 +139,10 @@ def page(fname, title, desc, body, current=None):
 
     <!-- ===== KOPFZEILE: Name links, Navigation rechts (bleibt beim Scrollen oben).
          Auf dem Handy wird die Navigation hinter dem Knopf "Menü" versteckt. ===== -->
-    <header class="site-header">
-        <div class="wrap">
-            <a class="brand" href="index.html">Marc <span>Scheidegger</span></a>
+    <!-- Schwebende Glas-Leiste: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
+    <header class="site-header fixed inset-x-0 top-3 z-50 px-4">
+        <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-full border border-white/10 bg-night-950/70 py-2 pr-2 pl-5 shadow-[0_10px_40px_-15px_rgb(0_0_0/.8)] backdrop-blur-xl">
+            <a class="font-bold tracking-tight text-white no-underline hover:text-white" href="index.html">Marc <span class="text-gold-500">Scheidegger</span></a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menü</button>
             <nav class="nav" id="nav" aria-label="Hauptnavigation">
                 <ul>
@@ -158,15 +159,15 @@ def page(fname, title, desc, body, current=None):
 
     <!-- ===== FUSSZEILE: Copyright, Social-Media-Icons, Impressum/Datenschutz.
          Die Jahreszahl wird von site.js automatisch aktualisiert. ===== -->
-    <footer class="site-footer">
-        <div class="wrap">
-            <p>© <span data-year>2026</span> Marc Scheidegger</p>
-            <ul class="social" aria-label="Social Media">
+    <footer class="site-footer border-t border-white/10 py-12 text-[.95rem] text-night-300">
+        <div class="wrap flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+            <p class="m-0"><span class="font-semibold text-white">Marc <span class="text-gold-500">Scheidegger</span></span> · © <span data-year>2026</span></p>
+            <ul class="social m-0 flex list-none flex-wrap gap-2.5 p-0" aria-label="Social Media">
 {social_icons("                ")}
             </ul>
-            <ul>
-                <li><a href="impressum.html">Impressum</a></li>
-                <li><a href="datenschutz.html">Datenschutz</a></li>
+            <ul class="m-0 flex list-none flex-wrap gap-x-5 p-0">
+                <li><a class="text-night-300 no-underline hover:text-white" href="impressum.html">Impressum</a></li>
+                <li><a class="text-night-300 no-underline hover:text-white" href="datenschutz.html">Datenschutz</a></li>
             </ul>
         </div>
     </footer>
@@ -444,7 +445,7 @@ def compact_card(p):
     im = f'\n                    <img src="img/{img}" alt="{E(name)}" loading="lazy" width="1200" height="800">' if img else ""
     return f"""                <article class="card" id="{slug}">{im}
                     <div class="body">
-                        <p class="years" style="color:var(--accent);font-weight:600;font-size:.9rem;margin:0 0 4px">{E(years)}</p>
+                        <p class="years">{E(years)}</p>
                         <h3>{E(name)}</h3>
                         <p class="lineup">{E(lineup)}</p>
                         <ul class="facts">
@@ -667,15 +668,30 @@ def tool_card(k, name, url, text, h="h3"):
                     </a>"""
 
 home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschreibung ===== -->
-        <section class="hero">
-            <img src="img/hero-jvf-earlclub.jpg" alt="Marc Scheidegger mit dem Julian von Flüe Trio auf der Bühne" width="2000" height="1500" fetchpriority="high">
-            <div class="wrap">
-                <span class="kicker">Gitarre · Gesang · Mandoline</span>
-                <h1>Marc Scheidegger</h1>
-                <p class="lead">Gitarrist und Sänger – live mit dem Julian von Flüe Trio und Mala Oreen, als Begleitmusiker im Studio und mit eigenen Übe-Tools für alle, die ein Instrument lernen.</p>
-                <div class="btns">
-                    <a class="btn" href="projekte.html">Projekte entdecken</a>
-                    <a class="btn ghost" href="kontakt.html">Kontakt &amp; Booking</a>
+        <!-- Text links, Bühnenfoto als grosse Karte rechts (auf dem Handy untereinander) -->
+        <section class="relative overflow-x-clip pt-32 pb-16 sm:pt-40 lg:pb-24">
+            <div class="wrap grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
+                <div>
+                    <span class="kicker">Gitarre · Gesang · Mandoline</span>
+                    <h1>Marc <span class="bg-gradient-to-r from-gold-300 via-gold-500 to-gold-400 bg-clip-text text-transparent">Scheidegger</span></h1>
+                    <p class="lead">Gitarrist und Sänger – live mit dem Julian von Flüe Trio und Mala Oreen, als Begleitmusiker im Studio und mit eigenen Übe-Tools für alle, die ein Instrument lernen.</p>
+                    <div class="btns">
+                        <a class="btn" href="projekte.html">Projekte entdecken</a>
+                        <a class="btn ghost" href="kontakt.html">Kontakt &amp; Booking</a>
+                    </div>
+                    <dl class="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
+                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Seit</dt><dd class="m-0 text-2xl font-extrabold text-white">1999</dd></div>
+                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Projekte</dt><dd class="m-0 text-2xl font-extrabold text-white">{len(P)}</dd></div>
+                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Übe-Tools</dt><dd class="m-0 text-2xl font-extrabold text-white">3</dd></div>
+                    </dl>
+                </div>
+                <div class="relative">
+                    <div class="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-gold-500/25 via-night-400/10 to-transparent blur-2xl" aria-hidden="true"></div>
+                    <img class="aspect-[4/5] w-full rounded-4xl object-cover ring-1 ring-white/15 sm:aspect-[4/3] lg:aspect-[4/5]" src="img/hero-jvf-earlclub.jpg" alt="Marc Scheidegger mit dem Julian von Flüe Trio auf der Bühne" width="2000" height="1500" fetchpriority="high">
+                    <div class="absolute bottom-4 left-4 rounded-2xl border border-white/10 bg-night-950/75 px-4 py-3 backdrop-blur-xl">
+                        <p class="m-0 text-xs tracking-widest text-night-300 uppercase">Live mit</p>
+                        <p class="m-0 font-semibold text-white">Julian von Flüe Trio</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -908,6 +924,15 @@ with open(p404) as f:
     t = re.sub(r'(href|src)="(css|js|favicon|index|img)', r'\1="/\2', f.read())
 with open(p404, "w") as f:
     f.write(t)
+
+# CSS mit Tailwind erzeugen: src/site.tailwind.css → css/site.css (nur verwendete Klassen, verkleinert).
+# Das Programm liegt in tools/ (nicht in Git, nicht online). Fehlt es, bleibt css/site.css wie es ist.
+TW = os.path.join(OUT, "tools", "tailwindcss-macos-arm64")
+if os.path.exists(TW):
+    subprocess.run([TW, "-i", os.path.join(OUT, "src", "site.tailwind.css"),
+                    "-o", os.path.join(OUT, "css", "site.css"), "--minify"], check=True, capture_output=True)
+else:
+    print("Hinweis: tools/tailwindcss-macos-arm64 fehlt – css/site.css nicht neu erzeugt")
 
 # Kurze Bestätigung im Terminal mit allen Jahren der Chronologie
 print("ok", years)

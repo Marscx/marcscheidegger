@@ -1,0 +1,280 @@
+/* =============================================================================
+   marcscheidegger.ch – Design-Variante mit Tailwind CSS (Branch design-tailwind)
+   =============================================================================
+   Das ist die QUELLE. Daraus erzeugt das Tailwind-Programm die fertige Datei
+   css/site.css (nur mit den Klassen, die wirklich vorkommen, verkleinert):
+
+       python3 build.py          (macht das automatisch, wenn tools/ vorhanden ist)
+
+   Aufbau:
+     1. Tailwind laden und sagen, wo Klassen vorkommen (@source)
+     2. Farben, Schrift, Rundungen (@theme) – Nachtblau + Gold
+     3. Grundregeln (Hintergrund, Text, Überschriften)
+     4. Bausteine (@layer components): die Klassen, die build.py und site.js
+        verwenden (hero, section, card, gigs, track, timeline …). Sie sind aus
+        Tailwind-Werkzeugen zusammengesetzt (@apply), damit alles einheitlich ist.
+   Kopfzeile, Fusszeile und der Seitenkopf der Startseite sind direkt in build.py
+   mit Tailwind-Klassen gestaltet. */
+
+/* ---------- 1. Tailwind und Quellen ---------- */
+@import "tailwindcss";
+@source "../build.py";
+@source "../js/site.js";
+
+/* ---------- 2. Farben und Grundwerte ---------- */
+@theme {
+    /* Nachtblau-Palette (950 = Seitenhintergrund) */
+    --color-night-950: #0b1220;
+    --color-night-900: #111a2e;
+    --color-night-800: #16213a;
+    --color-night-700: #1f2d4d;
+    --color-night-600: #2a3a5e;
+    --color-night-400: #8fa8dc;
+    --color-night-300: #a9b8d6;
+    --color-night-100: #dfe6f4;
+    /* Gold als Akzent (Buttons, Jahreszahlen, aktive Elemente) */
+    --color-gold-300: #ffd27a;
+    --color-gold-400: #f7c35a;
+    --color-gold-500: #f2b544;
+    --color-gold-950: #1a1305;
+    /* Systemschriften: es wird nichts von fremden Servern geladen */
+    --font-sans: "Avenir Next", ui-sans-serif, system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --radius-4xl: 2rem;
+}
+
+/* ---------- 3. Grundregeln ---------- */
+@layer base {
+    html { color-scheme: dark; -webkit-text-size-adjust: 100%; }
+    body {
+        @apply bg-night-950 text-night-100 font-sans antialiased;
+        font-size: 1.0625rem; line-height: 1.7;
+        /* zwei weiche Lichtflecken oben – geben der Seite Tiefe */
+        background-image:
+            radial-gradient(60rem 40rem at 10% -10%, rgb(143 168 220 / .13), transparent 60%),
+            radial-gradient(50rem 30rem at 100% 0%, rgb(242 181 68 / .07), transparent 60%);
+        background-repeat: no-repeat;
+    }
+    h1, h2, h3 { @apply text-white font-bold tracking-tight text-balance; line-height: 1.08; margin: 0 0 .5em; }
+    h1 { font-size: clamp(2.6rem, 7vw, 5.2rem); @apply font-extrabold; letter-spacing: -.035em; }
+    h2 { font-size: clamp(1.9rem, 3.8vw, 2.9rem); letter-spacing: -.025em; }
+    h3 { @apply text-xl font-semibold; }
+    p { margin: 0 0 1em; }
+    a { @apply text-gold-500 underline-offset-4 transition-colors; }
+    a:hover { @apply text-gold-300; }
+    [id] { scroll-margin-top: 96px; }
+    :focus-visible { @apply outline-3 outline-offset-3 outline-gold-500 rounded; }
+    ::selection { @apply bg-gold-500 text-gold-950; }
+}
+
+/* ---------- 4. Bausteine ---------- */
+@layer components {
+    .wrap { width: min(72rem, 100% - 32px); margin-inline: auto; }
+    .skip { @apply absolute -left-[999px] top-2 z-[100] rounded-lg bg-gold-500 px-3.5 py-2 text-gold-950; }
+    .skip:focus { @apply left-2; }
+    .sr { @apply sr-only; }
+
+    /* Navigation: Pillen; auf dem Handy aufklappbar (site.js setzt .js und .open) */
+    .nav ul { @apply m-0 flex list-none gap-1 p-0; }
+    .nav a { @apply block rounded-full px-4 py-2 text-[.95rem] font-medium text-night-300 no-underline transition; }
+    .nav a:hover { @apply bg-white/5 text-white; }
+    .nav a[aria-current="page"] { @apply bg-gold-500 text-gold-950; }
+    .nav-toggle { @apply hidden cursor-pointer rounded-full border border-white/15 bg-white/5 px-4 py-2 font-medium text-white; }
+    @media (max-width: 860px) {
+        .nav-toggle { @apply block; }
+        .js .nav { @apply absolute inset-x-0 top-[calc(100%+8px)] hidden rounded-3xl border border-white/10 bg-night-900 p-2 shadow-2xl; }
+        .js .nav.open { @apply block; }
+        .nav ul { @apply flex-col; }
+        .nav a { @apply rounded-2xl px-4 py-3; }
+        html:not(.js) .site-header > div { @apply flex-wrap; }
+        html:not(.js) .nav ul { @apply flex-row flex-wrap; }
+    }
+
+    /* Seitenkopf: .hero (mit Bild), .small (Unterseiten), .plain (ohne Bild) */
+    .hero { @apply relative isolate flex items-end pt-36 pb-20; min-height: min(80vh, 760px); }
+    .hero.small { @apply pt-40 pb-6; min-height: 0; }
+    .hero > img { @apply absolute inset-0 -z-20 size-full object-cover; }
+    .hero::after {
+        content: ""; @apply absolute inset-0 -z-10;
+        background:
+            linear-gradient(180deg, rgb(11 18 32 / .25) 0%, rgb(11 18 32 / .65) 55%, var(--color-night-950) 100%),
+            linear-gradient(90deg, rgb(11 18 32 / .8) 0%, transparent 75%);
+    }
+    .hero.plain::after { background: none; }
+    .lead { @apply max-w-2xl text-lg text-night-100 sm:text-xl; }
+
+    /* Kicker: kleines Etikett mit goldenem Punkt über den Titeln */
+    .kicker {
+        @apply mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1
+               text-xs font-semibold tracking-[.18em] text-night-300 uppercase backdrop-blur;
+    }
+    .kicker::before { content: ""; @apply size-1.5 rounded-full bg-gold-500 shadow-[0_0_10px_var(--color-gold-500)]; }
+
+    /* Buttons */
+    .btns { @apply mt-7 flex flex-wrap gap-3; }
+    .btn {
+        @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-gold-950 no-underline transition
+               bg-gradient-to-b from-gold-400 to-gold-500 shadow-[0_8px_30px_-8px_rgb(242_181_68/.6)];
+    }
+    .btn:hover { @apply -translate-y-0.5 text-gold-950 shadow-[0_12px_36px_-8px_rgb(242_181_68/.75)]; }
+    .btn svg { @apply size-5; }
+    .btn.ghost { @apply bg-none bg-white/5 text-white shadow-none ring-1 ring-white/15 ring-inset backdrop-blur; }
+    .btn.ghost:hover { @apply bg-white/10 text-white ring-white/30; }
+
+    /* Abschnitte */
+    .section { @apply py-20 sm:py-24; }
+    .section.alt { @apply border-y border-white/5 bg-night-900/60; }
+    .section-head { @apply mb-10 max-w-3xl; }
+    .section-head p { @apply text-night-300; }
+
+    /* Raster und Karten */
+    .grid { @apply grid gap-6; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+    .grid.two { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); }
+    .card {
+        @apply flex flex-col overflow-hidden rounded-4xl bg-white/[.035] ring-1 ring-white/10 ring-inset
+               shadow-[0_20px_60px_-30px_rgb(0_0_0/.8)];
+    }
+    .card > img { @apply aspect-[3/2] w-full object-cover; }
+    .card > img.square { @apply aspect-square; }
+    .card .body { @apply flex flex-1 flex-col p-7; }
+    .card .body p { @apply text-night-300; }
+    .card .more { @apply mt-auto inline-flex items-center gap-1 font-semibold text-gold-500 no-underline; }
+    .card .more::after { content: "→"; @apply transition-transform; }
+    a.card { @apply text-inherit no-underline transition duration-300; }
+    a.card:hover { @apply -translate-y-1 text-inherit ring-gold-500/40 shadow-[0_30px_80px_-30px_rgb(242_181_68/.35)]; }
+    a.card:hover .more::after { @apply translate-x-1; }
+    a.card > img { @apply transition duration-500; }
+    a.card:hover > img { @apply scale-[1.03]; }
+
+    .split { @apply grid items-center gap-12 lg:grid-cols-2; }
+    .split > * { min-width: 0; }
+    .split img { @apply w-full rounded-4xl ring-1 ring-white/10; }
+
+    /* Projekte */
+    .project { @apply grid items-start gap-10 border-t border-white/10 py-12 md:grid-cols-[5fr_7fr]; }
+    .project:first-of-type { @apply border-t-0 pt-0; }
+    .project img { @apply aspect-[4/3] w-full rounded-4xl object-cover ring-1 ring-white/10 md:sticky md:top-24; }
+    .project h3 { @apply text-3xl font-bold; }
+    .project .lineup, .compact .lineup { @apply text-night-300; }
+    .years { @apply mb-2 text-sm font-semibold tracking-wider text-gold-500; }
+    .facts { @apply m-0 mb-4 list-none p-0; }
+    .facts li { @apply grid grid-cols-[6.5em_1fr] gap-3 border-b border-white/[.07] py-2; }
+    .facts li:last-child { @apply border-b-0; }
+    .facts b { @apply font-semibold text-night-400 tabular-nums; }
+    .compact { @apply grid gap-5; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); }
+    .compact h3 { @apply mb-1; }
+
+    /* Clips: Vorschaubild mit Abspielknopf, site.js ersetzt es beim Klick durch den Player */
+    .project > .clips, .project > .clip-note { grid-column: 1 / -1; }
+    .clips { @apply grid gap-5; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+    .card .clips { @apply mt-2 grid-cols-1; }
+    .clip { @apply m-0; }
+    .clip-play, .clip iframe { @apply relative block aspect-video w-full overflow-hidden rounded-2xl border-0 bg-black ring-1 ring-white/10; }
+    .clip-play img { @apply size-full object-cover opacity-80 transition duration-500; }
+    .clip-play:hover img { @apply scale-105 opacity-100; }
+    .clip-icon { @apply absolute top-1/2 left-1/2 grid size-16 -translate-1/2 place-items-center rounded-full bg-gold-500/90 shadow-[0_0_40px_rgb(242_181_68/.5)] transition; }
+    .clip-icon::after { content: ""; @apply ml-1 border-y-[11px] border-l-[18px] border-y-transparent border-l-gold-950; }
+    .clip-play:hover .clip-icon { @apply scale-110; }
+    .clip-src { @apply absolute top-2.5 left-2.5 rounded-full bg-night-950/80 px-2.5 py-0.5 text-xs font-semibold text-white backdrop-blur; }
+    .clip figcaption { @apply mt-2 text-[.95rem] font-semibold text-white; }
+    .clip figcaption span { @apply font-normal text-night-300; }
+    .clip-note { @apply mt-2.5 mb-0 text-xs text-night-300; }
+
+    /* Hörproben und Mini-Player */
+    .tracks { @apply mt-1 mb-2; }
+    .tracks-head { @apply mb-2 text-xs font-semibold tracking-[.18em] text-night-400 uppercase; }
+    .tracks-head span { @apply ml-1.5 tracking-normal text-night-300 normal-case font-normal; }
+    .tracks ul { @apply m-0 grid list-none gap-1.5 p-0; }
+    .track {
+        @apply flex items-center gap-3 rounded-2xl bg-white/[.03] py-2 pr-4 pl-2 text-white no-underline ring-1 ring-white/10 ring-inset transition;
+    }
+    .track::before {
+        content: ""; @apply size-8 flex-none rounded-full bg-gold-500;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 2l5 3-5 3z' fill='%231a1305'/%3E%3C/svg%3E");
+        background-position: center; background-size: 14px; background-repeat: no-repeat;
+    }
+    .track b { @apply font-semibold; }
+    .track span { @apply ml-auto text-right text-sm text-night-300; }
+    .track:hover { @apply bg-white/[.06] text-white ring-white/25; }
+    .track.spielt { @apply bg-gold-500/10 ring-gold-500/60; }
+    .track.spielt::before { animation: puls 1.2s ease-in-out infinite; }
+    @media (max-width: 560px) { .track { @apply flex-wrap; } .track span { @apply ml-11 w-full text-left; } }
+
+    .mini-player { @apply fixed right-4 bottom-4 z-60 w-[min(340px,calc(100%-32px))] overflow-hidden rounded-3xl bg-night-800/95 ring-1 ring-gold-500/60 shadow-2xl backdrop-blur-xl; }
+    .mp-head { @apply flex items-center justify-between gap-2 py-2 pr-2 pl-4 text-sm font-semibold text-white; }
+    .mp-head span { @apply truncate; }
+    .mp-head button { @apply size-8 flex-none cursor-pointer rounded-full border border-white/15 bg-night-950 text-lg leading-none text-white; }
+    .mp-head button:hover { @apply border-gold-500; }
+    .mini-player iframe { @apply block h-[175px] w-full border-0; }
+
+    /* Konzerte: Datum als goldene Kachel */
+    .gigs { @apply m-0 grid list-none gap-3 p-0; }
+    .gigs li {
+        @apply grid grid-cols-[8em_1fr] items-center gap-5 rounded-3xl bg-white/[.035] px-6 py-4 ring-1 ring-white/10 ring-inset transition;
+    }
+    .gigs li:hover { @apply bg-white/[.06] ring-white/20; }
+    .gigs li[hidden] { @apply hidden; }
+    .gigs time { @apply whitespace-nowrap text-night-300 tabular-nums; }
+    .gigs time b { @apply text-2xl font-extrabold text-gold-500; }
+    .gigs strong { @apply block font-semibold text-white; }
+    .gigs span { @apply text-night-300; }
+    .gigs a { @apply ml-2.5 whitespace-nowrap font-semibold no-underline; }
+    .gigs-empty { @apply text-night-300; }
+    @media (max-width: 560px) {
+        .gigs li { @apply grid-cols-1 gap-1 px-5; }
+        .gigs a { @apply mt-1 ml-0 inline-block; }
+        .gigs span { @apply block; }
+    }
+
+    /* Chronologie */
+    .years-nav { @apply mb-10 flex flex-wrap gap-1.5; }
+    .years-nav a { @apply rounded-full bg-white/[.03] px-3 py-1 text-sm text-night-300 no-underline ring-1 ring-white/10 tabular-nums; }
+    .years-nav a:hover { @apply bg-gold-500 text-gold-950 ring-gold-500; }
+    .timeline { @apply relative m-0 list-none p-0; }
+    .timeline::before { content: ""; @apply absolute top-2 bottom-2 left-[calc(4.6em+16px)] w-px -translate-x-1/2 bg-gradient-to-b from-gold-500/70 via-night-600 to-transparent; }
+    .year { @apply grid grid-cols-[4.6em_1fr] gap-x-8 py-3.5; }
+    .year > h2 { @apply relative m-0 pt-0.5 text-xl text-gold-500 tabular-nums; }
+    .year > h2::after { content: ""; @apply absolute top-2.5 -right-[22px] size-3 rounded-full bg-night-950 ring-2 ring-gold-500; }
+    .year ul { @apply m-0 list-none p-0; }
+    .year li { @apply pt-0.5 pb-2; }
+    .year li a { @apply font-semibold text-white no-underline; }
+    .year li a:hover { @apply text-gold-500; }
+    .year li span { @apply text-night-300; }
+    @media (max-width: 560px) {
+        .timeline::before { @apply left-[calc(3.4em+12px)]; }
+        .year { @apply grid-cols-[3.4em_1fr] gap-x-6; }
+        .year > h2 { @apply text-base; }
+        .year > h2::after { @apply -right-[18px]; }
+    }
+
+    /* E-Mail-Karte, Link-Listen, Rechtstexte */
+    .mail-card { @apply min-h-full items-center justify-center gap-1.5 px-6 py-12 text-center; }
+    .mail-icon { @apply mb-4 grid size-24 place-items-center rounded-full bg-gradient-to-b from-gold-400 to-gold-500 text-gold-950 shadow-[0_0_60px_-10px_rgb(242_181_68/.6)] transition; }
+    .mail-icon svg { @apply size-11; }
+    .mail-card .kicker { @apply m-0; }
+    .mail-card strong { @apply text-xl break-all text-white sm:text-2xl; }
+    .mail-card .more { @apply mt-2.5; }
+    .mail-card:hover .mail-icon { @apply scale-105; }
+
+    .links { @apply m-0 grid list-none gap-2.5 p-0; }
+    .links a { @apply flex items-center gap-3 rounded-2xl bg-white/[.03] px-4 py-3.5 font-medium text-white no-underline ring-1 ring-white/10 ring-inset transition; }
+    .links a::after { content: "↗"; @apply ml-auto text-night-400; }
+    .links a:hover { @apply bg-white/[.06] ring-white/25; }
+    .links .ico { @apply grid size-9 place-items-center rounded-full bg-night-800 text-gold-500; }
+    .links .ico svg { @apply size-5; }
+
+    .prose { @apply max-w-3xl; }
+    .prose h2 { @apply mt-10 text-2xl; }
+    .prose p, .prose li { @apply text-night-100/90; }
+
+    /* Fusszeile: runde Social-Icons */
+    .social a { @apply grid size-11 place-items-center rounded-full text-night-300 ring-1 ring-white/10 transition; }
+    .social a:hover { @apply -translate-y-0.5 text-gold-500 ring-gold-500/60; }
+    .social svg { @apply size-5; }
+}
+
+@keyframes puls { 50% { transform: scale(.85); } }
+
+/* Wer "Bewegung reduzieren" eingestellt hat, bekommt keine Animationen */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+}
