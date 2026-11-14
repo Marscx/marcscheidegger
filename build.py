@@ -142,7 +142,7 @@ def page(fname, title, desc, body, current=None):
     <!-- Schwebende Glas-Leiste: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
     <header class="site-header fixed inset-x-0 top-3 z-50 px-4">
         <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 border border-white/10 bg-night-950/70 py-2 pr-2 pl-5 shadow-[0_10px_40px_-15px_rgb(0_0_0/.8)] backdrop-blur-xl">
-            <a class="font-bold tracking-tight text-white no-underline hover:text-white" href="index.html">Marc <span class="text-akzent-500">Scheidegger</span></a>
+            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite">marc<span>.</span>scheidegger<i aria-hidden="true"></i></a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menü</button>
             <nav class="nav" id="nav" aria-label="Hauptnavigation">
                 <ul>
@@ -161,7 +161,7 @@ def page(fname, title, desc, body, current=None):
          Die Jahreszahl wird von site.js automatisch aktualisiert. ===== -->
     <footer class="site-footer border-t border-white/10 py-12 text-[.95rem] text-night-300">
         <div class="wrap flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
-            <p class="m-0"><span class="font-semibold text-white">Marc <span class="text-akzent-500">Scheidegger</span></span> · © <span data-year>2026</span></p>
+            <p class="m-0"><span class="logo">marc<span>.</span>scheidegger</span> · © <span data-year>2026</span></p>
             <ul class="social m-0 flex list-none flex-wrap gap-2.5 p-0" aria-label="Social Media">
 {social_icons("                ")}
             </ul>
@@ -680,16 +680,16 @@ home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschre
                         <a class="btn ghost" href="kontakt.html">Kontakt &amp; Booking</a>
                     </div>
                     <dl class="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
-                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Seit</dt><dd class="m-0 text-2xl font-extrabold text-white">1999</dd></div>
-                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Projekte</dt><dd class="m-0 text-2xl font-extrabold text-white">{len(P)}</dd></div>
-                        <div><dt class="text-xs tracking-widest text-night-300 uppercase">Übe-Tools</dt><dd class="m-0 text-2xl font-extrabold text-white">3</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Seit</dt><dd class="m-0 text-2xl font-extrabold text-white">1999</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Projekte</dt><dd class="m-0 text-2xl font-extrabold text-white">{len(P)}</dd></div>
+                        <div><dt class="font-schreib text-xs tracking-widest text-night-300 uppercase">Übe-Tools</dt><dd class="m-0 text-2xl font-extrabold text-white">3</dd></div>
                     </dl>
                 </div>
                 <div class="relative">
                     <div class="absolute -inset-6 -z-10 bg-gradient-to-tr from-akzent-500/25 via-night-400/10 to-transparent blur-2xl" aria-hidden="true"></div>
                     <img class="aspect-[4/5] w-full object-cover ring-1 ring-white/15 sm:aspect-[4/3] lg:aspect-[4/5]" src="img/hero-jvf-earlclub.jpg" alt="Marc Scheidegger mit dem Julian von Flüe Trio auf der Bühne" width="2000" height="1500" fetchpriority="high">
                     <div class="absolute bottom-4 left-4 border border-white/10 bg-night-950/75 px-4 py-3 backdrop-blur-xl">
-                        <p class="m-0 text-xs tracking-widest text-night-300 uppercase">Live mit</p>
+                        <p class="m-0 font-schreib text-xs tracking-widest text-night-300 uppercase">Live mit</p>
                         <p class="m-0 font-semibold text-white">Julian von Flüe Trio</p>
                     </div>
                 </div>
