@@ -60,7 +60,7 @@ Fotografen. Alle Rechte vorbehalten – keine Weiterverwendung ohne Einwilligung
 
 Auf diesem Branch wird das Aussehen mit [Tailwind CSS](https://tailwindcss.com) v4 erzeugt.
 
-- **Quelle:** `src/site.tailwind.css` – Farben (Nachtblau `night-*`, Gold `gold-*`) und alle Bausteine.
+- **Quelle:** `src/site.tailwind.css` – Farben (Nachtblau `night-*`, Koralle `akzent-*`) und alle Bausteine.
 - **Ergebnis:** `css/site.css` – wird erzeugt, nie direkt bearbeiten. Es enthält nur die Klassen,
   die in `build.py` und `js/site.js` vorkommen, und kommt mit Git auf den Server (Plesk baut nichts).
 - **Programm:** `tools/tailwindcss-macos-arm64` (Tailwind v4.3.3, offizieller Download von GitHub,
