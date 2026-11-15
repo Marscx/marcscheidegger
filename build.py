@@ -663,10 +663,9 @@ TOOLS = [
      "Kurse"),
 ]
 
-def tool_card(k, name, url, text, thema, h="h3"):
-    """Typografische Karte für ein Übe-Tool: Nummer und Thema in Schreibmaschine,
-    grosser dünner Name, Strich in der Akzentfarbe links (Aussehen: .tool-karte)."""
-    nr = f"{[t[0] for t in TOOLS].index(k) + 1:02d}"
+def karte(nr, thema, name, url, text, mehr, h="h3"):
+    """Typografische Karte: Nummer und Thema in Schreibmaschine, grosser dünner Name,
+    Strich in der Akzentfarbe links (Aussehen: .tool-karte). nr z. B. "01"."""
     return f"""                    <a class="card tool-karte" href="{url}">
                         <div class="tool-kopf">
                             <span class="tool-nr">{nr} / {E(thema)}</span>
@@ -674,9 +673,26 @@ def tool_card(k, name, url, text, thema, h="h3"):
                         </div>
                         <div class="body">
                             <p>{E(text)}</p>
-                            <span class="more">{"Zu den Kursen" if k == "moodle" else "Tool öffnen"}</span>
+                            <span class="more">{E(mehr)}</span>
                         </div>
                     </a>"""
+
+def tool_card(k, name, url, text, thema, h="h3"):
+    """Karte für ein Übe-Tool oder die Online-Kurse (Nummer = Platz in der Liste TOOLS)."""
+    nr = f"{[t[0] for t in TOOLS].index(k) + 1:02d}"
+    return karte(nr, thema, name, url, text, "Zu den Kursen" if k == "moodle" else "Tool öffnen", h)
+
+# Weitere Werkzeuge auf der Lernen-Seite (Nummern laufen nach den Übe-Tools weiter).
+# (Thema, Name, Link, Text, Linktext)
+WERKZEUGE = [
+    ("Anleitungen", "Digitale Werkzeuge", "https://digi.marcscheidegger.ch/",
+     "Anleitungen zu digitalen Werkzeugen wie Noteflight, Moises oder DaVinci Resolve – Schritt für Schritt.",
+     "Zu den Anleitungen"),
+    ("Noten", "Noteflight", "https://marcscheidegger.sites.noteflight.com/home",
+     "Noten schreiben im Browser – mit Noteflight.", "Zu Noteflight"),
+    ("Produktion", "Soundtrap", "https://www.soundtrap.com/",
+     "Musik produzieren im Browser – mit Soundtrap.", "Zu Soundtrap"),
+]
 
 home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschreibung ===== -->
         <!-- Bühnenfoto bildschirmfüllend im Hintergrund, darüber dunkle Verläufe für die Lesbarkeit;
@@ -806,26 +822,18 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
             </div>
         </section>
 
-        <!-- ===== ANLEITUNGEN (digi.marcscheidegger.ch) und weitere Werkzeuge.
-             Die Online-Kurse (Moodle) stehen jetzt oben als vierte Karte bei den Übe-Tools. ===== -->
+        <!-- ===== WEITERE WERKZEUGE: Anleitungen (digi.marcscheidegger.ch), Noteflight, Soundtrap –
+             als Karten wie die Übe-Tools (Liste WERKZEUGE). ===== -->
         <section class="section alt">
-            <div class="wrap grid two">
-                <div class="card"><div class="body">
-                    <span class="kicker">Anleitungen</span>
-                    <h2 style="font-size:1.7rem">Digitale Werkzeuge</h2>
-                    <p>Anleitungen zu digitalen Werkzeugen wie Noteflight, Moises oder DaVinci Resolve – Schritt für Schritt.</p>
-                    <div class="btns">
-                        <a class="btn" href="https://digi.marcscheidegger.ch/">Zu den Anleitungen ↗</a>
-                    </div>
-                </div></div>
-                <div class="card"><div class="body">
+            <div class="wrap">
+                <div class="section-head">
                     <span class="kicker">Werkzeuge</span>
-                    <h2 style="font-size:1.7rem">Online Musik machen</h2>
-                    <ul class="links">
-                        <li><a href="https://marcscheidegger.sites.noteflight.com/home">Noten schreiben mit Noteflight</a></li>
-                        <li><a href="https://www.soundtrap.com/">Musik produzieren mit Soundtrap</a></li>
-                    </ul>
-                </div></div>
+                    <h2>Online Musik machen</h2>
+                    <p>Anleitungen zu digitalen Werkzeugen und Programme zum Noten schreiben und Musik produzieren – alles im Browser.</p>
+                </div>
+                <div class="grid">
+{chr(10).join(karte(f"{len(TOOLS) + i + 1:02d}", *w) for i, w in enumerate(WERKZEUGE))}
+                </div>
             </div>
         </section>
 """
