@@ -96,31 +96,45 @@
     .logo-wort:first-of-type::first-letter { vertical-align: -.05em; }
     .logo-wort + .logo-wort::first-letter { vertical-align: -.12em; }
     .logo-wort + .logo-wort { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
-    /* Logo-Zeichen: ein Verstärker-Knopf (Poti), nur mit CSS gezeichnet.
-       ::before = Skala: 11 Striche im Bogen (unten offen, wie auf dem Amp)
-       ::after  = Knopf mit Rand und Zeiger in der Akzentfarbe, fast auf Anschlag gedreht */
     .logo { @apply inline-flex items-center; }
-    .logo-zeichen { @apply relative mr-2 inline-block size-[32px] flex-none max-sm:scale-90; }
+    /* Logo-Zeichen: ein Plattenspieler von oben, nur mit CSS gezeichnet.
+       Eckiges Gehäuse (Rahmen), darauf
+       ::before = Schallplatte: Rillen, Lichtreflex, Etikett in der Akzentfarbe, Mittelstift
+       ::after  = Tonarm mit Drehpunkt und Tonabnehmer
+       Beim Darüberfahren schwenkt der Tonarm auf die Platte und sie dreht sich mit 33⅓ U/min
+       (eine Umdrehung = 1.8 Sekunden). */
+    .logo-zeichen {
+        position: relative; display: inline-block; flex: none; box-sizing: border-box;
+        width: 32px; height: 32px; margin-right: 9px;
+        border: 1.5px solid rgb(255 255 255 / .85);
+    }
     .logo-zeichen::before {
-        content: ""; @apply absolute inset-0 rounded-full;
-        background: repeating-conic-gradient(from -152deg, rgb(255 255 255 / .8) 0 4deg, transparent 4deg 30deg);
-        /* sichtbar bleibt nur ein schmaler Ring aussen (kurze Striche) und nur der Bogen
-           von -150° bis +150° – unten ist die Skala offen wie auf dem Amp */
-        -webkit-mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
-        -webkit-mask-composite: source-in;
-                mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
-                mask-composite: intersect;
+        content: ""; position: absolute; left: 2px; top: 3.5px; width: 22px; height: 22px; border-radius: 50%;
+        background:
+            radial-gradient(circle, #f5f7fb 0 .9px, transparent 1.3px),                                  /* Mittelstift */
+            radial-gradient(circle, var(--color-akzent-500) 0 4px, transparent 4.4px),                                    /* Etikett */
+            conic-gradient(transparent 0 15%, rgb(255 255 255 / .22) 22%, transparent 29% 65%,
+                           rgb(255 255 255 / .22) 72%, transparent 79%),                                 /* Lichtreflex */
+            repeating-radial-gradient(circle, #0b1220 0 1.1px, #2a3a5e 1.1px 1.7px);                     /* Rillen */
+        box-shadow: 0 0 0 1px rgb(255 255 255 / .35);
     }
     .logo-zeichen::after {
-        content: ""; @apply absolute inset-[7px] rounded-full border-2 border-white/90;
+        content: ""; position: absolute; right: 0; top: 0; width: 12px; height: 21px;
         background:
-            linear-gradient(var(--color-akzent-500), var(--color-akzent-500)) 50% 1px / 2.5px 6px no-repeat,   /* Zeiger */
-            radial-gradient(circle at 35% 30%, var(--color-night-600), var(--color-night-900));               /* Knopf */
-        transform: rotate(120deg);                                                                            /* auf "10" */
-        transition: transform .4s cubic-bezier(.3, 1.6, .5, 1);
+            radial-gradient(circle at 9px 3.5px, #f5f7fb 0 2.2px, transparent 2.6px),                     /* Drehpunkt */
+            linear-gradient(#f5f7fb, #f5f7fb) 8.3px 3.5px / 1.4px 14px no-repeat,                         /* Arm */
+            linear-gradient(var(--color-akzent-500), var(--color-akzent-500)) 7px 16.5px / 4px 4px no-repeat;                                 /* Tonabnehmer */
+        transform-origin: 9px 3.5px; transform: rotate(4deg);
+        transition: transform .6s ease-in-out;
     }
-    /* Kleiner Gag beim Darüberfahren: der Knopf dreht auf Anschlag */
-    .logo:hover .logo-zeichen::after { transform: rotate(150deg); }
+    .logo:hover .logo-zeichen::after { transform: rotate(24deg); }
+    .logo:hover .logo-zeichen::before { animation: plattenspieler-dreh 1.8s linear infinite; }
+    @keyframes plattenspieler-dreh { to { transform: rotate(1turn); } }
+    @media (prefers-reduced-motion: reduce) {
+        .logo-zeichen::after { transition: none; }
+        .logo:hover .logo-zeichen::before { animation: none; }
+    }
+    @media (max-width: 639px) { .logo-zeichen { transform: scale(.9); } }
     .skip { @apply absolute -left-[999px] top-2 z-[100] bg-akzent-500 px-3.5 py-2 text-akzent-950; }
     .skip:focus { @apply left-2; }
     .sr { @apply sr-only; }
