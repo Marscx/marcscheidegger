@@ -149,7 +149,7 @@
     .nav-toggle[aria-expanded="true"] { @apply border-akzent-500 text-akzent-500; }
     @media (max-width: 860px) {
         .nav-toggle { @apply grid; }
-        .js .nav { @apply absolute inset-x-0 top-[calc(100%+8px)] hidden border border-white/10 bg-night-900 p-2 shadow-2xl; }
+        .js .nav { @apply absolute inset-x-0 top-full hidden border-b border-white/10 bg-night-950 p-2 shadow-2xl; }
         .js .nav.open { @apply block; }
         .nav ul { @apply flex-col; }
         .nav a { @apply px-4 py-3; }

@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 16
+V = 17
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -139,9 +139,9 @@ def page(fname, title, desc, body, current=None):
 
     <!-- ===== KOPFZEILE: Name links, Navigation rechts (bleibt beim Scrollen oben).
          Auf dem Handy wird die Navigation hinter dem Knopf "Menü" versteckt. ===== -->
-    <!-- Schwebende Glas-Leiste: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
-    <header class="site-header fixed inset-x-0 top-3 z-50 px-4">
-        <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 border border-white/10 bg-night-950/70 py-2 pr-2 pl-5 shadow-[0_10px_40px_-15px_rgb(0_0_0/.8)] backdrop-blur-xl">
+    <!-- Kopfleiste bündig oben über die ganze Breite, deckendes Nachtblau: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
+    <header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night-950/95 backdrop-blur-xl">
+        <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
             <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span aria-hidden="true"></span></button>
             <nav class="nav" id="nav" aria-label="Hauptnavigation">
