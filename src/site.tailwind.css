@@ -197,6 +197,8 @@
     /* Raster und Karten */
     .grid { @apply grid gap-6; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
     .grid.two { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); }
+    .grid.vier { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }   /* vier Karten nebeneinander */
+    .grid.vier .tool-kopf h3 { font-size: clamp(1.7rem, 2.3vw, 2.15rem); }
     .card {
         @apply flex flex-col overflow-hidden bg-white/[.035] ring-1 ring-white/10 ring-inset
                shadow-[0_20px_60px_-30px_rgb(0_0_0/.8)];

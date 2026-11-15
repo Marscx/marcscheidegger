@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 15
+V = 16
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -646,7 +646,7 @@ def band_card(slug, name, img, text):
                         </div>
                     </a>"""
 
-# Die Übe-Tools (eigene Subdomains). (Kürzel, Name, Link, Text, Thema);
+# Die Übe-Tools (eigene Subdomains) und die Online-Kurse (Moodle). (Kürzel, Name, Link, Text, Thema);
 # das Thema steht klein über dem Namen ("01 / ZUFALL"). Wird auf Home und Lernen verwendet.
 TOOLS = [
     ("wuerfel", "Würfel", "https://zufall.marcscheidegger.ch/",
@@ -658,6 +658,9 @@ TOOLS = [
     ("instrumentengrafik", "Instrumentengrafiken", "https://caged.marcscheidegger.ch/",
      "Akkorde und Formen auf Gitarre, Ukulele und Keyboard sichtbar machen – klar dargestellt, mit hervorgehobenen Grundtönen.",
      "Griffbrett"),
+    ("moodle", "Online-Kurse", "https://marcscheidegger.moodlecloud.com/",
+     "Meine Kurse auf der Lernplattform Moodle – lernen im eigenen Tempo. Für die Kurse meldest du dich auf Moodle an.",
+     "Kurse"),
 ]
 
 def tool_card(k, name, url, text, thema, h="h3"):
@@ -671,7 +674,7 @@ def tool_card(k, name, url, text, thema, h="h3"):
                         </div>
                         <div class="body">
                             <p>{E(text)}</p>
-                            <span class="more">Tool öffnen</span>
+                            <span class="more">{"Zu den Kursen" if k == "moodle" else "Tool öffnen"}</span>
                         </div>
                     </a>"""
 
@@ -750,10 +753,10 @@ home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschre
             <div class="wrap">
                 <div class="section-head">
                     <span class="kicker">Lernen &amp; Üben</span>
-                    <h2>Meine Übe-Tools</h2>
-                    <p>Kostenlose Werkzeuge im Browser – für das tägliche Üben auf Gitarre, Ukulele und Keyboard.</p>
+                    <h2>Übe-Tools und Online-Kurse</h2>
+                    <p>Kostenlose Werkzeuge im Browser für das tägliche Üben auf Gitarre, Ukulele und Keyboard – und meine Online-Kurse auf Moodle.</p>
                 </div>
-                <div class="grid">
+                <div class="grid vier">
 {chr(10).join(tool_card(*t) for t in TOOLS)}
                 </div>
                 <div class="btns"><a class="btn ghost" href="lernen.html">Alles zum Lernen</a></div>
@@ -782,7 +785,7 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
                     <p class="lead">Eigene Übe-Tools im Browser, Online-Kurse und Werkzeuge zum Noten schreiben und Musik produzieren.</p>
                     <div class="btns">
                         <a class="btn" href="#tools">Zu den Übe-Tools</a>
-                        <a class="btn ghost" href="https://marcscheidegger.moodlecloud.com/login/index.php">Online-Kurse ↗</a>
+                        <a class="btn ghost" href="https://marcscheidegger.moodlecloud.com/">Online-Kurse ↗</a>
                     </div>
                 </div>
                 <img src="img/marc-scheidegger.jpg" alt="Porträt Marc Scheidegger" width="1200" height="1200" style="max-width:420px;justify-self:center">
@@ -793,26 +796,26 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
         <section class="section" id="tools">
             <div class="wrap">
                 <div class="section-head">
-                    <span class="kicker">Kostenlos im Browser</span>
-                    <h2>Meine Übe-Tools</h2>
-                    <p>Funktionieren auf dem Computer, Tablet und Handy – ohne Anmeldung.</p>
+                    <span class="kicker">Im Browser</span>
+                    <h2>Übe-Tools und Online-Kurse</h2>
+                    <p>Die Übe-Tools funktionieren auf dem Computer, Tablet und Handy – ohne Anmeldung. Für die Online-Kurse meldest du dich auf Moodle an.</p>
                 </div>
-                <div class="grid">
+                <div class="grid vier">
 {chr(10).join(tool_card(*t) for t in TOOLS)}
                 </div>
             </div>
         </section>
 
-        <!-- ===== ONLINE-KURSE (Moodle) und weitere Werkzeuge ===== -->
+        <!-- ===== ANLEITUNGEN (digi.marcscheidegger.ch) und weitere Werkzeuge.
+             Die Online-Kurse (Moodle) stehen jetzt oben als vierte Karte bei den Übe-Tools. ===== -->
         <section class="section alt">
             <div class="wrap grid two">
                 <div class="card"><div class="body">
-                    <span class="kicker">Online-Kurse</span>
-                    <h2 style="font-size:1.7rem">Lernen im eigenen Tempo</h2>
-                    <p>Meine Kurse auf der Lernplattform Moodle – Anmeldung über den Link. Dazu Anleitungen zu digitalen Werkzeugen wie Noteflight, Moises oder DaVinci Resolve.</p>
+                    <span class="kicker">Anleitungen</span>
+                    <h2 style="font-size:1.7rem">Digitale Werkzeuge</h2>
+                    <p>Anleitungen zu digitalen Werkzeugen wie Noteflight, Moises oder DaVinci Resolve – Schritt für Schritt.</p>
                     <div class="btns">
-                        <a class="btn" href="https://marcscheidegger.moodlecloud.com/login/index.php">Zu den Online-Kursen ↗</a>
-                        <a class="btn ghost" href="https://digi.marcscheidegger.ch/">Anleitungen zu Werkzeugen ↗</a>
+                        <a class="btn" href="https://digi.marcscheidegger.ch/">Zu den Anleitungen ↗</a>
                     </div>
                 </div></div>
                 <div class="card"><div class="body">
