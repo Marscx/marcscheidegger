@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 17
+V = 18
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -749,7 +749,7 @@ home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschre
         <!-- ===== ÜBER MICH: Porträt links, Text rechts ("split" = zwei Spalten) ===== -->
         <section class="section">
             <div class="wrap split">
-                <img src="img/marc-scheidegger.jpg" alt="Porträt Marc Scheidegger" loading="lazy" width="1200" height="1200">
+                <figure class="m-0"><img src="img/marc-scheidegger-live.jpg" alt="Marc Scheidegger live mit Gitarre auf der Bühne" loading="lazy" width="1200" height="1200"><figcaption class="mt-2 font-schreib text-[0.7rem] tracking-widest text-night-300 uppercase">Foto: Andreas Busslinger</figcaption></figure>
                 <div>
                     <span class="kicker">Seit 1999</span>
                     <h2>Bühne, Studio, Festival</h2>
@@ -802,7 +802,7 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
                         <a class="btn ghost" href="https://marcscheidegger.moodlecloud.com/">Online-Kurse ↗</a>
                     </div>
                 </div>
-                <img src="img/marc-scheidegger.jpg" alt="Porträt Marc Scheidegger" width="1200" height="1200" style="max-width:420px;justify-self:center">
+                <figure class="m-0 w-full" style="max-width:420px;justify-self:center"><img src="img/marc-scheidegger-live.jpg" alt="Marc Scheidegger live mit Gitarre auf der Bühne" width="1200" height="1200"><figcaption class="mt-2 font-schreib text-[0.7rem] tracking-widest text-night-300 uppercase">Foto: Andreas Busslinger</figcaption></figure>
             </div>
         </section>
 
