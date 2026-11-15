@@ -91,6 +91,10 @@
     /* top: .16em – die grossen Anfangsbuchstaben ragen nach oben; so liegt der Schriftzug optisch mittig zum Knopf */
     .logo-wort { @apply relative inline-block uppercase; top: .16em; font-size: .72em; letter-spacing: .02em; }
     .logo-wort::first-letter { font-size: 1.4em; }
+    /* Die Initialen der Handschrift enden über der Grundlinie (M wenig, S deutlich) –
+       so abgesenkt stehen sie auf derselben Linie wie die übrigen Buchstaben */
+    .logo-wort:first-of-type::first-letter { vertical-align: -.05em; }
+    .logo-wort + .logo-wort::first-letter { vertical-align: -.12em; }
     .logo-wort + .logo-wort { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
     /* Logo-Zeichen: ein Verstärker-Knopf (Poti), nur mit CSS gezeichnet.
        ::before = Skala: 11 Striche im Bogen (unten offen, wie auf dem Amp)
