@@ -71,3 +71,6 @@ Auf diesem Branch wird das Aussehen mit [Tailwind CSS](https://tailwindcss.com) 
   Tailwind-Klassen gestaltet; alle übrigen Bausteine (Karten, Konzerte, Hörproben, Zeitleiste …)
   behalten ihre Namen und sind in der Quelle aus Tailwind-Werkzeugen zusammengesetzt.
 - Es werden keine Schriften oder Dateien von fremden Servern geladen.
+- **Logo-Schrift:** `fonts/marc-versalien.ttf` ist Marcs Handschrift, aber nur mit den Grossbuchstaben
+  des Namens (A C D E G H I M R S) und dem Leerzeichen – alle anderen Zeichen sind entfernt, damit sich
+  aus der Datei keine Unterschrift nachbauen lässt. Die volle Schrift kommt nie in dieses Repo.

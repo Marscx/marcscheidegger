@@ -42,8 +42,20 @@
     --font-sans: "Avenir Next", ui-sans-serif, system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     /* Schreibmaschine für Logo und kleine Beschriftungen (Systemschriften, nichts wird geladen):
        American Typewriter (Mac/iPhone), sonst Courier */
+    /* Marcs Handschrift (eigene Schrift, liegt auf dem eigenen Server in fonts/) */
+    --font-hand: "Marc Handschrift", "American Typewriter", cursive;
     --font-schreib: "American Typewriter", "Courier Prime", "Courier New", ui-monospace, monospace;
     /* Ganz eckig: keine Rundungen (Karten, Buttons, Bilder) */
+}
+
+/* Marcs Handschrift (nur Versalien): wird vom eigenen Server geladen (keine fremden Dienste) */
+@font-face {
+    font-family: "Marc Handschrift";
+    /* Nur die Grossbuchstaben des Namens (A C D E G H I M R S) und das Leerzeichen sind in der
+       Datei – alle anderen Zeichen wurden entfernt, damit sich keine Unterschrift nachbauen lässt. */
+    src: url("../fonts/marc-versalien.ttf") format("truetype");
+    unicode-range: U+0020, U+0041, U+0043-0045, U+0047-0049, U+004D, U+0052-0053;
+    font-display: swap;
 }
 
 /* ---------- 3. Grundregeln ---------- */
@@ -73,15 +85,17 @@
 /* ---------- 4. Bausteine ---------- */
 @layer components {
     .wrap { width: min(72rem, 100% - 32px); margin-inline: auto; }
-    /* Logo: Schreibmaschine, schlank, Punkt in der Akzentfarbe */
-    .logo { @apply font-schreib text-[1.25rem] font-normal tracking-normal text-white no-underline; }
+    /* Logo: MARC SCHEIDEGGER in Marcs Handschrift, nur Grossbuchstaben, Anfangsbuchstaben grösser */
+    .logo { @apply font-hand text-[1.3rem] sm:text-[1.75rem] leading-none whitespace-nowrap font-normal tracking-normal text-white no-underline; }
     .logo:hover { @apply text-white; }
-    .logo > span { @apply text-akzent-500; }
+    .logo-wort { @apply inline-block uppercase; font-size: .72em; letter-spacing: .02em; }
+    .logo-wort::first-letter { font-size: 1.4em; }
+    .logo-wort + .logo-wort { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
     /* Logo-Zeichen: ein Verstärker-Knopf (Poti), nur mit CSS gezeichnet.
        ::before = Skala: 11 Striche im Bogen (unten offen, wie auf dem Amp)
        ::after  = Knopf mit Rand und Zeiger in der Akzentfarbe, fast auf Anschlag gedreht */
     .logo { @apply inline-flex items-center; }
-    .logo-zeichen { @apply relative mr-2.5 inline-block size-[32px] flex-none; }
+    .logo-zeichen { @apply relative mr-2 inline-block size-[32px] flex-none max-sm:scale-90; }
     .logo-zeichen::before {
         content: ""; @apply absolute inset-0 rounded-full;
         background: repeating-conic-gradient(from -152deg, rgb(255 255 255 / .8) 0 4deg, transparent 4deg 30deg);
@@ -111,9 +125,12 @@
     .nav a { @apply block px-4 py-2 text-[.95rem] font-medium text-night-300 no-underline transition; }
     .nav a:hover { @apply bg-white/5 text-white; }
     .nav a[aria-current="page"] { @apply bg-akzent-500 text-akzent-950; }
-    .nav-toggle { @apply hidden cursor-pointer border border-white/15 bg-white/5 px-4 py-2 font-medium text-white; }
+    /* Menü-Knopf (nur Handy): drei Striche ☰ – der mittlere ist der span, die anderen sind Schatten */
+    .nav-toggle { @apply hidden size-10 flex-none cursor-pointer place-items-center border border-white/15 bg-white/5 text-white; }
+    .nav-toggle span { @apply block h-[2px] w-[18px] bg-current; box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor; }
+    .nav-toggle[aria-expanded="true"] { @apply border-akzent-500 text-akzent-500; }
     @media (max-width: 860px) {
-        .nav-toggle { @apply block; }
+        .nav-toggle { @apply grid; }
         .js .nav { @apply absolute inset-x-0 top-[calc(100%+8px)] hidden border border-white/10 bg-night-900 p-2 shadow-2xl; }
         .js .nav.open { @apply block; }
         .nav ul { @apply flex-col; }
