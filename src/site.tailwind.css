@@ -88,7 +88,8 @@
     /* Logo: MARC SCHEIDEGGER in Marcs Handschrift, nur Grossbuchstaben, Anfangsbuchstaben grösser */
     .logo { @apply font-hand text-[1.3rem] sm:text-[1.75rem] leading-none whitespace-nowrap font-normal tracking-normal text-white no-underline; }
     .logo:hover { @apply text-white; }
-    .logo-wort { @apply inline-block uppercase; font-size: .72em; letter-spacing: .02em; }
+    /* top: .16em – die grossen Anfangsbuchstaben ragen nach oben; so liegt der Schriftzug optisch mittig zum Knopf */
+    .logo-wort { @apply relative inline-block uppercase; top: .16em; font-size: .72em; letter-spacing: .02em; }
     .logo-wort::first-letter { font-size: 1.4em; }
     .logo-wort + .logo-wort { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
     /* Logo-Zeichen: ein Verstärker-Knopf (Poti), nur mit CSS gezeichnet.
