@@ -126,12 +126,14 @@
         transform-origin: 9px 3.5px; transform: rotate(4deg);
         transition: transform .6s ease-in-out;
     }
-    .logo:hover .logo-zeichen::after { transform: rotate(24deg); }
-    .logo:hover .logo-zeichen::before { animation: plattenspieler-dreh 1.8s linear infinite; }
+    .logo:hover .logo-zeichen::after, .logo.spielt .logo-zeichen::after { transform: rotate(24deg); }
+    .logo:hover .logo-zeichen::before, .logo.spielt .logo-zeichen::before { animation: plattenspieler-dreh 1.8s linear infinite; }
+    /* Startseite: der Plattenspieler ist anklickbar und spielt eine Hörprobe (siehe site.js) */
+    .logo[data-embed] .logo-zeichen { cursor: pointer; }
     @keyframes plattenspieler-dreh { to { transform: rotate(1turn); } }
     @media (prefers-reduced-motion: reduce) {
         .logo-zeichen::after { transition: none; }
-        .logo:hover .logo-zeichen::before { animation: none; }
+        .logo:hover .logo-zeichen::before, .logo.spielt .logo-zeichen::before { animation: none; }
     }
     @media (max-width: 639px) { .logo-zeichen { transform: scale(.9); } }
     .skip { @apply absolute -left-[999px] top-2 z-[100] bg-akzent-500 px-3.5 py-2 text-akzent-950; }

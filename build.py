@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 18
+V = 19
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -110,6 +110,14 @@ def page(fname, title, desc, body, current=None):
     body     der eigentliche Seiteninhalt (HTML-Abschnitte, siehe weiter unten)
     current  welcher Menüpunkt hervorgehoben wird; "-" = keiner (Impressum usw.)
     """
+    # Nur auf der Startseite: Klick auf den Plattenspieler im Logo spielt eine Hörprobe
+    # (Moë, "The Same Old Story") im Mini-Player ab, statt die Startseite neu zu laden.
+    # Ohne JavaScript bleibt das Logo ein normaler Link. Siehe site.js, Abschnitt 4.
+    logo_platte = ""
+    if fname == "index.html":
+        tid = "487607869?i=487608450"
+        logo_platte = (f' data-embed="https://embed.music.apple.com/ch/album/{tid}"'
+                       ' data-title="Moë – The Same Old Story" title="Plattenspieler: Hörprobe abspielen"')
     navlis = "\n".join(
         f'                <li><a href="{h}"{CUR if h == (current or fname) else ""}>{t}</a></li>'
         for h, t in NAV)
@@ -142,7 +150,7 @@ def page(fname, title, desc, body, current=None):
     <!-- Kopfleiste bündig oben über die ganze Breite, deckendes Nachtblau: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
     <header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night-950/95 backdrop-blur-xl">
         <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
-            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
+            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite"{logo_platte}><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span aria-hidden="true"></span></button>
             <nav class="nav" id="nav" aria-label="Hauptnavigation">
                 <ul>

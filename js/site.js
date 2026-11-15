@@ -68,7 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const miniSchliessen = () => {
         if (mini) mini.remove();
         mini = null;
-        document.querySelectorAll('.track.spielt').forEach(t => t.classList.remove('spielt'));
+        document.querySelectorAll('.spielt').forEach(t => t.classList.remove('spielt'));   // Hörprobe-Zeile oder Plattenspieler
+    };
+
+    // Mini-Player unten rechts öffnen und den Auslöser (Zeile oder Logo) als "spielt" markieren
+    const miniOeffnen = (ausloeser) => {
+        clipStoppen();
+        miniSchliessen();
+        mini = document.createElement('div');
+        mini.className = 'mini-player';
+        mini.innerHTML = '<div class="mp-head"><span></span><button type="button" aria-label="Hörprobe schliessen">×</button></div>';
+        mini.querySelector('span').textContent = '♪ ' + ausloeser.dataset.title;
+        mini.querySelector('button').addEventListener('click', miniSchliessen);
+        const f = document.createElement('iframe');
+        f.src = ausloeser.dataset.embed;
+        f.title = 'Hörprobe: ' + ausloeser.dataset.title;
+        f.allow = 'autoplay; encrypted-media';
+        mini.append(f);
+        document.body.append(mini);
+        ausloeser.classList.add('spielt');
     };
 
     // Hörproben: Klick öffnet unten rechts den Mini-Player mit dem Apple-Music-Player.
@@ -76,20 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.track[data-embed]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();          // nicht zu Apple Music wechseln, sondern hier abspielen
-            clipStoppen();
-            miniSchliessen();
-            mini = document.createElement('div');
-            mini.className = 'mini-player';
-            mini.innerHTML = '<div class="mp-head"><span></span><button type="button" aria-label="Hörprobe schliessen">×</button></div>';
-            mini.querySelector('span').textContent = '♪ ' + a.dataset.title;
-            mini.querySelector('button').addEventListener('click', miniSchliessen);
-            const f = document.createElement('iframe');
-            f.src = a.dataset.embed;
-            f.title = 'Hörprobe: ' + a.dataset.title;
-            f.allow = 'autoplay; encrypted-media';
-            mini.append(f);
-            document.body.append(mini);
-            a.classList.add('spielt');   // Zeile als "läuft gerade" markieren
+            miniOeffnen(a);
+        });
+    });
+
+    // Plattenspieler im Logo (nur Startseite, dort hat das Logo data-embed):
+    // erster Klick legt die Platte auf (Mini-Player mit Moë), zweiter Klick hebt sie wieder ab.
+    document.querySelectorAll('.logo[data-embed]').forEach(logo => {
+        logo.addEventListener('click', e => {
+            if (!e.target.closest('.logo-zeichen')) return;   // Klick auf den Namen: normaler Link
+            e.preventDefault();
+            if (logo.classList.contains('spielt')) miniSchliessen();
+            else miniOeffnen(logo);
         });
     });
 
