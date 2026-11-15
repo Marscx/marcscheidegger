@@ -213,6 +213,15 @@
     a.card > img { @apply transition duration-500; }
     a.card:hover > img { @apply scale-[1.03]; }
 
+    /* Tool-Karten (Home, Lernen): typografisch statt Bild – Nummer/Thema in Schreibmaschine,
+       grosser dünner Name, Strich in der Akzentfarbe links, der beim Darüberfahren breiter wird */
+    .tool-kopf {
+        @apply flex min-h-44 flex-col justify-between gap-6 border-l-4 border-akzent-500 bg-white/[.02] px-7 pt-6 pb-7 transition-[border-width] duration-300;
+    }
+    .tool-nr { @apply font-schreib text-xs tracking-[.2em] text-akzent-500 uppercase; }
+    .tool-kopf h3 { @apply m-0 text-[clamp(2rem,3.4vw,2.6rem)] leading-[1.05] font-light tracking-[-.03em]; }   /* Trennstelle von Hand (&shy;) in build.py */
+    .tool-karte .body { @apply border-l-4 border-transparent pt-4; }
+    a.tool-karte:hover .tool-kopf { @apply border-l-[10px]; }
     .split { @apply grid items-center gap-12 lg:grid-cols-2; }
     .split > * { min-width: 0; }
     .split img { @apply w-full ring-1 ring-white/10; }

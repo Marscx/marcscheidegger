@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 14
+V = 15
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -645,23 +645,30 @@ def band_card(slug, name, img, text):
                         </div>
                     </a>"""
 
-# Die Übe-Tools (eigene Subdomains). (Bild-Kürzel, Name, Link, Text);
-# das Bild heisst img/tool-<Kürzel>.jpg. Wird auf Home und Lernen verwendet.
+# Die Übe-Tools (eigene Subdomains). (Kürzel, Name, Link, Text, Thema);
+# das Thema steht klein über dem Namen ("01 / ZUFALL"). Wird auf Home und Lernen verwendet.
 TOOLS = [
     ("wuerfel", "Würfel", "https://zufall.marcscheidegger.ch/",
-     "Zufallsgenerator für die Übezeit: Stammton, Chromatik, Akkorde, CAGED-Formen und mehr – würfeln statt immer das Gleiche üben."),
+     "Zufallsgenerator für die Übezeit: Stammton, Chromatik, Akkorde, CAGED-Formen und mehr – würfeln statt immer das Gleiche üben.",
+     "Zufall"),
     ("uebetimer", "Übe-Timer", "https://uebetimer.marcscheidegger.ch/",
-     "Mehrere Timer für ein ganzes Übeprogramm. Sie laufen nacheinander ab, mit Gong am Ende jeder Übung und einem Journal für Notizen."),
+     "Mehrere Timer für ein ganzes Übeprogramm. Sie laufen nacheinander ab, mit Gong am Ende jeder Übung und einem Journal für Notizen.",
+     "Zeit"),
     ("instrumentengrafik", "Instrumentengrafiken", "https://caged.marcscheidegger.ch/",
-     "Akkorde und Formen auf Gitarre, Ukulele und Keyboard sichtbar machen – klar dargestellt, mit hervorgehobenen Grundtönen."),
+     "Akkorde und Formen auf Gitarre, Ukulele und Keyboard sichtbar machen – klar dargestellt, mit hervorgehobenen Grundtönen.",
+     "Griffbrett"),
 ]
 
-def tool_card(k, name, url, text, h="h3"):
-    """Karte für ein Übe-Tool mit quadratischer Grafik."""
-    return f"""                    <a class="card" href="{url}">
-                        <img class="square" src="img/tool-{k}.jpg" alt="Grafik: {E(name)}" loading="lazy" width="800" height="800">
+def tool_card(k, name, url, text, thema, h="h3"):
+    """Typografische Karte für ein Übe-Tool: Nummer und Thema in Schreibmaschine,
+    grosser dünner Name, Strich in der Akzentfarbe links (Aussehen: .tool-karte)."""
+    nr = f"{[t[0] for t in TOOLS].index(k) + 1:02d}"
+    return f"""                    <a class="card tool-karte" href="{url}">
+                        <div class="tool-kopf">
+                            <span class="tool-nr">{nr} / {E(thema)}</span>
+                            <{h}>{E(name).replace("Instrumentengrafiken", "Instrumenten&shy;grafiken")}</{h}>
+                        </div>
                         <div class="body">
-                            <{h}>{E(name)}</{h}>
                             <p>{E(text)}</p>
                             <span class="more">Tool öffnen</span>
                         </div>
