@@ -682,7 +682,7 @@ def tool_card(k, name, url, text, thema, h="h3"):
     nr = f"{[t[0] for t in TOOLS].index(k) + 1:02d}"
     return karte(nr, thema, name, url, text, "Zu den Kursen" if k == "moodle" else "Tool öffnen", h)
 
-# Weitere Werkzeuge auf der Lernen-Seite (Nummern laufen nach den Übe-Tools weiter).
+# Weitere Werkzeuge auf der Lernen-Seite (Anleitungen, Noteflight) (Nummern laufen nach den Übe-Tools weiter).
 # (Thema, Name, Link, Text, Linktext)
 WERKZEUGE = [
     ("Anleitungen", "Digitale Werkzeuge", "https://digi.marcscheidegger.ch/",
@@ -690,8 +690,6 @@ WERKZEUGE = [
      "Zu den Anleitungen"),
     ("Noten", "Noteflight", "https://marcscheidegger.sites.noteflight.com/home",
      "Noten schreiben im Browser – mit Noteflight.", "Zu Noteflight"),
-    ("Produktion", "Soundtrap", "https://www.soundtrap.com/",
-     "Musik produzieren im Browser – mit Soundtrap.", "Zu Soundtrap"),
 ]
 
 home = f"""        <!-- ===== SEITENKOPF: grosses Bühnenfoto, Name, Kurzbeschreibung ===== -->
@@ -822,16 +820,16 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
             </div>
         </section>
 
-        <!-- ===== WEITERE WERKZEUGE: Anleitungen (digi.marcscheidegger.ch), Noteflight, Soundtrap –
+        <!-- ===== WEITERE WERKZEUGE: Anleitungen (digi.marcscheidegger.ch) und Noteflight –
              als Karten wie die Übe-Tools (Liste WERKZEUGE). ===== -->
         <section class="section alt">
             <div class="wrap">
                 <div class="section-head">
                     <span class="kicker">Werkzeuge</span>
                     <h2>Online Musik machen</h2>
-                    <p>Anleitungen zu digitalen Werkzeugen und Programme zum Noten schreiben und Musik produzieren – alles im Browser.</p>
+                    <p>Anleitungen zu digitalen Werkzeugen und Noten schreiben im Browser.</p>
                 </div>
-                <div class="grid">
+                <div class="grid two">
 {chr(10).join(karte(f"{len(TOOLS) + i + 1:02d}", *w) for i, w in enumerate(WERKZEUGE))}
                 </div>
             </div>
