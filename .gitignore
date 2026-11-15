@@ -1,3 +1,4 @@
 .DS_Store
 # Tailwind-Programm (lokal, nicht online)
 tools/
+__pycache__/

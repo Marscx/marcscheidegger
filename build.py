@@ -29,7 +29,7 @@ AUFBAU DIESER DATEI
 4. Die einzelnen Seiten (Projekte, Chronologie, Home, Lernen, Kontakt, Rechtliches, 404)
 
 Was du am häufigsten änderst:
-    neues Konzert          → Liste KONZERTE
+    neue Konzerte          → python3 konzerte.py (liest die Band-Websites), Ausnahmen in KONZERTE_VON_HAND
     neue Station / Band    → Liste P (Projekte)
     neues Video            → Liste CLIPS
     neue Hörprobe          → Liste TRACKS
@@ -458,32 +458,33 @@ def compact_card(p):
 grp = lambda g: [p for p in P if p[7] == g]
 
 # ---------------------------------------------------------------- Konzerte
-# Kommende Konzerte, nach Datum sortiert eintragen. Ein Eintrag:
+# Die Termine kommen aus konzerte.json. Diese Datei schreibt konzerte.py, das die
+# Websites der Bands ausliest (Julian von Flüe Trio, Mala Oreen). Einmal pro Woche:
+#
+#     python3 konzerte.py && python3 build.py
+#
+# Ein Eintrag: datum (JJJJ-MM-TT), zeit ("20:15" oder ""), band (slug aus der
+# Projektliste), ort, link (Ticket-/Info-Link oder "").
+# Konzerte, die auf keiner Band-Website stehen, hier von Hand eintragen:
 #   (datum, zeit, band-slug, ort, link)
-#   datum      immer im Format JJJJ-MM-TT, z. B. "2027-03-18"
-#   zeit       "20:15" oder "" wenn unbekannt
-#   band-slug  slug aus der Projektliste, z. B. "julian-von-fluee"
-#   ort        Veranstalter und Ort
-#   link       Ticket-/Info-Link oder ""
+# Steht am selben Tag für dieselbe Band schon ein Termin in konzerte.json, gilt der
+# Eintrag von Hand (so lässt sich auch ein einzelner Termin korrigieren).
+KONZERTE_VON_HAND = [
+]
 # Vergangene Konzerte musst du nicht löschen: site.js blendet sie im Browser
 # automatisch aus. Die Startseite zeigt die nächsten 5, die Projekte-Seite alle.
-KONZERTE = [
-    ("2026-11-21", "20:00", "julian-von-fluee", "ARTick – Schlössli Mattstetten", "https://eventfrog.ch/de/p/konzerte/folk/julian-von-fluee-trio-alpine-folk-7462512049513359337.html"),
-    ("2026-12-05", "18:00", "julian-von-fluee", "Alpine Folk im Roten Doppelpfeil «Churchill», Zürich", "https://www.sbb.ch/de/freizeit-ferien/ideen/angebot.html/zuege/folkmusik-churchill"),
-    ("2027-01-22", "", "julian-von-fluee", "Kulturverein Ermitage, Beckenried", ""),
-    ("2027-01-23", "", "julian-von-fluee", "Jazzclub Thalwil, feat. Roland von Flüe", ""),
-    ("2027-01-30", "", "julian-von-fluee", "Anna Stüssi Haus, Dänikon", ""),
-    ("2027-02-12", "20:00", "mala-oreen", "Dinner-Konzert, Frohe Aussicht, Oberrieden", "https://www.frohe-aussicht-oberrieden.ch"),
-    ("2027-02-26", "", "julian-von-fluee", "Theater im Pfarrhauskeller, Waldenburg", ""),
-    ("2027-03-18", "20:15", "julian-von-fluee", "Kleinkunstbühne Rathus-Schüür, Baar", ""),
-    ("2027-03-19", "21:00", "julian-von-fluee", "Le Singe, Biel", ""),
-    ("2027-04-10", "20:00", "julian-von-fluee", "Diogenes Theater, Altstätten", "https://diogenes-theater.ch/veranstaltung/julian-von-der-fluehe-trio-alpine-folk/"),
-    ("2027-04-23", "20:00", "julian-von-fluee", "Kulturhalle Rothenburg", ""),
-    ("2027-04-24", "19:30", "julian-von-fluee", "Kulturschopf Feldbach", ""),
-    ("2027-10-16", "20:15", "julian-von-fluee", "Gaswerk Eventbar, Seewen", "https://www.gaswerk-eventbar.ch/veranstaltungen/julian-von-fluee-trio-ch/"),
-    ("2027-10-22", "19:30", "julian-von-fluee", "Schloss Schauensee, Kriens", ""),
-    ("2027-10-31", "17:00", "julian-von-fluee", "Kulturraum Marabu, Gelterkinden", ""),
-]
+def konzerte_laden():
+    import json
+    liste = {}
+    pfad = os.path.join(OUT, "konzerte.json")
+    if os.path.exists(pfad):
+        with open(pfad) as f:
+            for k in json.load(f):
+                liste[(k["datum"], k["band"])] = (k["datum"], k["zeit"], k["band"], k["ort"], k["link"])
+    for k in KONZERTE_VON_HAND:
+        liste[(k[0], k[2])] = k
+    return sorted(liste.values(), key=lambda k: (k[0], k[1]))
+KONZERTE = konzerte_laden()
 MONATE = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
 BAND = {p[0]: p[1] for p in P}   # slug → Bandname, z. B. "mala-oreen" → "Mala Oreen"
 

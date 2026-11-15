@@ -40,6 +40,18 @@ php -S localhost:8090
 
 Dann http://localhost:8090 öffnen.
 
+## Konzerte aktualisieren (einmal pro Woche)
+
+```
+python3 konzerte.py && python3 build.py
+```
+
+`konzerte.py` liest die Termine von julianvonfluee.ch/live und vom Optune-Kalender von
+Mala Oreen und schreibt sie nach `konzerte.json`; `build.py` baut daraus die Seiten.
+Danach committen und pushen. Ist eine Band-Website nicht erreichbar, bleiben deren
+bisherige Termine stehen. Schreibweisen korrigieren: `KORREKTUREN` in `konzerte.py`.
+Konzerte, die auf keiner Band-Website stehen: `KONZERTE_VON_HAND` in `build.py`.
+
 ## Veröffentlichen (Plesk)
 
 1. **Test:** Subdomain `neu.marcscheidegger.ch` → Git → Repository
