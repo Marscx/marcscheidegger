@@ -32,6 +32,13 @@ AddDefaultCharset utf-8
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# ---------- 1b. Alte Test-Adresse auf die Hauptadresse umleiten ----------
+# Seit dem Livegang ist neu.marcscheidegger.ch nicht mehr nötig: jede Adresse dort führt
+# dauerhaft (301) zur gleichen Seite auf marcscheidegger.ch, z. B. neu.…/projekte.html → marcscheidegger.ch/projekte.html.
+# Greift nur, wenn die Subdomain neu. in Plesk auf denselben Ordner (httpdocs) zeigt.
+RewriteCond %{HTTP_HOST} ^neu\.marcscheidegger\.ch$ [NC]
+RewriteRule ^ https://marcscheidegger.ch%{REQUEST_URI} [R=301,L]
+
 # ---------- 2. HTTPS erzwingen ----------
 # Wer http://… aufruft, wird auf die verschlüsselte Adresse https://… umgeleitet.
 RewriteCond %{HTTPS} off

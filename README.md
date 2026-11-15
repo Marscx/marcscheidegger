@@ -47,9 +47,13 @@ Dann http://localhost:8090 öffnen.
    bei Push, Bereitstellungspfad = Dokumentenstamm der Subdomain.
    SSL/TLS (Let's Encrypt) für die Subdomain aktivieren – `.htaccess` leitet auf HTTPS um.
    Auf `neu.` sendet der Server `noindex`, damit Google die Testseite nicht aufnimmt.
-2. **Livegang:** bei `marcscheidegger.ch` unter Hosting-Einstellungen den Dokumentenstamm auf den
-   Ordner von `neu.marcscheidegger.ch` stellen. Die WordPress-Dateien in `httpdocs` bleiben
-   unverändert; zurück geht es, indem man den Dokumentenstamm wieder auf `httpdocs` stellt.
+2. **Livegang:** Die Website wird direkt in `httpdocs` von `marcscheidegger.ch` bereitgestellt
+   (Git-Bereitstellungspfad in Plesk = `httpdocs`). So bleiben die verlinkten Unterordner in
+   `httpdocs` (moodle, MarcBuch …) unter ihren Adressen erreichbar. Die WordPress-Dateien bleiben
+   liegen, sind aber durch `.htaccess` gesperrt (Abschnitt 4); die Startseite ist `index.html`.
+   Die Subdomain `neu.` zeigt danach ebenfalls auf `httpdocs` – `.htaccess` (Abschnitt 1b)
+   leitet jede Adresse dort per 301 auf `marcscheidegger.ch` um.
+   Vorher in Plesk eine vollständige Sicherung erstellen.
 
 ## Urheberrecht
 
