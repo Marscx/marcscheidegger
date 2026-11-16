@@ -302,6 +302,7 @@
     .jb-kuenstler h3 a { @apply text-white no-underline hover:text-akzent-400; }
     .jb-kuenstler h3 span { @apply font-schreib text-[0.65rem] tracking-widest text-night-300 uppercase; }
     .jb-kuenstler ul { @apply m-0 grid list-none gap-1 p-0; }
+    .jb-hinweis { @apply -mt-0.5 mb-2 text-xs text-night-300 italic; }
     /* Kompakte Zeilen: Titel und Album untereinander neben dem Abspielknopf (Grid statt Flex) */
     .jukebox .track { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; row-gap: 0; padding: .45rem .6rem; }
     .jukebox .track::before { grid-row: span 2; align-self: center; transform: scale(.8); }

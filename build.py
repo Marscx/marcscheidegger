@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 20
+V = 21
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -396,6 +396,18 @@ def tracks(slug):
                             </ul>
                         </div>"""
 
+# Zusätzliche Songs nur für die Jukebox: Bands, mit denen Marc live spielt, auf deren
+# Aufnahmen er aber nicht zu hören ist. Sie erscheinen NICHT auf der Projekte-Seite
+# (dort nur Aufnahmen mit Marc) und tragen in der Jukebox einen Hinweis.
+JUKEBOX_LIVE = {
+    "mala-oreen": [
+        ("1568707941?i=1568707942", "Ragged Queen", "Awake", "2021"),
+        ("1568707941?i=1568707953", "Offspring", "Awake", "2021"),
+        ("1568707941?i=1568707996", "Awake", "Awake", "2021"),
+    ],
+}
+JUKEBOX_LIVE_HINWEIS = "Aufnahmen ohne mich – live spiele ich Gitarre, Mandoline und Gesang"
+
 def jukebox():
     """Jukebox beim Plattenspieler (nur Startseite): alle Hörproben aus TRACKS,
     nach Künstler wie in der Künstler-Ansicht von Apple Music –
@@ -406,19 +418,22 @@ def jukebox():
     # erscheinen erst, wenn sie in TRACKS Songs haben; nicht genannte Bands kommen ans Ende.
     reihenfolge = ["julian-von-fluee", "mala-oreen", "kubus", "moe", "patrick-jonsson",
                    "yvonne-moore", "stimmreise"]
-    kuenstler = ([slug for slug in reihenfolge if slug in TRACKS]
-                 + [slug for slug in TRACKS if slug not in reihenfolge])
+    alle = {**TRACKS, **JUKEBOX_LIVE}
+    kuenstler = ([slug for slug in reihenfolge if slug in alle]
+                 + [slug for slug in alle if slug not in reihenfolge])
     teile = []
     for slug in kuenstler:
         name = namen.get(slug, slug)
-        songs = sorted(TRACKS[slug], key=lambda t: (-int(t[3]), t[2]))
+        songs = sorted(alle[slug], key=lambda t: (-int(t[3]), t[2]))
+        hinweis = (f"""\n                <p class="jb-hinweis">{E(JUKEBOX_LIVE_HINWEIS)}</p>"""
+                   if slug in JUKEBOX_LIVE else "")
         zeilen = "\n".join(
             f"""                    <li><a class="track" href="https://music.apple.com/ch/album/{tid}" """
             f"""data-embed="https://embed.music.apple.com/ch/album/{tid}" data-title="{E(name)} – {E(t)}">"""
             f"""<b>{E(t)}</b> <span>{E(alb)} · {y}</span></a></li>"""
             for tid, t, alb, y in songs)
         teile.append(f"""            <section class="jb-kuenstler">
-                <h3><a href="projekte.html#{slug}">{E(name)}</a> <span>{len(songs)} {"Song" if len(songs) == 1 else "Songs"}</span></h3>
+                <h3><a href="projekte.html#{slug}">{E(name)}</a> <span>{len(songs)} {"Song" if len(songs) == 1 else "Songs"}</span></h3>{hinweis}
                 <ul>
 {zeilen}
                 </ul>
