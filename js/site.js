@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Plattenspieler im Logo (nur Startseite, dort hat das Logo data-jukebox):
     // Klick auf den Plattenspieler öffnet bzw. schliesst die Jukebox mit allen Hörproben.
-    // Die Musik läuft weiter, auch wenn die Jukebox zugeht; solange sie läuft, dreht sich die Platte.
+    // Geht die Jukebox zu, schliesst sich auch der Mini-Player; solange Musik läuft, dreht sich die Platte.
     const logo = document.querySelector('.logo[data-jukebox]');
     const jukebox = document.getElementById('jukebox');
     if (logo && jukebox) {
@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             jukebox.hidden = !zeigen;
             logo.setAttribute('aria-expanded', String(zeigen));
             if (zeigen) jukebox.querySelector('.track')?.focus({ preventScroll: true });
+            else miniSchliessen();   // Jukebox zu: auch der Apple-Music-Player verschwindet
         };
         logo.addEventListener('click', e => {
             if (!e.target.closest('.logo-zeichen')) return;   // Klick auf den Namen: normaler Link
