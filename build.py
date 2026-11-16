@@ -355,8 +355,8 @@ TRACKS = {
         ("1635556489?i=1635556510", "Riiwäiwel", "stimmreise.ch, Vol. 2", "2010"),
     ],
     "patrick-jonsson": [
-        ("375345689?i=375345741", "This Is the Sky", "This Is the Sky", "2009"),
-        ("1292581091?i=1292581099", "People Are Strange", "People Are Strange", "2013"),
+        ("1292581091?i=1292581102", "Granville Road (feat. Anna Kaenzig)", "People Are Strange", "2013"),
+        ("375345689?i=375345739", "Sunrise", "This Is the Sky", "2009"),
     ],
     "emel": [
         ("1305231429?i=1305231649", "Dragon", "Single", "2017"),
