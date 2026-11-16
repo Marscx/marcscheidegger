@@ -268,16 +268,28 @@
     .track {
         @apply flex items-center gap-3 bg-white/[.03] py-2 pr-4 pl-2 text-white no-underline ring-1 ring-white/10 ring-inset transition;
     }
+    /* Abspielknopf als kleine Schallplatte (wie der Plattenspieler im Logo):
+       Rillen, Lichtreflex, Etikett in der Akzentfarbe mit Play-Dreieck.
+       Läuft die Hörprobe, verschwindet das Dreieck und die Platte dreht sich (33⅓ U/min). */
     .track::before {
-        content: ""; @apply size-8 flex-none bg-akzent-500;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 2l5 3-5 3z' fill='%232a0904'/%3E%3C/svg%3E");
-        background-position: center; background-size: 14px; background-repeat: no-repeat;
+        content: ""; @apply size-8 flex-none rounded-full;
+        --pfeil: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3.5 2.5l4 2.5-4 2.5z' fill='%232a0904'/%3E%3C/svg%3E");
+        background:
+            var(--pfeil) center / 10px no-repeat,                                                       /* Play-Dreieck */
+            radial-gradient(circle, #f5f7fb 0 .9px, transparent 1.3px),                                /* Mittelstift */
+            radial-gradient(circle, var(--color-akzent-500) 0 7px, transparent 7.5px),                 /* Etikett */
+            conic-gradient(transparent 0 15%, rgb(255 255 255 / .2) 22%, transparent 29% 65%,
+                           rgb(255 255 255 / .2) 72%, transparent 79%),                               /* Lichtreflex */
+            repeating-radial-gradient(circle, #0b1220 0 1.2px, #2a3a5e 1.2px 1.9px);                   /* Rillen */
+        box-shadow: 0 0 0 1px rgb(255 255 255 / .3);
     }
     .track b { @apply font-semibold; }
     .track span { @apply ml-auto text-right text-sm text-night-300; }
     .track:hover { @apply bg-white/[.06] text-white ring-white/25; }
     .track.spielt { @apply bg-akzent-500/10 ring-akzent-500/60; }
-    .track.spielt::before { animation: puls 1.2s ease-in-out infinite; }
+    .track.spielt::before { --pfeil: none; animation: plattenspieler-dreh 1.8s linear infinite; }
+    .track:hover::before { box-shadow: 0 0 0 1px var(--color-akzent-500); }
+    @media (prefers-reduced-motion: reduce) { .track.spielt::before { animation: none; } }
     @media (max-width: 560px) { .track { @apply flex-wrap; } .track span { @apply ml-11 w-full text-left; } }
 
     .mini-player { @apply fixed right-4 bottom-4 z-60 w-[min(340px,calc(100%-32px))] overflow-hidden bg-night-800/95 ring-1 ring-akzent-500/60 shadow-2xl backdrop-blur-xl; }
@@ -305,7 +317,7 @@
     .jb-hinweis { @apply -mt-0.5 mb-2 text-xs text-night-300 italic; }
     /* Kompakte Zeilen: Titel und Album untereinander neben dem Abspielknopf (Grid statt Flex) */
     .jukebox .track { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; row-gap: 0; padding: .45rem .6rem; }
-    .jukebox .track::before { grid-row: span 2; align-self: center; transform: scale(.8); }
+    .jukebox .track::before { grid-row: span 2; align-self: center; width: 28px; height: 28px; }
     .jukebox .track b { @apply text-[0.95rem] leading-snug font-medium; }
     .jukebox .track span { @apply m-0 w-auto text-left text-xs; }
     /* Wenn der Mini-Player offen ist, lässt die Jukebox unten Platz für ihn (Handy: untereinander) */
