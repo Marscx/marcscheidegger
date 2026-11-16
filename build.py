@@ -398,11 +398,16 @@ def tracks(slug):
 
 def jukebox():
     """Jukebox beim Plattenspieler (nur Startseite): alle Hörproben aus TRACKS,
-    nach Künstler sortiert wie in der Künstler-Ansicht von Apple Music –
-    Künstler alphabetisch, darunter die Songs nach Album (neustes zuerst).
+    nach Künstler wie in der Künstler-Ansicht von Apple Music –
+    Künstler in fester Reihenfolge (siehe reihenfolge), darunter die Songs nach Album (neustes zuerst).
     Die Zeilen sind normale Hörproben (.track), site.js spielt sie im Mini-Player."""
     namen = {p[0]: p[1] for p in P}
-    kuenstler = sorted(TRACKS, key=lambda slug: namen.get(slug, slug).casefold())
+    # Reihenfolge der Künstler in der Jukebox. Bands ohne Hörproben (z. B. Mala Oreen)
+    # erscheinen erst, wenn sie in TRACKS Songs haben; nicht genannte Bands kommen ans Ende.
+    reihenfolge = ["julian-von-fluee", "mala-oreen", "kubus", "moe", "patrick-jonsson",
+                   "yvonne-moore", "stimmreise"]
+    kuenstler = ([slug for slug in reihenfolge if slug in TRACKS]
+                 + [slug for slug in TRACKS if slug not in reihenfolge])
     teile = []
     for slug in kuenstler:
         name = namen.get(slug, slug)
