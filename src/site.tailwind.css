@@ -128,8 +128,8 @@
     }
     .logo:hover .logo-zeichen::after, .logo.spielt .logo-zeichen::after { transform: rotate(24deg); }
     .logo:hover .logo-zeichen::before, .logo.spielt .logo-zeichen::before { animation: plattenspieler-dreh 1.8s linear infinite; }
-    /* Startseite: der Plattenspieler ist anklickbar und spielt eine Hörprobe (siehe site.js) */
-    .logo[data-embed] .logo-zeichen { cursor: pointer; }
+    /* Startseite: der Plattenspieler ist anklickbar und öffnet die Jukebox (siehe site.js) */
+    .logo[data-jukebox] .logo-zeichen { cursor: pointer; }
     @keyframes plattenspieler-dreh { to { transform: rotate(1turn); } }
     @media (prefers-reduced-motion: reduce) {
         .logo-zeichen::after { transition: none; }
@@ -286,6 +286,30 @@
     .mp-head button { @apply size-8 flex-none cursor-pointer border border-white/15 bg-night-950 text-lg leading-none text-white; }
     .mp-head button:hover { @apply border-akzent-500; }
     .mini-player iframe { @apply block h-[175px] w-full border-0; }
+
+    /* Jukebox beim Plattenspieler (nur Startseite): Panel links oben unter der Kopfleiste,
+       Künstler wie in der Künstler-Ansicht von Apple Music untereinander, Songs als Hörproben-Zeilen. */
+    .jukebox { @apply fixed top-[64px] left-4 z-60 flex w-[min(400px,calc(100%-32px))] flex-col bg-night-900/97 ring-1 ring-akzent-500/60 shadow-2xl backdrop-blur-xl;
+               max-height: calc(100dvh - 64px - 16px); }
+    .jukebox[hidden] { display: none; }
+    .jb-kopf { @apply flex flex-none items-center justify-between gap-3 border-b border-white/10 py-2 pr-2 pl-4; }
+    .jb-kopf p { @apply m-0 text-xs text-night-300; }
+    .jb-kopf p span { @apply mr-2 font-schreib text-sm tracking-widest text-akzent-400 uppercase; }
+    .jb-kopf button { @apply size-8 flex-none cursor-pointer border border-white/15 bg-night-950 text-lg leading-none text-white; }
+    .jb-kopf button:hover { @apply border-akzent-500; }
+    .jb-liste { @apply overflow-y-auto overscroll-contain px-4 pb-4; }
+    .jb-kuenstler h3 { @apply mt-4 mb-1.5 flex items-baseline justify-between gap-2 text-lg font-light text-white; }
+    .jb-kuenstler h3 a { @apply text-white no-underline hover:text-akzent-400; }
+    .jb-kuenstler h3 span { @apply font-schreib text-[0.65rem] tracking-widest text-night-300 uppercase; }
+    .jb-kuenstler ul { @apply m-0 grid list-none gap-1 p-0; }
+    /* Kompakte Zeilen: Titel und Album untereinander neben dem Abspielknopf (Grid statt Flex) */
+    .jukebox .track { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; row-gap: 0; padding: .45rem .6rem; }
+    .jukebox .track::before { grid-row: span 2; align-self: center; transform: scale(.8); }
+    .jukebox .track b { @apply text-[0.95rem] leading-snug font-medium; }
+    .jukebox .track span { @apply m-0 w-auto text-left text-xs; }
+    /* Wenn der Mini-Player offen ist, lässt die Jukebox unten Platz für ihn (Handy: untereinander) */
+    body:has(.mini-player) .jukebox { max-height: calc(100dvh - 64px - 250px); }
+    @media (min-width: 900px) { body:has(.mini-player) .jukebox { max-height: calc(100dvh - 64px - 16px); } }
 
     /* Konzerte: Datum in der Akzentfarbe */
     .gigs { @apply m-0 grid list-none gap-3 p-0; }

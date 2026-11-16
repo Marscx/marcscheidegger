@@ -98,16 +98,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Plattenspieler im Logo (nur Startseite, dort hat das Logo data-embed):
-    // erster Klick legt die Platte auf (Mini-Player mit Moë), zweiter Klick hebt sie wieder ab.
-    document.querySelectorAll('.logo[data-embed]').forEach(logo => {
+    // Plattenspieler im Logo (nur Startseite, dort hat das Logo data-jukebox):
+    // Klick auf den Plattenspieler öffnet bzw. schliesst die Jukebox mit allen Hörproben.
+    // Die Musik läuft weiter, auch wenn die Jukebox zugeht; solange sie läuft, dreht sich die Platte.
+    const logo = document.querySelector('.logo[data-jukebox]');
+    const jukebox = document.getElementById('jukebox');
+    if (logo && jukebox) {
+        logo.setAttribute('aria-expanded', 'false');
+        const jukeboxZeigen = (zeigen) => {
+            jukebox.hidden = !zeigen;
+            logo.setAttribute('aria-expanded', String(zeigen));
+            if (zeigen) jukebox.querySelector('.track')?.focus({ preventScroll: true });
+        };
         logo.addEventListener('click', e => {
             if (!e.target.closest('.logo-zeichen')) return;   // Klick auf den Namen: normaler Link
             e.preventDefault();
-            if (logo.classList.contains('spielt')) miniSchliessen();
-            else miniOeffnen(logo);
+            jukeboxZeigen(jukebox.hidden);
         });
-    });
+        jukebox.querySelector('.jb-kopf button').addEventListener('click', () => jukeboxZeigen(false));
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !jukebox.hidden) jukeboxZeigen(false); });
+        // Platte dreht sich, solange eine Hörprobe läuft (egal ob aus der Jukebox oder von einer Bandseite)
+        new MutationObserver(() => logo.classList.toggle('spielt', !!mini))
+            .observe(document.body, { childList: true });
+    }
 
     // Videos: Klick ersetzt das Vorschaubild an Ort und Stelle durch den echten Player.
     document.querySelectorAll('.clip-play[data-embed]').forEach(a => {

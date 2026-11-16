@@ -14,8 +14,8 @@
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0b1220">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="css/site.css?v=19">
-    <script src="js/site.js?v=19"></script>
+    <link rel="stylesheet" href="css/site.css?v=20">
+    <script src="js/site.js?v=20"></script>
 </head>
 <body>
     <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
@@ -26,7 +26,7 @@
     <!-- Kopfleiste bündig oben über die ganze Breite, deckendes Nachtblau: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
     <header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night-950/95 backdrop-blur-xl">
         <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
-            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite" data-embed="https://embed.music.apple.com/ch/album/487607869?i=487608450" data-title="Moë – The Same Old Story" title="Plattenspieler: Hörprobe abspielen"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
+            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite" data-jukebox aria-controls="jukebox" title="Plattenspieler: Jukebox öffnen"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
             <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span aria-hidden="true"></span></button>
             <nav class="nav" id="nav" aria-label="Hauptnavigation">
                 <ul>
@@ -39,6 +39,71 @@
             </nav>
         </div>
     </header>
+
+    <!-- ===== JUKEBOX: öffnet sich beim Klick auf den Plattenspieler im Logo (site.js) ===== -->
+    <div class="jukebox" id="jukebox" role="dialog" aria-label="Jukebox" hidden>
+        <div class="jb-kopf"><p><span>Jukebox</span> Hörproben nach Künstler · Apple Music</p><button type="button" aria-label="Jukebox schliessen">×</button></div>
+        <div class="jb-liste">
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#emel">Emel</a> <span>1 Song</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1305231429?i=1305231649" data-embed="https://embed.music.apple.com/ch/album/1305231429?i=1305231649" data-title="Emel – Dragon"><b>Dragon</b> <span>Single · 2017</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#guy-vincent">Guy Vincent</a> <span>2 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/693996856?i=693996860" data-embed="https://embed.music.apple.com/ch/album/693996856?i=693996860" data-title="Guy Vincent – Expectations"><b>Expectations</b> <span>Expectations · 2013</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/693996856?i=693996891" data-embed="https://embed.music.apple.com/ch/album/693996856?i=693996891" data-title="Guy Vincent – We Live"><b>We Live</b> <span>Expectations · 2013</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#julian-von-fluee">Julian von Flüe Trio</a> <span>6 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1779697391?i=1779698068" data-embed="https://embed.music.apple.com/ch/album/1779697391?i=1779698068" data-title="Julian von Flüe Trio – Wie Zyt verstricht"><b>Wie Zyt verstricht</b> <span>Alpine Folk · 2024</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1779697391?i=1779698061" data-embed="https://embed.music.apple.com/ch/album/1779697391?i=1779698061" data-title="Julian von Flüe Trio – Linas chlini Wunderwält"><b>Linas chlini Wunderwält</b> <span>Alpine Folk · 2024</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1690417968?i=1690418999" data-embed="https://embed.music.apple.com/ch/album/1690417968?i=1690418999" data-title="Julian von Flüe Trio – Übers Kopfsteipflaschter"><b>Übers Kopfsteipflaschter</b> <span>Dur d’Altstadt · 2023</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1690417968?i=1690418722" data-embed="https://embed.music.apple.com/ch/album/1690417968?i=1690418722" data-title="Julian von Flüe Trio – Caviano"><b>Caviano</b> <span>Dur d’Altstadt · 2023</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1690417968?i=1690418158" data-embed="https://embed.music.apple.com/ch/album/1690417968?i=1690418158" data-title="Julian von Flüe Trio – Lichtblick"><b>Lichtblick</b> <span>Dur d’Altstadt · 2023</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1690406111?i=1690406329" data-embed="https://embed.music.apple.com/ch/album/1690406111?i=1690406329" data-title="Julian von Flüe Trio – De Päuli isch lind"><b>De Päuli isch lind</b> <span>Drive · 2019</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#kubus">Kubus</a> <span>2 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1435500427?i=1435500429" data-embed="https://embed.music.apple.com/ch/album/1435500427?i=1435500429" data-title="Kubus – Hürfel"><b>Hürfel</b> <span>Kubus · 2002</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1435500427?i=1435500703" data-embed="https://embed.music.apple.com/ch/album/1435500427?i=1435500703" data-title="Kubus – Pilzkultur"><b>Pilzkultur</b> <span>Kubus · 2002</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#moe">Moë</a> <span>1 Song</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/487607869?i=487608450" data-embed="https://embed.music.apple.com/ch/album/487607869?i=487608450" data-title="Moë – The Same Old Story"><b>The Same Old Story</b> <span>Reflections · 2003</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#patrick-jonsson">Patrick Jonsson</a> <span>2 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1292581091?i=1292581099" data-embed="https://embed.music.apple.com/ch/album/1292581091?i=1292581099" data-title="Patrick Jonsson – People Are Strange"><b>People Are Strange</b> <span>People Are Strange · 2013</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/375345689?i=375345741" data-embed="https://embed.music.apple.com/ch/album/375345689?i=375345741" data-title="Patrick Jonsson – This Is the Sky"><b>This Is the Sky</b> <span>This Is the Sky · 2009</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#stimmreise">stimmreise.ch</a> <span>2 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1635556489?i=1635557122" data-embed="https://embed.music.apple.com/ch/album/1635556489?i=1635557122" data-title="stimmreise.ch – Oldbox"><b>Oldbox</b> <span>stimmreise.ch, Vol. 2 · 2010</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/1635556489?i=1635556510" data-embed="https://embed.music.apple.com/ch/album/1635556489?i=1635556510" data-title="stimmreise.ch – Riiwäiwel"><b>Riiwäiwel</b> <span>stimmreise.ch, Vol. 2 · 2010</span></a></li>
+                </ul>
+            </section>
+            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#yvonne-moore">Yvonne Moore</a> <span>2 Songs</span></h3>
+                <ul>
+                    <li><a class="track" href="https://music.apple.com/ch/album/163232224?i=163232718" data-embed="https://embed.music.apple.com/ch/album/163232224?i=163232718" data-title="Yvonne Moore – Closer to You"><b>Closer to You</b> <span>Nomad · 2002</span></a></li>
+                    <li><a class="track" href="https://music.apple.com/ch/album/163232224?i=163232902" data-embed="https://embed.music.apple.com/ch/album/163232224?i=163232902" data-title="Yvonne Moore – Come On Yvonne"><b>Come On Yvonne</b> <span>Nomad · 2002</span></a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
 
     <!-- ===== HAUPTINHALT der Seite ===== -->
     <main id="inhalt">

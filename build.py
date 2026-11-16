@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 19
+V = 20
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -110,14 +110,13 @@ def page(fname, title, desc, body, current=None):
     body     der eigentliche Seiteninhalt (HTML-Abschnitte, siehe weiter unten)
     current  welcher Menüpunkt hervorgehoben wird; "-" = keiner (Impressum usw.)
     """
-    # Nur auf der Startseite: Klick auf den Plattenspieler im Logo spielt eine Hörprobe
-    # (Moë, "The Same Old Story") im Mini-Player ab, statt die Startseite neu zu laden.
-    # Ohne JavaScript bleibt das Logo ein normaler Link. Siehe site.js, Abschnitt 4.
-    logo_platte = ""
+    # Nur auf der Startseite: Klick auf den Plattenspieler im Logo öffnet die Jukebox
+    # (alle Hörproben nach Künstler, siehe jukebox() und site.js). Ohne JavaScript
+    # bleibt das Logo ein normaler Link.
+    logo_platte = jukebox_box = ""
     if fname == "index.html":
-        tid = "487607869?i=487608450"
-        logo_platte = (f' data-embed="https://embed.music.apple.com/ch/album/{tid}"'
-                       ' data-title="Moë – The Same Old Story" title="Plattenspieler: Hörprobe abspielen"')
+        logo_platte = ' data-jukebox aria-controls="jukebox" title="Plattenspieler: Jukebox öffnen"'
+        jukebox_box = jukebox()
     navlis = "\n".join(
         f'                <li><a href="{h}"{CUR if h == (current or fname) else ""}>{t}</a></li>'
         for h, t in NAV)
@@ -159,7 +158,7 @@ def page(fname, title, desc, body, current=None):
             </nav>
         </div>
     </header>
-
+{jukebox_box}
     <!-- ===== HAUPTINHALT der Seite ===== -->
     <main id="inhalt">
 {body.rstrip()}
@@ -338,10 +337,11 @@ CLIPS = {
 TRACKS = {
     "julian-von-fluee": [
         ("1779697391?i=1779698068", "Wie Zyt verstricht", "Alpine Folk", "2024"),
-        ("1779697391?i=1779697648", "E glungne Abig", "Alpine Folk", "2024"),
-        ("1690417968?i=1690418716", "Dur d’Altstadt", "Dur d’Altstadt", "2023"),
-        ("1690406111?i=1690406557", "Uf um Stoos ob Schwyz", "Drive", "2019"),
-        ("1690406111?i=1690406337", "Nachtspaziergang", "Drive", "2019"),
+        ("1779697391?i=1779698061", "Linas chlini Wunderwält", "Alpine Folk", "2024"),
+        ("1690417968?i=1690418999", "Übers Kopfsteipflaschter", "Dur d’Altstadt", "2023"),
+        ("1690417968?i=1690418722", "Caviano", "Dur d’Altstadt", "2023"),
+        ("1690417968?i=1690418158", "Lichtblick", "Dur d’Altstadt", "2023"),
+        ("1690406111?i=1690406329", "De Päuli isch lind", "Drive", "2019"),
     ],
     "kubus": [
         ("1435500427?i=1435500429", "Hürfel", "Kubus", "2002"),
@@ -395,6 +395,38 @@ def tracks(slug):
 {chr(10).join(track(*t) for t in TRACKS[slug])}
                             </ul>
                         </div>"""
+
+def jukebox():
+    """Jukebox beim Plattenspieler (nur Startseite): alle Hörproben aus TRACKS,
+    nach Künstler sortiert wie in der Künstler-Ansicht von Apple Music –
+    Künstler alphabetisch, darunter die Songs nach Album (neustes zuerst).
+    Die Zeilen sind normale Hörproben (.track), site.js spielt sie im Mini-Player."""
+    namen = {p[0]: p[1] for p in P}
+    kuenstler = sorted(TRACKS, key=lambda slug: namen.get(slug, slug).casefold())
+    teile = []
+    for slug in kuenstler:
+        name = namen.get(slug, slug)
+        songs = sorted(TRACKS[slug], key=lambda t: (-int(t[3]), t[2]))
+        zeilen = "\n".join(
+            f"""                    <li><a class="track" href="https://music.apple.com/ch/album/{tid}" """
+            f"""data-embed="https://embed.music.apple.com/ch/album/{tid}" data-title="{E(name)} – {E(t)}">"""
+            f"""<b>{E(t)}</b> <span>{E(alb)} · {y}</span></a></li>"""
+            for tid, t, alb, y in songs)
+        teile.append(f"""            <section class="jb-kuenstler">
+                <h3><a href="projekte.html#{slug}">{E(name)}</a> <span>{len(songs)} {"Song" if len(songs) == 1 else "Songs"}</span></h3>
+                <ul>
+{zeilen}
+                </ul>
+            </section>""")
+    return f"""
+    <!-- ===== JUKEBOX: öffnet sich beim Klick auf den Plattenspieler im Logo (site.js) ===== -->
+    <div class="jukebox" id="jukebox" role="dialog" aria-label="Jukebox" hidden>
+        <div class="jb-kopf"><p><span>Jukebox</span> Hörproben nach Künstler · Apple Music</p><button type="button" aria-label="Jukebox schliessen">×</button></div>
+        <div class="jb-liste">
+{chr(10).join(teile)}
+        </div>
+    </div>
+"""
 
 def clip(kind, cid, title, year):
     """Ein Video als Vorschaubild mit Abspielknopf. Erst der Klick ersetzt das Bild
