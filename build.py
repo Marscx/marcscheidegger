@@ -862,7 +862,7 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
                         <a class="btn ghost" href="https://marcscheidegger.moodlecloud.com/">Online-Kurse ↗</a>
                     </div>
                 </div>
-                <figure class="m-0 w-full" style="max-width:420px;justify-self:center"><img src="img/marc-scheidegger-live.jpg" alt="Marc Scheidegger live mit Gitarre auf der Bühne" width="1200" height="1200"><figcaption class="mt-2 font-schreib text-[0.7rem] tracking-widest text-night-300 uppercase">Foto: Andreas Busslinger</figcaption></figure>
+                <figure class="m-0 w-full" style="max-width:420px;justify-self:center"><img src="img/marc-scheidegger-portrait.jpg" alt="Porträt Marc Scheidegger mit Hut und Brille" width="900" height="900"><figcaption class="mt-2 font-schreib text-[0.7rem] tracking-widest text-night-300 uppercase">Foto: Andrea Ebener</figcaption></figure>
             </div>
         </section>
 
