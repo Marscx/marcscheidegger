@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 24
+V = 25
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -944,6 +944,7 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
                         <p id="mappeInfo" class="mappe-info"></p>
                     </div>
                     <div class="btns mappe-aktionen">
+                        <button type="button" class="btn ghost" id="mappeText">⬇ Als Text</button>
                         <button type="button" class="btn ghost" id="mappeDrucken">Drucken / PDF</button>
                         <button type="button" class="btn ghost" id="mappeSchliessen">Schliessen</button>
                     </div>

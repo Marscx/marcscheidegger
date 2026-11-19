@@ -235,6 +235,78 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { knopf.textContent = '⬇ Mappe speichern'; }, 1800);
     });
 
+    // ---------- Mappe als Textdatei (lesbar, z. B. für Mail oder Notizen) ----------
+    function mappeText() {
+        const z = [];
+        const strich = (t) => { z.push(t, '='.repeat(t.length), ''); };
+        const titel = (t) => { z.push(t, '-'.repeat(t.length)); };
+        strich(mappe.name ? `ÜBEMAPPE VON ${mappe.name.toUpperCase()}` : 'ÜBEMAPPE');
+        z.push(`Angelegt:  ${tag(mappe.erstellt)}`);
+        if (mappe.geaendert) z.push(`Geändert:  ${tag(mappe.geaendert)}, ${uhr(mappe.geaendert)}`);
+        z.push(`Erstellt:  ${tag(new Date())}, ${uhr(new Date())} – marcscheidegger.ch/mappe.html`, '');
+
+        const t = mappe.tools.uebetimer;
+        const plan = Array.isArray(t && t.plan) ? t.plan : [];
+        if (plan.length) {
+            titel('ÜBEPLAN');
+            plan.forEach((p, i) => z.push(`${i + 1}. ${p.thema} – ${dauer(p.sekunden)}`));
+            z.push(`   Total ${dauer(plan.reduce((s, p) => s + (p.sekunden || 0), 0))}`, '');
+        }
+        if (t) {
+            const journal = Array.isArray(t.journal) ? t.journal.filter((e) => e && e.start) : [];
+            const geuebt = (e) => (e.uebungen || []).reduce((s, u) => s + (u.geuebt || 0), 0);
+            titel('ÜBE-JOURNAL (Übe-Timer)');
+            z.push(`${journal.length} ${journal.length === 1 ? 'Übesession' : 'Übesessions'}, geübt ${dauer(journal.reduce((s, e) => s + geuebt(e), 0))}`, '');
+            for (const e of journal.slice().reverse()) {
+                const geplant = (e.uebungen || []).reduce((s, u) => s + (u.geplant || 0), 0);
+                z.push(`${tag(e.start)}, ${uhr(e.start)}${e.ende ? '–' + uhr(e.ende) : ''} · geübt ${dauer(geuebt(e))} von ${dauer(geplant)}`);
+                (e.uebungen || []).forEach((u) => {
+                    z.push(`  - ${u.thema}: ${dauer(u.geuebt)} von ${dauer(u.geplant)} · ${u.status}`);
+                    if (u.notiz) u.notiz.split('\n').forEach((l) => z.push(`      > ${l}`));
+                });
+                if (e.notizen) e.notizen.split('\n').forEach((l) => z.push(`  Notiz: ${l}`));
+                z.push('');
+            }
+        }
+        const w = mappe.tools.wuerfel;
+        if (w) {
+            const lern = w.lernstand || {};
+            const verlauf = Array.isArray(w.verlauf) ? w.verlauf : [];
+            const gewusst = AKKORDE.filter((n) => lern[n] && lern[n].zuletzt === 'ja');
+            const nicht = AKKORDE.filter((n) => lern[n] && lern[n].zuletzt !== 'ja');
+            const offen = AKKORDE.filter((n) => !lern[n]);
+            titel('AKKORDE DER 1. LAGE (Würfel)');
+            z.push(`Gewusst (${gewusst.length}):        ${gewusst.join(', ') || '–'}`);
+            z.push(`Nicht gewusst (${nicht.length}):  ${nicht.join(', ') || '–'}`);
+            z.push(`Noch nicht geübt (${offen.length}): ${offen.join(', ') || '–'}`, '');
+            const geuebte = AKKORDE.filter((n) => lern[n]);
+            if (geuebte.length) {
+                z.push('Pro Akkord (gewusst / nicht gewusst):');
+                geuebte.forEach((n) => z.push(`  ${n.padEnd(4)} ${lern[n].ja || 0} ✓  ${lern[n].nein || 0} ✗`));
+                z.push('');
+            }
+            if (verlauf.length) {
+                z.push('Letzte Antworten:');
+                verlauf.slice(-20).reverse().forEach((v) => z.push(`  ${tag(v.zeit)} ${uhr(v.zeit)}  ${v.akkord.padEnd(4)} ${v.gewusst ? '✓ gewusst' : '✗ nicht gewusst'}`));
+                z.push('');
+            }
+        }
+        return z.join('\n');
+    }
+    $('#mappeText').addEventListener('click', () => {
+        if (!mappe) return;
+        const name = Mappe.dateiname(mappe).replace(/\.json$/, '.txt');
+        const blob = new Blob(['\ufeff' + mappeText()], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.append(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
     $('#mappeDrucken').addEventListener('click', () => window.print());
     $('#mappeSchliessen').addEventListener('click', () => {
         mappe = null;
