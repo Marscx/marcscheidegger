@@ -233,10 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
     knopf.textContent = teilen ? '↗ Mappe teilen' : '⬇ Mappe speichern';
     knopf.addEventListener('click', () => {
         if (!mappe) return;
-        if (teilen) { Mappe.teilen(mappe); return; }
+        const gespeichert = () => {
+            const alt = knopf.textContent;
+            knopf.textContent = 'Gespeichert ✓';
+            setTimeout(() => { knopf.textContent = alt; }, 1800);
+        };
+        // Kann der Browser die Datei doch nicht teilen, wird sie heruntergeladen
+        if (teilen) { Mappe.teilen(mappe).then((r) => { if (r === 'heruntergeladen') gespeichert(); }); return; }
         Mappe.herunterladen(mappe);
-        knopf.textContent = 'Gespeichert ✓';
-        setTimeout(() => { knopf.textContent = '⬇ Mappe speichern'; }, 1800);
+        gespeichert();
     });
 
     // ---------- Mappe als Textdatei (lesbar, z. B. für Mail oder Notizen) ----------
