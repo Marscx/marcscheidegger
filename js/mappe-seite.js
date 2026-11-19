@@ -198,9 +198,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ---------- Mappe öffnen, anzeigen, weitergeben ----------
+    function titelZeigen() {
+        $('#mappeTitel').textContent = mappe.name ? `Übemappe von ${mappe.name}` : 'Übemappe';
+    }
     function anzeigen() {
         $('#mappeInhalt').hidden = false;
-        $('#mappeTitel').textContent = mappe.name ? `Übemappe von ${mappe.name}` : 'Übemappe';
+        titelZeigen();
+        $('#mappeName').value = mappe.name || '';
         const teile = Object.keys(mappe.tools).map((k) => TOOL_NAMEN[k] || k);
         $('#mappeInfo').textContent = `angelegt ${tag(mappe.erstellt)}` +
             (mappe.geaendert ? ` · zuletzt geändert ${tag(mappe.geaendert)}, ${uhr(mappe.geaendert)}` : '') +
@@ -305,6 +309,23 @@ document.addEventListener('DOMContentLoaded', () => {
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    // Name ändern (steht nur in der Datei)
+    $('#mappeName').addEventListener('input', (e) => {
+        if (!mappe) return;
+        mappe.name = e.target.value.trim();
+        titelZeigen();
+    });
+
+    // Neue, leere Mappe – z. B. für eine neue Schülerin mit dem ersten Übeplan
+    $('#mappeNeu').addEventListener('click', () => {
+        if (mappe && !confirm('Die geöffnete Mappe schliessen und eine neue beginnen? Nicht geteilte Änderungen gehen verloren.')) return;
+        mappe = Mappe.neu();
+        $('#mappeMeldung').textContent = '';
+        anzeigen();
+        $('#planMeldung').textContent = 'Neue Mappe: Name eintragen, Übeplan zusammenstellen, «In die Mappe übernehmen» und dann teilen.';
+        $('#mappeName').focus({ preventScroll: true });
     });
 
     $('#mappeDrucken').addEventListener('click', () => window.print());

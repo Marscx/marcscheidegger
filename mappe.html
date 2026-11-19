@@ -14,10 +14,10 @@
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0b1220">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="css/site.css?v=25">
-    <script src="js/site.js?v=25"></script>
-    <script src="js/mappe.js?v=25" defer></script>
-    <script src="js/mappe-seite.js?v=25" defer></script>
+    <link rel="stylesheet" href="css/site.css?v=26">
+    <script src="js/site.js?v=26"></script>
+    <script src="js/mappe.js?v=26" defer></script>
+    <script src="js/mappe-seite.js?v=26" defer></script>
 </head>
 <body>
     <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
@@ -49,10 +49,11 @@
             <div class="wrap">
                 <span class="kicker">Lernen &amp; Üben</span>
                 <h1>Übemappe</h1>
-                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche.</p>
+                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche. Für neue Schülerinnen und Schüler legst du hier eine neue Mappe mit Übeplan an.</p>
                 <div class="btns">
                     <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
                     <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
+                    <button type="button" class="btn ghost" id="mappeNeu">＋ Neue Mappe</button>
                 </div>
                 <p class="mappe-schutz">Die Mappe wird nur in deinem Browser angezeigt. Nichts wird hochgeladen oder gespeichert – nach dem Schliessen der Seite ist sie wieder weg.</p>
                 <p class="mappe-meldung" id="mappeMeldung" role="status"></p>
@@ -67,6 +68,9 @@
                         <span class="kicker">Mappe</span>
                         <h2 id="mappeTitel">Übemappe</h2>
                         <p id="mappeInfo" class="mappe-info"></p>
+                        <label class="mappe-name">Name <span>(freiwillig)</span>
+                            <input id="mappeName" type="text" maxlength="40" placeholder="z. B. Vorname" autocomplete="off">
+                        </label>
                     </div>
                     <div class="btns mappe-aktionen">
                         <button type="button" class="btn ghost" id="mappeText">⬇ Als Text</button>

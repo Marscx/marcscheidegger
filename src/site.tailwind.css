@@ -326,6 +326,10 @@
     .mappe-kopf { @apply mb-10 flex flex-wrap items-end justify-between gap-6; }
     .mappe-kopf h2 { @apply m-0; }
     .mappe-info { @apply mt-1 mb-0 text-sm text-night-300; }
+    .mappe-kopf .mappe-name { @apply mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-semibold text-white; }
+    .mappe-kopf .mappe-name span { @apply font-normal text-night-300; }
+    .mappe-kopf .mappe-name input { @apply w-64 max-w-full bg-white/5 px-3 py-2 font-sans text-base font-normal text-white ring-1 ring-white/15 ring-inset focus:ring-akzent-500 focus:outline-none; }
+    @media print { .mappe-kopf .mappe-name { display: none !important; } }
     .mappe-hinweis { @apply text-sm text-night-300; }
     .mappe-block { @apply mb-12 border-t border-white/10 pt-8; }
     .mappe-block h3 { @apply mt-0 mb-5 flex items-baseline gap-3 text-2xl font-light; }
