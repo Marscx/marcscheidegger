@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 23
+V = 24
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -101,7 +101,7 @@ def social_links(indent):
     return "\n".join(f'{indent}<li><a href="{u}"><span class="ico">{ICONS[k]}</span>{t}</a></li>' for k, t, u in SOCIAL if k != "mail")
 
 # --- Seitenrahmen ------------------------------------------------------------
-def page(fname, title, desc, body, current=None):
+def page(fname, title, desc, body, current=None, skripte=()):
     """Schreibt eine komplette HTML-Seite: gemeinsamer Rahmen + der Inhalt "body".
 
     fname    Dateiname, z. B. "projekte.html"
@@ -109,6 +109,7 @@ def page(fname, title, desc, body, current=None):
     desc     Kurzbeschreibung für Google und für Vorschauen beim Teilen (WhatsApp usw.)
     body     der eigentliche Seiteninhalt (HTML-Abschnitte, siehe weiter unten)
     current  welcher Menüpunkt hervorgehoben wird; "-" = keiner (Impressum usw.)
+    skripte  zusätzliche Skripte nur für diese Seite, z. B. ("js/mappe.js",)
     """
     # Nur auf der Startseite: Klick auf den Plattenspieler im Logo öffnet die Jukebox
     # (alle Hörproben nach Künstler, siehe jukebox() und site.js). Ohne JavaScript
@@ -139,7 +140,7 @@ def page(fname, title, desc, body, current=None):
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/site.css?v={V}">
     <script src="js/site.js?v={V}"></script>
-</head>
+{"".join(f'    <script src="{x}?v={V}" defer></script>{chr(10)}' for x in skripte)}</head>
 <body>
     <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
     <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -880,6 +881,23 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
             </div>
         </section>
 
+        <!-- ===== ÜBEMAPPE: Hinweis und Link zur Übersichtsseite mappe.html ===== -->
+        <section class="section">
+            <div class="wrap split">
+                <div>
+                    <span class="kicker">Übemappe</span>
+                    <h2>Dein Übe-Journal als Datei</h2>
+                    <p>Übe-Timer und Würfel speichern Journal und Lernstand in einer Übemappe. Du teilst sie per WhatsApp oder Mail und öffnest sie später wieder – ohne Konto, nichts wird auf einem Server gespeichert.</p>
+                    <div class="btns"><a class="btn" href="mappe.html">Übemappe ansehen</a></div>
+                </div>
+                <ul class="mappe-punkte">
+                    <li><b>Übe-Timer</b> – jede Übesession mit Zeiten und Notizen</li>
+                    <li><b>Würfel</b> – welche Akkorde du schon kannst, mit Verlauf</li>
+                    <li><b>Übeplan</b> – die Hausaufgabe für die nächste Woche</li>
+                </ul>
+            </div>
+        </section>
+
         <!-- ===== WEITERE WERKZEUGE: Anleitungen (digi.marcscheidegger.ch) und Noteflight –
              als Karten wie die Übe-Tools (Liste WERKZEUGE). ===== -->
         <section class="section alt">
@@ -896,6 +914,77 @@ lernen = f"""        <!-- ===== SEITENKOPF: Text links, Porträt rechts ===== --
         </section>
 """
 page("lernen.html", "Lernen", "Übe-Tools von Marc Scheidegger: Würfel, Übe-Timer und Instrumentengrafiken, dazu Online-Kurse und Werkzeuge zum Musik machen.", lernen)
+
+# ---------------------------------------------------------------- Seite: Übemappe
+# Übersicht einer Übemappe (Datei der Schüler/innen aus Übe-Timer und Würfel, Format: MAPPE.md
+# in den Tools). Die Datei wird nur im Browser gelesen (js/mappe.js, js/mappe-seite.js) –
+# nichts geht an den Server, und nach dem Schliessen der Seite ist nichts mehr gespeichert.
+mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
+        <section class="hero small plain">
+            <div class="wrap">
+                <span class="kicker">Lernen &amp; Üben</span>
+                <h1>Übemappe</h1>
+                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche.</p>
+                <div class="btns">
+                    <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
+                    <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
+                </div>
+                <p class="mappe-schutz">Die Mappe wird nur in deinem Browser angezeigt. Nichts wird hochgeladen oder gespeichert – nach dem Schliessen der Seite ist sie wieder weg.</p>
+                <p class="mappe-meldung" id="mappeMeldung" role="status"></p>
+            </div>
+        </section>
+
+        <!-- ===== INHALT DER MAPPE (wird von js/mappe-seite.js gefüllt) ===== -->
+        <section class="section mappe-seite" id="mappeInhalt" hidden>
+            <div class="wrap">
+                <div class="mappe-kopf">
+                    <div>
+                        <span class="kicker">Mappe</span>
+                        <h2 id="mappeTitel">Übemappe</h2>
+                        <p id="mappeInfo" class="mappe-info"></p>
+                    </div>
+                    <div class="btns mappe-aktionen">
+                        <button type="button" class="btn ghost" id="mappeDrucken">Drucken / PDF</button>
+                        <button type="button" class="btn ghost" id="mappeSchliessen">Schliessen</button>
+                    </div>
+                </div>
+
+                <div class="mappe-block" id="blockTimer" hidden>
+                    <h3>Übe-Timer: Journal</h3>
+                    <div class="mappe-zahlen" id="timerZahlen"></div>
+                    <div class="mappe-wochen" id="timerWochen" aria-label="Übezeit pro Woche"></div>
+                    <div id="timerSessions"></div>
+                </div>
+
+                <div class="mappe-block" id="blockWuerfel" hidden>
+                    <h3>Würfel: Akkorde der 1. Lage</h3>
+                    <div class="mappe-zahlen" id="wuerfelZahlen"></div>
+                    <div class="mappe-akkorde" id="wuerfelAkkorde"></div>
+                    <h4>Letzte Antworten</h4>
+                    <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
+                </div>
+
+                <div class="mappe-block mappe-plan" id="blockPlan">
+                    <h3>Übeplan für die nächste Woche</h3>
+                    <p class="mappe-hinweis">Der Plan kommt in die Mappe. Öffnet die Schülerin oder der Schüler die Mappe im Übe-Timer, ist er dort als Übeprogramm bereit.</p>
+                    <ol class="plan-zeilen" id="planZeilen"></ol>
+                    <div class="btns">
+                        <button type="button" class="btn ghost" id="planNeu">＋ Übung</button>
+                        <button type="button" class="btn" id="planUebernehmen">In die Mappe übernehmen</button>
+                    </div>
+                    <p class="mappe-meldung" id="planMeldung" role="status"></p>
+                </div>
+
+                <div class="mappe-block mappe-weiter">
+                    <h3>Mappe zurückgeben</h3>
+                    <p class="mappe-hinweis">Nach Änderungen am Übeplan die Mappe teilen (iPad: WhatsApp, Mail, AirDrop) oder speichern.</p>
+                    <button type="button" class="btn" id="mappeWeitergeben">↗ Mappe teilen</button>
+                </div>
+            </div>
+        </section>
+"""
+page("mappe.html", "Übemappe", "Übemappe ansehen: Übe-Journal und Lernstand aus den Übe-Tools von Marc Scheidegger – nur im Browser, ohne Upload.",
+     mappe_seite, current="lernen.html", skripte=("js/mappe.js", "js/mappe-seite.js"))
 
 # ---------------------------------------------------------------- Seite: Kontakt
 kontakt = f"""        <!-- ===== SEITENKOPF ===== -->

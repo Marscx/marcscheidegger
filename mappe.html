@@ -1,0 +1,131 @@
+<!doctype html>
+<!-- Diese Datei wird von build.py erzeugt – Änderungen bitte dort machen. -->
+<html lang="de-CH">
+<head>
+    <!-- Unsichtbarer Kopf: Zeichensatz, Handy-Darstellung, Titel, Beschreibung
+         für Google (description) und für Link-Vorschauen (og:…), Icon, CSS und JS -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Übemappe – Marc Scheidegger</title>
+    <meta name="description" content="Übemappe ansehen: Übe-Journal und Lernstand aus den Übe-Tools von Marc Scheidegger – nur im Browser, ohne Upload.">
+    <meta property="og:title" content="Übemappe – Marc Scheidegger">
+    <meta property="og:description" content="Übemappe ansehen: Übe-Journal und Lernstand aus den Übe-Tools von Marc Scheidegger – nur im Browser, ohne Upload.">
+    <meta property="og:image" content="https://marcscheidegger.ch/img/hero-jvf-earlclub.jpg">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0b1220">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/site.css?v=24">
+    <script src="js/site.js?v=24"></script>
+    <script src="js/mappe.js?v=24" defer></script>
+    <script src="js/mappe-seite.js?v=24" defer></script>
+</head>
+<body>
+    <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
+    <a class="skip" href="#inhalt">Zum Inhalt</a>
+
+    <!-- ===== KOPFZEILE: Name links, Navigation rechts (bleibt beim Scrollen oben).
+         Auf dem Handy wird die Navigation hinter dem Knopf "Menü" versteckt. ===== -->
+    <!-- Kopfleiste bündig oben über die ganze Breite, deckendes Nachtblau: Tailwind-Klassen direkt hier (Aussehen der Menüpunkte: .nav in src/site.tailwind.css) -->
+    <header class="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night-950/95 backdrop-blur-xl">
+        <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5">
+            <a class="logo" href="index.html" aria-label="Marc Scheidegger – Startseite"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span aria-hidden="true"></span></button>
+            <nav class="nav" id="nav" aria-label="Hauptnavigation">
+                <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="projekte.html">Projekte</a></li>
+                <li><a href="chronologie.html">Chronologie</a></li>
+                <li><a href="lernen.html" aria-current="page">Lernen</a></li>
+                <li><a href="kontakt.html">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== HAUPTINHALT der Seite ===== -->
+    <main id="inhalt">
+        <!-- ===== SEITENKOPF ===== -->
+        <section class="hero small plain">
+            <div class="wrap">
+                <span class="kicker">Lernen &amp; Üben</span>
+                <h1>Übemappe</h1>
+                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche.</p>
+                <div class="btns">
+                    <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
+                    <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
+                </div>
+                <p class="mappe-schutz">Die Mappe wird nur in deinem Browser angezeigt. Nichts wird hochgeladen oder gespeichert – nach dem Schliessen der Seite ist sie wieder weg.</p>
+                <p class="mappe-meldung" id="mappeMeldung" role="status"></p>
+            </div>
+        </section>
+
+        <!-- ===== INHALT DER MAPPE (wird von js/mappe-seite.js gefüllt) ===== -->
+        <section class="section mappe-seite" id="mappeInhalt" hidden>
+            <div class="wrap">
+                <div class="mappe-kopf">
+                    <div>
+                        <span class="kicker">Mappe</span>
+                        <h2 id="mappeTitel">Übemappe</h2>
+                        <p id="mappeInfo" class="mappe-info"></p>
+                    </div>
+                    <div class="btns mappe-aktionen">
+                        <button type="button" class="btn ghost" id="mappeDrucken">Drucken / PDF</button>
+                        <button type="button" class="btn ghost" id="mappeSchliessen">Schliessen</button>
+                    </div>
+                </div>
+
+                <div class="mappe-block" id="blockTimer" hidden>
+                    <h3>Übe-Timer: Journal</h3>
+                    <div class="mappe-zahlen" id="timerZahlen"></div>
+                    <div class="mappe-wochen" id="timerWochen" aria-label="Übezeit pro Woche"></div>
+                    <div id="timerSessions"></div>
+                </div>
+
+                <div class="mappe-block" id="blockWuerfel" hidden>
+                    <h3>Würfel: Akkorde der 1. Lage</h3>
+                    <div class="mappe-zahlen" id="wuerfelZahlen"></div>
+                    <div class="mappe-akkorde" id="wuerfelAkkorde"></div>
+                    <h4>Letzte Antworten</h4>
+                    <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
+                </div>
+
+                <div class="mappe-block mappe-plan" id="blockPlan">
+                    <h3>Übeplan für die nächste Woche</h3>
+                    <p class="mappe-hinweis">Der Plan kommt in die Mappe. Öffnet die Schülerin oder der Schüler die Mappe im Übe-Timer, ist er dort als Übeprogramm bereit.</p>
+                    <ol class="plan-zeilen" id="planZeilen"></ol>
+                    <div class="btns">
+                        <button type="button" class="btn ghost" id="planNeu">＋ Übung</button>
+                        <button type="button" class="btn" id="planUebernehmen">In die Mappe übernehmen</button>
+                    </div>
+                    <p class="mappe-meldung" id="planMeldung" role="status"></p>
+                </div>
+
+                <div class="mappe-block mappe-weiter">
+                    <h3>Mappe zurückgeben</h3>
+                    <p class="mappe-hinweis">Nach Änderungen am Übeplan die Mappe teilen (iPad: WhatsApp, Mail, AirDrop) oder speichern.</p>
+                    <button type="button" class="btn" id="mappeWeitergeben">↗ Mappe teilen</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FUSSZEILE: Copyright, Social-Media-Icons, Impressum/Datenschutz.
+         Die Jahreszahl wird von site.js automatisch aktualisiert. ===== -->
+    <footer class="site-footer border-t border-white/10 py-12 text-[.95rem] text-night-300">
+        <div class="wrap flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+            <p class="m-0"><span class="logo"><b class="logo-zeichen" aria-hidden="true"></b><span class="logo-wort">Marc</span> <span class="logo-wort">Scheidegger</span></span> · © <span data-year>2026</span></p>
+            <ul class="social m-0 flex list-none flex-wrap gap-2.5 p-0" aria-label="Social Media">
+                <li><a href="https://www.instagram.com/marscx/" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a></li>
+                <li><a href="https://www.youtube.com/watch?v=AC6F9rHJwL4" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg></a></li>
+                <li><a href="https://www.linkedin.com/in/marc-scheidegger-470537ab/" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v6M8 7.5v.01M12 17v-6M12 13.5a2.5 2.5 0 0 1 5 0V17"/></svg></a></li>
+                <li><a href="https://twitter.com/marscx" aria-label="X" title="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h4.5L20 20h-4.5z"/><path d="M19.5 4l-6.6 7.5M11.1 12.5 4.5 20"/></svg></a></li>
+                <li><a href="mailto:marcscheidegger@mac.com" aria-label="E-Mail" title="E-Mail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a></li>
+            </ul>
+            <ul class="m-0 flex list-none flex-wrap gap-x-5 p-0">
+                <li><a class="text-night-300 no-underline hover:text-white" href="impressum.html">Impressum</a></li>
+                <li><a class="text-night-300 no-underline hover:text-white" href="datenschutz.html">Datenschutz</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>

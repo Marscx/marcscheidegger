@@ -20,6 +20,7 @@
 @import "tailwindcss";
 @source "../build.py";
 @source "../js/site.js";
+@source "../js/mappe-seite.js";
 
 /* ---------- 2. Farben und Grundwerte ---------- */
 @theme {
@@ -315,6 +316,78 @@
     .jb-kuenstler h3 span { @apply font-schreib text-[0.65rem] tracking-widest text-night-300 uppercase; }
     .jb-kuenstler ul { @apply m-0 grid list-none gap-1 p-0; }
     .jb-hinweis { @apply -mt-0.5 mb-2 text-xs text-night-300 italic; }
+
+    /* ---------- Übemappe (mappe.html, js/mappe-seite.js) ---------- */
+    .mappe-schutz { @apply mt-6 max-w-2xl text-sm text-night-300; }
+    .mappe-meldung { @apply mt-3 min-h-5 text-sm text-akzent-400; }
+    .mappe-punkte { @apply m-0 grid list-none gap-3 p-0; }
+    .mappe-punkte li { @apply border-l-4 border-akzent-500 bg-white/[.03] px-5 py-4 text-night-100 ring-1 ring-white/10 ring-inset; }
+    .mappe-punkte b { @apply text-white; }
+    .mappe-kopf { @apply mb-10 flex flex-wrap items-end justify-between gap-6; }
+    .mappe-kopf h2 { @apply m-0; }
+    .mappe-info { @apply mt-1 mb-0 text-sm text-night-300; }
+    .mappe-hinweis { @apply text-sm text-night-300; }
+    .mappe-block { @apply mb-12 border-t border-white/10 pt-8; }
+    .mappe-block h3 { @apply mt-0 mb-5 flex items-baseline gap-3 text-2xl font-light; }
+    .mappe-block h4 { @apply mt-8 mb-3 text-base font-semibold text-white; }
+    .mappe-zahlen { @apply mb-6 grid gap-3; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .mappe-zahl { @apply bg-white/[.03] px-4 py-3 ring-1 ring-white/10 ring-inset; }
+    .mappe-zahl b { @apply block text-2xl font-light text-white; }
+    .mappe-zahl span { @apply text-xs text-night-300; }
+    /* Übezeit pro Woche als Säulen */
+    .mappe-wochen { @apply mb-8 grid h-40 grid-cols-8 items-end gap-2; }
+    .mappe-woche { @apply flex h-full flex-col items-center gap-1; }
+    .mappe-woche .saeule { @apply relative w-full flex-1 bg-white/[.04]; }
+    .mappe-woche .saeule i { @apply absolute inset-x-0 bottom-0 block bg-akzent-500; }
+    .mappe-woche .wert { @apply min-h-4 text-[.7rem] text-night-300; }
+    .mappe-woche .datum { @apply text-[.7rem] text-night-300; }
+    /* Sessions */
+    .mappe-session { @apply mb-4 bg-white/[.03] px-5 py-4 ring-1 ring-white/10 ring-inset; }
+    .mappe-session h4 { @apply m-0 text-base font-semibold text-white; }
+    .mappe-uebungen { @apply mt-3 mb-0 grid list-none gap-2 p-0; }
+    .mappe-uebungen .zeile { @apply flex flex-wrap items-baseline gap-x-3 gap-y-1; }
+    .mappe-uebungen .thema { @apply flex-1 font-semibold text-night-100; }
+    .mappe-uebungen .zeit { @apply text-sm text-night-300 tabular-nums; }
+    .mappe-uebungen .status { @apply font-schreib text-[.65rem] tracking-widest text-night-300 uppercase; }
+    .mappe-uebungen .status.ok { @apply text-akzent-400; }
+    .mappe-session .notiz { @apply mt-1 mb-0 border-l-2 border-akzent-500/60 pl-3 text-sm whitespace-pre-wrap text-night-100; }
+    .mappe-session .notiz.allgemein { @apply mt-3; }
+    /* Akkorde als Raster */
+    .mappe-akkorde { @apply grid gap-2; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+    .mappe-akkord { @apply grid grid-cols-[1fr_auto] items-center bg-white/[.03] px-3 py-2 ring-1 ring-white/10 ring-inset; }
+    .mappe-akkord b { @apply text-lg font-semibold text-white; }
+    .mappe-akkord .marke { @apply text-night-300; }
+    .mappe-akkord .zaehler { @apply col-span-2 text-[.7rem] text-night-300; }
+    .mappe-akkord.ja { @apply ring-[#5cc96b]/60; }
+    .mappe-akkord.ja .marke { @apply font-bold text-[#5cc96b]; }
+    .mappe-akkord.nein { @apply ring-akzent-500/60; }
+    .mappe-akkord.nein .marke { @apply font-bold text-akzent-500; }
+    .mappe-verlauf { @apply m-0 grid list-none gap-1 p-0 text-sm; }
+    .mappe-verlauf li { @apply flex flex-wrap gap-x-3 border-b border-white/5 py-1.5 text-night-100; }
+    .mappe-verlauf .zeit { @apply w-44 text-night-300 tabular-nums; }
+    .mappe-verlauf b { @apply w-12 text-white; }
+    .mappe-verlauf li.ja span:last-child { @apply text-[#5cc96b]; }
+    .mappe-verlauf li.nein span:last-child { @apply text-akzent-400; }
+    /* Übeplan bearbeiten */
+    .plan-zeilen { @apply mt-4 mb-5 grid list-none gap-2 p-0; }
+    .plan-zeile { @apply grid grid-cols-[1fr_5rem_auto_auto] items-center gap-2; }
+    .plan-zeile input { @apply w-full bg-white/5 px-3 py-2 font-sans text-white ring-1 ring-white/15 ring-inset focus:ring-akzent-500 focus:outline-none; }
+    .plan-zeile .einheit { @apply text-sm text-night-300; }
+    .plan-weg { @apply size-9 cursor-pointer border-0 bg-white/5 text-night-100 ring-1 ring-white/15 ring-inset hover:text-white hover:ring-akzent-500; }
+    .mappe-seite label.btn, .hero label.btn { @apply cursor-pointer; }
+
+    /* Drucken / PDF: nur die Mappe, hell auf weissem Papier */
+    @media print {
+        .site-header, .site-footer, .hero, .mappe-aktionen, .mappe-plan, .mappe-weiter, .skip { display: none !important; }
+        body, .mappe-seite { background: #fff !important; color: #0b1220 !important; }
+        .mappe-seite { padding: 0 !important; }
+        .mappe-seite * { color: #0b1220 !important; box-shadow: none !important; }
+        .mappe-zahl, .mappe-session, .mappe-akkord { background: #fff !important; border: 1px solid #c9d4ea; }
+        .mappe-woche .saeule { background: #eef1f7 !important; }
+        .mappe-woche .saeule i { background: #c23a2b !important; }
+        .mappe-session { break-inside: avoid; }
+        .mappe-block { border-color: #c9d4ea !important; }
+    }
     /* Kompakte Zeilen: Titel und Album untereinander neben dem Abspielknopf (Grid statt Flex) */
     .jukebox .track { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; row-gap: 0; padding: .45rem .6rem; }
     .jukebox .track::before { grid-row: span 2; align-self: center; width: 28px; height: 28px; }
