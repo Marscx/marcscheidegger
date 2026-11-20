@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 29
+V = 30
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -948,37 +948,47 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
                         </label>
                     </div>
                     <div class="btns mappe-aktionen">
+                        <button type="button" class="btn ghost" id="alleAuf">Alle aufklappen</button>
                         <button type="button" class="btn ghost" id="mappeText">⬇ Als Text</button>
                         <button type="button" class="btn ghost" id="mappeDrucken">Drucken / PDF</button>
                         <button type="button" class="btn ghost" id="mappeSchliessen">Schliessen</button>
                     </div>
                 </div>
 
-                <div class="mappe-block" id="blockJahr"></div>
+                <!-- Abschnitte als Aufklapp-Menüs (details/summary); beim Drucken klappt mappe-seite.js alle auf -->
+                <details class="mappe-block" id="blockJahr" open>
+                    <summary><h3>Schuljahr im Überblick</h3></summary>
+                    <div id="jahrInhalt"></div>
+                </details>
 
-                <div class="mappe-block" id="blockTimer" hidden>
-                    <h3>Übe-Timer: Journal</h3>
+                <details class="mappe-block" id="blockTimer" hidden>
+                    <summary><h3>Übe-Timer: Journal</h3></summary>
                     <div class="mappe-zahlen" id="timerZahlen"></div>
                     <div class="mappe-wochen" id="timerWochen" aria-label="Übezeit pro Woche"></div>
-                    <div id="timerSessions"></div>
-                </div>
+                    <details class="mappe-unter" id="timerSessionsBox">
+                        <summary id="timerSessionsTitel">Alle Übesessions</summary>
+                        <div id="timerSessions"></div>
+                    </details>
+                </details>
 
-                <div class="mappe-block" id="blockWuerfel" hidden>
-                    <h3>Würfel: Akkorde der 1. Lage</h3>
+                <details class="mappe-block" id="blockWuerfel" hidden>
+                    <summary><h3>Würfel: Akkorde der 1. Lage</h3></summary>
                     <div class="mappe-zahlen" id="wuerfelZahlen"></div>
                     <div class="mappe-akkorde" id="wuerfelAkkorde"></div>
-                    <h4>Letzte Antworten</h4>
-                    <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
-                </div>
+                    <details class="mappe-unter">
+                        <summary>Letzte Antworten</summary>
+                        <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
+                    </details>
+                </details>
 
-                <div class="mappe-block gespraech" id="blockGespraech">
-                    <h3>Schülergespräch</h3>
+                <details class="mappe-block gespraech" id="blockGespraech">
+                    <summary><h3>Schülergespräch</h3></summary>
                     <p class="mappe-hinweis">Pro Kriterium 1–5 Sterne: wie gut es geht und wie wichtig es ist (Schüler/in) sowie deine Einschätzung. Keine Noten – das Spinnennetz zeigt Stand und Schwerpunkte, die Lücken zeigen mögliche Ziele.</p>
                     <div id="gespraechInhalt"></div>
-                </div>
+                </details>
 
-                <div class="mappe-block mappe-plan" id="blockPlan">
-                    <h3>Übeplan für die nächste Woche</h3>
+                <details class="mappe-block mappe-plan" id="blockPlan">
+                    <summary><h3>Übeplan für die nächste Woche</h3></summary>
                     <p class="mappe-hinweis">Der Plan kommt in die Mappe. Öffnet die Schülerin oder der Schüler die Mappe im Übe-Timer, ist er dort als Übeprogramm bereit.</p>
                     <ol class="plan-zeilen" id="planZeilen"></ol>
                     <div class="btns">
@@ -986,7 +996,7 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
                         <button type="button" class="btn" id="planUebernehmen">In die Mappe übernehmen</button>
                     </div>
                     <p class="mappe-meldung" id="planMeldung" role="status"></p>
-                </div>
+                </details>
 
                 <div class="mappe-block mappe-weiter">
                     <h3>Mappe zurückgeben</h3>

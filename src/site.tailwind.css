@@ -333,6 +333,20 @@
     .mappe-hinweis { @apply text-sm text-night-300; }
     .mappe-block { @apply mb-12 border-t border-white/10 pt-8; }
     .mappe-block h3 { @apply mt-0 mb-5 flex items-baseline gap-3 text-2xl font-light; }
+    /* Abschnitte als Aufklapp-Menüs */
+    .mappe-block > summary { @apply flex cursor-pointer list-none items-center gap-3 select-none; }
+    .mappe-block > summary::-webkit-details-marker, .mappe-unter > summary::-webkit-details-marker { display: none; }
+    .mappe-block > summary h3 { @apply m-0; }
+    .mappe-block > summary::after, .mappe-unter > summary::before {
+        content: "+"; @apply ml-auto grid size-8 flex-none place-items-center text-xl text-akzent-400 ring-1 ring-white/15 ring-inset;
+    }
+    .mappe-block[open] > summary { @apply mb-5; }
+    .mappe-block[open] > summary::after, .mappe-unter[open] > summary::before { content: "−"; }
+    .mappe-block > summary:hover::after { @apply ring-akzent-500; }
+    .mappe-unter { @apply mt-6; }
+    .mappe-unter > summary { @apply flex cursor-pointer list-none items-center gap-3 font-semibold text-white select-none; }
+    .mappe-unter > summary::before { @apply ml-0 size-7 text-base; }
+    .mappe-unter[open] > summary { @apply mb-4; }
     .mappe-block h4 { @apply mt-8 mb-3 text-base font-semibold text-white; }
     .mappe-zahlen { @apply mb-6 grid gap-3; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
     .mappe-zahl { @apply bg-white/[.03] px-4 py-3 ring-1 ring-white/10 ring-inset; }
@@ -456,6 +470,7 @@
     /* Drucken / PDF: nur die Mappe, hell auf weissem Papier */
     @media print {
         .site-header, .site-footer, .hero, .mappe-aktionen, .mappe-plan, .mappe-weiter, .skip { display: none !important; }
+        .mappe-block > summary::after, .mappe-unter > summary::before { display: none !important; }
         body, .mappe-seite { background: #fff !important; color: #0b1220 !important; }
         .mappe-seite { padding: 0 !important; }
         .mappe-seite * { color: #0b1220 !important; box-shadow: none !important; }

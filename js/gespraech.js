@@ -128,7 +128,6 @@ const Gespraech = (() => {
         const jahre = schuljahre(mappe);
         if (!gewaehltesJahr || !jahre.includes(gewaehltesJahr)) gewaehltesJahr = jahre[0];
         const kopf = el('div', 'jahr-kopf');
-        kopf.append(el('h3', '', 'Schuljahr im Überblick'));
         const wahl = el('select', 'jahr-wahl');
         wahl.setAttribute('aria-label', 'Schuljahr');
         jahre.forEach((j) => { const o = el('option', '', 'Schuljahr ' + j); o.value = j; wahl.append(o); });

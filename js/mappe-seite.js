@@ -86,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
             wochen.append(spalte);
         }
 
-        // Sessions, neueste zuerst
+        // Sessions, neueste zuerst (in einem eigenen Aufklapp-Menü)
+        $('#timerSessionsTitel').textContent = `Alle Übesessions anzeigen (${journal.length})`;
         const box = $('#timerSessions');
         box.textContent = '';
         if (!journal.length) {
@@ -213,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#blockWuerfel').hidden = true;
         if (mappe.tools.uebetimer) timerZeigen(mappe.tools.uebetimer);
         if (mappe.tools.wuerfel) wuerfelZeigen(mappe.tools.wuerfel);
-        Gespraech.jahrZeigen(mappe, $('#blockJahr'));
+        Gespraech.jahrZeigen(mappe, $('#jahrInhalt'));
         Gespraech.zeigen(mappe, $('#gespraechInhalt'));
         planZeigen(mappe.tools.uebetimer);
         $('#mappeInhalt').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -335,8 +336,27 @@ document.addEventListener('DOMContentLoaded', () => {
         mappe = Mappe.neu();
         $('#mappeMeldung').textContent = '';
         anzeigen();
+        $('#blockPlan').open = true;
         $('#planMeldung').textContent = 'Neue Mappe: Name eintragen, Übeplan zusammenstellen, «In die Mappe übernehmen» und dann teilen.';
         $('#mappeName').focus({ preventScroll: true });
+    });
+
+    // Alle Abschnitte auf- bzw. zuklappen
+    const abschnitte = () => [...document.querySelectorAll('#mappeInhalt details')];
+    $('#alleAuf').addEventListener('click', (e) => {
+        const auf = abschnitte().some((d) => !d.open);
+        abschnitte().forEach((d) => { d.open = auf; });
+        e.currentTarget.textContent = auf ? 'Alle zuklappen' : 'Alle aufklappen';
+    });
+    // Beim Drucken alles aufklappen (zugeklappte Abschnitte würden sonst fehlen), danach wie vorher
+    let vorDruck = null;
+    window.addEventListener('beforeprint', () => {
+        vorDruck = abschnitte().map((d) => d.open);
+        abschnitte().forEach((d) => { d.open = true; });
+    });
+    window.addEventListener('afterprint', () => {
+        if (vorDruck) abschnitte().forEach((d, i) => { d.open = vorDruck[i]; });
+        vorDruck = null;
     });
 
     $('#mappeDrucken').addEventListener('click', () => window.print());
