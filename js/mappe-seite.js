@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Akkorde der 1. Lage in der Reihenfolge des Würfels (akkorde.js)
     const AKKORDE = ['C', 'A', 'G', 'E', 'F', 'D', 'Am', 'Em', 'Dm', 'C7', 'A7', 'G7', 'E7', 'D7', 'B7', 'Am7', 'Em7', 'Dm7', 'Bm7'];
-    const TOOL_NAMEN = { uebetimer: 'Übe-Timer', wuerfel: 'Würfel' };
+    const TOOL_NAMEN = { uebetimer: 'Übe-Timer', wuerfel: 'Würfel', gespraech: 'Schülergespräch' };
 
     let mappe = null;
 
@@ -213,6 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#blockWuerfel').hidden = true;
         if (mappe.tools.uebetimer) timerZeigen(mappe.tools.uebetimer);
         if (mappe.tools.wuerfel) wuerfelZeigen(mappe.tools.wuerfel);
+        Gespraech.jahrZeigen(mappe, $('#blockJahr'));
+        Gespraech.zeigen(mappe, $('#gespraechInhalt'));
         planZeigen(mappe.tools.uebetimer);
         $('#mappeInhalt').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -253,6 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
         z.push(`Angelegt:  ${tag(mappe.erstellt)}`);
         if (mappe.geaendert) z.push(`Geändert:  ${tag(mappe.geaendert)}, ${uhr(mappe.geaendert)}`);
         z.push(`Erstellt:  ${tag(new Date())}, ${uhr(new Date())} – marcscheidegger.ch/mappe.html`, '');
+
+        z.push(Gespraech.jahrText(mappe));
+        const gtext = Gespraech.text(mappe);
+        if (gtext) z.push(gtext);
 
         const t = mappe.tools.uebetimer;
         const plan = Array.isArray(t && t.plan) ? t.plan : [];

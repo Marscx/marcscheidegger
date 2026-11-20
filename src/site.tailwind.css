@@ -380,6 +380,79 @@
     .plan-weg { @apply size-9 cursor-pointer border-0 bg-white/5 text-night-100 ring-1 ring-white/15 ring-inset hover:text-white hover:ring-akzent-500; }
     .mappe-seite label.btn, .hero label.btn { @apply cursor-pointer; }
 
+    /* Jahres-Dashboard */
+    .jahr-kopf { @apply mb-5 flex flex-wrap items-center justify-between gap-3; }
+    .jahr-kopf h3 { @apply m-0; }
+    .jahr-wahl { @apply bg-night-800 px-3 py-2 font-sans text-white ring-1 ring-white/15 ring-inset focus:ring-akzent-500 focus:outline-none; }
+    .jahr-monate { @apply grid-cols-12; }
+    .jahr-themen { @apply m-0 grid list-none gap-1 p-0 text-sm; }
+    .jahr-themen li { @apply flex justify-between gap-3 border-b border-white/5 py-1.5 text-night-100; }
+    .jahr-themen b { @apply font-normal text-night-300 tabular-nums; }
+
+    /* Schülergespräch */
+    .gespraech-reiter { @apply mb-6 flex flex-wrap gap-2; }
+    .gespraech-reiter .btn.ghost.aktiv { @apply ring-akzent-500; }
+    .gespraech-grund { @apply mb-6 grid gap-3; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .gespraech .feld { @apply grid gap-1 text-xs text-night-300; }
+    .gespraech .feld.breit { @apply mt-8; }
+    .gespraech input, .gespraech textarea { @apply w-full bg-white/5 px-3 py-2 font-sans text-base text-white ring-1 ring-white/15 ring-inset focus:ring-akzent-500 focus:outline-none; }
+    .gespraech textarea { @apply resize-y; }
+    .stern-legende { @apply mb-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-night-300; }
+    .stern-legende span { @apply inline-flex items-center gap-2; }
+    .stern-legende i { @apply inline-block size-3; }
+    .leg-sus { --farbe: var(--color-akzent-500); }
+    .leg-wichtig { --farbe: var(--color-night-400); }
+    .leg-lp { --farbe: #5cc96b; }
+    .stern-legende i { background: var(--farbe); }
+    .kriterien { @apply grid gap-0; }
+    .kr-kopf, .kr-zeile { @apply grid items-center gap-x-4; grid-template-columns: minmax(11rem, 1fr) repeat(3, auto); }
+    .kr-kopf { @apply sticky top-14 z-10 bg-night-950/95 py-2 text-xs; }
+    .kr-kopf span { color: var(--farbe, inherit); @apply w-[8.5rem] text-center; }
+    .kr-kopf span:first-child { @apply w-auto; }
+    .kr-gruppe { @apply mt-8 mb-2 border-b border-white/10 pb-2 font-schreib text-sm font-normal tracking-widest text-akzent-400 uppercase; }
+    .kr-thema { @apply mt-4 mb-1 text-base font-semibold text-white; }
+    .kr-zeile { @apply border-b border-white/5 py-1.5; }
+    .kr-zeile.einzeln .kr-name { @apply font-semibold text-white; }
+    .kr-name { @apply text-night-100; }
+    .kr-name small { @apply block text-xs text-night-300; }
+    .kr-label { @apply hidden; }
+    .kr-notiz { @apply mt-2 mb-1 text-sm; }
+    .kr-zeile.ueben { grid-template-columns: minmax(11rem, 1fr) auto; }
+    .sterne { @apply flex; }
+    .stern { @apply size-[1.7rem] cursor-pointer border-0 bg-transparent p-0 text-xl leading-none text-white/15 transition-colors; }
+    .sterne.sus .stern.an { @apply text-akzent-500; }
+    .sterne.wichtig .stern.an { @apply text-night-400; }
+    .sterne.lp .stern.an { color: #5cc96b; }
+    .stern:hover { @apply text-white/40; }
+    @media (max-width: 760px) {
+        .kr-kopf { @apply hidden; }
+        .kr-zeile { grid-template-columns: 1fr; @apply gap-y-1 py-3; }
+        .kr-zelle { @apply flex items-center gap-3; }
+        .kr-label { @apply block w-20 text-xs; color: var(--farbe); }
+        .kr-zeile.ueben { grid-template-columns: 1fr; }
+    }
+    .gespraech-auswertung { @apply mt-10 grid gap-8 lg:grid-cols-[1.2fr_1fr]; }
+    .spinne { @apply w-full max-w-[540px]; }
+    .spinne .netz { fill: none; stroke: rgb(255 255 255 / .1); }
+    .spinne .netz.rand { stroke: rgb(255 255 255 / .25); }
+    .spinne .achse { stroke: rgb(255 255 255 / .1); }
+    .spinne .beschriftung { fill: var(--color-night-300); font-size: 10px; }
+    .spinne .sus { fill: rgb(255 107 91 / .25); stroke: var(--color-akzent-500); stroke-width: 2; }
+    .spinne .wichtig { fill: rgb(143 168 220 / .12); stroke: var(--color-night-400); stroke-width: 2; }
+    .spinne .lp { fill: none; stroke: #5cc96b; stroke-width: 2; }
+    .spinne .vorher { fill: none; stroke: var(--color-akzent-300); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: .7; }
+    .ziele-box h4 { @apply mt-0; }
+    .ziele { @apply m-0 grid list-none gap-2 p-0; }
+    .ziele li { @apply grid grid-cols-[1fr_auto] items-center gap-x-3 bg-white/[.03] px-4 py-2 ring-1 ring-white/10 ring-inset; }
+    .ziel-name { @apply font-semibold text-white; }
+    .ziel-werte { @apply col-start-1 text-xs text-night-300; }
+    .ziele li .btn { @apply col-start-2 row-span-2 row-start-1; }
+    .btn.klein { @apply px-3 py-1.5 text-sm; }
+    .handlungen-box { @apply mb-3 grid gap-2; }
+    .handlung { @apply grid items-start gap-2; grid-template-columns: minmax(8rem, 1fr) minmax(12rem, 2fr) 8rem auto; }
+    @media (max-width: 760px) { .handlung { grid-template-columns: 1fr auto; } .handlung .massnahme, .handlung .bis { grid-column: 1; } .handlung .plan-weg { grid-column: 2; grid-row: 1; } }
+    .btn.ghost.loeschen { @apply mt-8 text-sm text-night-300; }
+
     /* Drucken / PDF: nur die Mappe, hell auf weissem Papier */
     @media print {
         .site-header, .site-footer, .hero, .mappe-aktionen, .mappe-plan, .mappe-weiter, .skip { display: none !important; }
@@ -391,6 +464,17 @@
         .mappe-woche .saeule i { background: #c23a2b !important; }
         .mappe-session { break-inside: avoid; }
         .mappe-block { border-color: #c9d4ea !important; }
+        .jahr-wahl, .gespraech-reiter, .ziele li .btn, .handlung .plan-weg, .gespraech > .btn, .btn.ghost.loeschen, #gespraechInhalt > .btn { display: none !important; }
+        .kr-kopf { position: static !important; background: #fff !important; }
+        .stern { color: #dbe1ee !important; font-size: 14px !important; width: 1.1rem !important; height: 1.1rem !important; }
+        .sterne.sus .stern.an { color: #c23a2b !important; }
+        .sterne.wichtig .stern.an { color: #2f6fde !important; }
+        .sterne.lp .stern.an { color: #2e8b57 !important; }
+        .kr-zeile { break-inside: avoid; }
+        .gespraech input, .gespraech textarea { background: #fff !important; box-shadow: none !important; border: 1px solid #dbe1ee; }
+        .spinne .netz, .spinne .achse { stroke: #c9d4ea !important; }
+        .spinne .beschriftung { fill: #0b1220 !important; }
+        .gespraech-auswertung { break-inside: avoid; }
     }
     /* Kompakte Zeilen: Titel und Album untereinander neben dem Abspielknopf (Grid statt Flex) */
     .jukebox .track { display: grid; grid-template-columns: auto 1fr; column-gap: .75rem; row-gap: 0; padding: .45rem .6rem; }

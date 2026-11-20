@@ -47,7 +47,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 # Cache-Version: Browser merken sich CSS/JS lange. Wird diese Zahl erhöht, hängt an
 # den Links ein neues "?v=…" und alle Besucher laden die geänderte Datei neu.
 # → Nach jeder Änderung an site.css oder site.js um 1 erhöhen.
-V = 27
+V = 29
 
 # Hauptnavigation oben: (Datei, Beschriftung) – Reihenfolge = Reihenfolge im Menü
 NAV = [("index.html", "Home"), ("projekte.html", "Projekte"), ("chronologie.html", "Chronologie"),
@@ -924,7 +924,7 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
             <div class="wrap">
                 <span class="kicker">Lernen &amp; Üben</span>
                 <h1>Übemappe</h1>
-                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche. Für neue Schülerinnen und Schüler legst du hier eine neue Mappe mit Übeplan an.</p>
+                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick, das ganze Schuljahr im Überblick, das Schülergespräch und ein neuer Übeplan für die nächste Woche.</p>
                 <div class="btns">
                     <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
                     <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
@@ -954,6 +954,8 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
                     </div>
                 </div>
 
+                <div class="mappe-block" id="blockJahr"></div>
+
                 <div class="mappe-block" id="blockTimer" hidden>
                     <h3>Übe-Timer: Journal</h3>
                     <div class="mappe-zahlen" id="timerZahlen"></div>
@@ -967,6 +969,12 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
                     <div class="mappe-akkorde" id="wuerfelAkkorde"></div>
                     <h4>Letzte Antworten</h4>
                     <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
+                </div>
+
+                <div class="mappe-block gespraech" id="blockGespraech">
+                    <h3>Schülergespräch</h3>
+                    <p class="mappe-hinweis">Pro Kriterium 1–5 Sterne: wie gut es geht und wie wichtig es ist (Schüler/in) sowie deine Einschätzung. Keine Noten – das Spinnennetz zeigt Stand und Schwerpunkte, die Lücken zeigen mögliche Ziele.</p>
+                    <div id="gespraechInhalt"></div>
                 </div>
 
                 <div class="mappe-block mappe-plan" id="blockPlan">
@@ -989,7 +997,7 @@ mappe_seite = """        <!-- ===== SEITENKOPF ===== -->
         </section>
 """
 page("mappe.html", "Übemappe", "Übemappe ansehen: Übe-Journal und Lernstand aus den Übe-Tools von Marc Scheidegger – nur im Browser, ohne Upload.",
-     mappe_seite, current="lernen.html", skripte=("js/mappe.js", "js/mappe-seite.js"))
+     mappe_seite, current="lernen.html", skripte=("js/mappe.js", "js/gespraech.js", "js/mappe-seite.js"))
 
 # ---------------------------------------------------------------- Seite: Kontakt
 kontakt = f"""        <!-- ===== SEITENKOPF ===== -->

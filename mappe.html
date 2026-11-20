@@ -14,10 +14,11 @@
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0b1220">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="css/site.css?v=27">
-    <script src="js/site.js?v=27"></script>
-    <script src="js/mappe.js?v=27" defer></script>
-    <script src="js/mappe-seite.js?v=27" defer></script>
+    <link rel="stylesheet" href="css/site.css?v=29">
+    <script src="js/site.js?v=29"></script>
+    <script src="js/mappe.js?v=29" defer></script>
+    <script src="js/gespraech.js?v=29" defer></script>
+    <script src="js/mappe-seite.js?v=29" defer></script>
 </head>
 <body>
     <!-- Unsichtbarer Sprunglink für Tastatur- und Screenreader-Nutzer -->
@@ -49,7 +50,7 @@
             <div class="wrap">
                 <span class="kicker">Lernen &amp; Üben</span>
                 <h1>Übemappe</h1>
-                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick – und ein neuer Übeplan für die nächste Woche. Für neue Schülerinnen und Schüler legst du hier eine neue Mappe mit Übeplan an.</p>
+                <p class="lead">Übe-Journal aus dem Übe-Timer und Lernstand aus dem Würfel auf einen Blick, das ganze Schuljahr im Überblick, das Schülergespräch und ein neuer Übeplan für die nächste Woche.</p>
                 <div class="btns">
                     <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
                     <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
@@ -79,6 +80,8 @@
                     </div>
                 </div>
 
+                <div class="mappe-block" id="blockJahr"></div>
+
                 <div class="mappe-block" id="blockTimer" hidden>
                     <h3>Übe-Timer: Journal</h3>
                     <div class="mappe-zahlen" id="timerZahlen"></div>
@@ -92,6 +95,12 @@
                     <div class="mappe-akkorde" id="wuerfelAkkorde"></div>
                     <h4>Letzte Antworten</h4>
                     <ol class="mappe-verlauf" id="wuerfelVerlauf"></ol>
+                </div>
+
+                <div class="mappe-block gespraech" id="blockGespraech">
+                    <h3>Schülergespräch</h3>
+                    <p class="mappe-hinweis">Pro Kriterium 1–5 Sterne: wie gut es geht und wie wichtig es ist (Schüler/in) sowie deine Einschätzung. Keine Noten – das Spinnennetz zeigt Stand und Schwerpunkte, die Lücken zeigen mögliche Ziele.</p>
+                    <div id="gespraechInhalt"></div>
                 </div>
 
                 <div class="mappe-block mappe-plan" id="blockPlan">
